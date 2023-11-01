@@ -8,14 +8,17 @@ import {
 import WithAuth from "../HOC/WithAuth";
 import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
-import Profile from "../Auth/Profile";
 import ErrorBoundary from "../HOC/ErrorBoundary";
+import AppNavbar from "../AppNavbar";
+import CollectionList from "../Collections/CollectionList";
+import ItemList from "../Items/ItemList/ItemList";
 
 const App = () => {
   const [errors, setErrors] = useState([]);
+  const [page, setPage] = useState(1);
   return (
     <Router>
-      <div className=" m-3">
+      <div>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
@@ -23,9 +26,19 @@ const App = () => {
             path="/users"
             element={
               <WithAuth>
-                <ErrorBoundary componentName="Profile">
-                  <Profile onSetErrors={setErrors} />
-                </ErrorBoundary>
+                <AppNavbar />
+                <CollectionList getAll={false} />
+                <ItemList page={page} onSetPage={setPage} />
+              </WithAuth>
+            }
+          />
+          <Route
+            path="/users/all"
+            element={
+              <WithAuth>
+                <AppNavbar />
+                <CollectionList getAll={true} />
+                <ItemList page={page} onSetPage={setPage} />
               </WithAuth>
             }
           />

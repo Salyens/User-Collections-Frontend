@@ -8,28 +8,28 @@ const Profile = ({ onSetErrors }) => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState({ name: "", isLoading: true });
 
-  // const handleGetUserName = () => {
-  //   ApiService.getUserInfo()
-  //     .then((res) => {
-  //       if (res.status === 200)
-  //         setUserName({
-  //           name: res.data.name,
-  //           isLoading: false,
-  //         });
-  //     })
-  //     .catch((e) => {
-  //       if (!e || (e.response && e.response.status === 401))
-  //         handleLogOut(navigate);
+  const handleGetUserName = () => {
+    ApiService.getUserInfo()
+      .then((res) => {
+        if (res.status === 200)
+          setUserName({
+            name: res.data.name,
+            isLoading: false,
+          });
+      })
+      .catch((e) => {
+        if (!e || (e.response && e.response.status === 401))
+          handleLogOut(navigate);
 
-  //       onSetErrors([
-  //         "An error occurred while loading the data. Please try again later.",
-  //       ]);
-  //     });
-  // };
+        onSetErrors([
+          "An error occurred while loading the data. Please try again later.",
+        ]);
+      });
+  };
 
-  // useEffect(() => {
-  //   handleGetUserName();
-  // }, []);
+  useEffect(() => {
+    handleGetUserName();
+  }, []);
 
   return (
     <div className="d-flex mt-2 justify-content-end align-items-center">

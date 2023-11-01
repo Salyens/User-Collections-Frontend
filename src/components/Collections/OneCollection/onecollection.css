@@ -1,0 +1,6 @@
+.wrapper-collection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 200px;
+}

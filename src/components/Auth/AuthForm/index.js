@@ -13,7 +13,7 @@ const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
       <h2 className="mb-3 text-center">{title}</h2>
 
       {errors && errors.length > 0 && (
-        <ul className="text-danger text-center">
+        <ul className="text-danger">
           {errors.map((error, index) => (
             <li key={index}>{error}</li>
           ))}
