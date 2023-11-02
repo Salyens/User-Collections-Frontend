@@ -9,7 +9,7 @@ const Login = () => {
   ];
   const initialState = { email: "", password: "" };
 
-  useCheckLogin();
+  // useCheckLogin();
 
   return (
     <AuthForm

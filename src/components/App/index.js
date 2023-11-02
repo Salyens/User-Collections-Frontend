@@ -11,6 +11,7 @@ import Registration from "../Auth/Registration";
 import ErrorBoundary from "../HOC/ErrorBoundary";
 import AppNavbar from "../AppNavbar";
 import GenericList from "../GenericList";
+import Footer from "../Footer/Footer";
 
 const App = () => {
   const [errors, setErrors] = useState([]);
@@ -28,11 +29,12 @@ const App = () => {
                 <AppNavbar />
                 <GenericList getAll={false} type="collection" />
                 <GenericList getAll={false} type="item" />
+                <Footer/>
               </WithAuth>
             }
           />
           <Route
-            path="collections"
+            path="/collections"
             element={
               <WithAuth>
                 <AppNavbar />
@@ -41,7 +43,7 @@ const App = () => {
             }
           />
           <Route
-            path="items"
+            path="/items"
             element={
               <WithAuth>
                 <AppNavbar />
@@ -49,7 +51,7 @@ const App = () => {
               </WithAuth>
             }
           />
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/main-page" replace />} />
           <Route
             path="/*"
             element={

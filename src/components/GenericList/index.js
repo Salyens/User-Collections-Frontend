@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Button } from "react-bootstrap";
 import useDataFetching from "../../hooks/useDataFetching";
 import CustomPagination from "../CustomPagination";
 import CollectionWrapper from "../Wrappers/CollectionWrapper";
 import ItemWrapper from "../Wrappers/ItemWrapper";
+import NavigationButton from "../Buttons/NavigationButton"
 
 const GenericList = ({ getAll, type }) => {
   const endpoint = type === "collection" ? "getCollections" : "getItems";
@@ -11,8 +11,8 @@ const GenericList = ({ getAll, type }) => {
 
   const header = getAll
     ? type === "collection"
-      ? "Collections"
-      : "Items"
+      ? "All Collections"
+      : "All Items"
     : type === "collection"
     ? "Largest Collections"
     : "New Items";
@@ -41,17 +41,8 @@ const GenericList = ({ getAll, type }) => {
           )
         )}
       </div>
-      {!getAll && (
-        <div className="d-flex justify-content-center">
-          <Button
-            variant={
-              type === "collection" ? "outline-success" : "outline-primary"
-            }
-          >
-            See more {type === "collection" ? "Collections" : "Items"}
-          </Button>
-        </div>
-      )}
+      {!getAll && <NavigationButton type={type} />}
+
 
       {getAll && (
         <CustomPagination

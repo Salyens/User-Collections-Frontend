@@ -6,7 +6,7 @@ import useHandleForm from "../../../hooks/useHandleForm";
 const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
   const navigate = useNavigate();
   const { input, errors, isLoading, handleInputChange, handleSubmit } =
-    useHandleForm(initialState, apiServiceFunction, () => navigate("/users"));
+    useHandleForm(initialState, apiServiceFunction, () => navigate("/main-page"));
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center vh-100">

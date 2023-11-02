@@ -5,11 +5,21 @@ class ApiService {
 
   static async registration(userData) {
     const response = await axios.post(
-      `${ApiService.apiBase}/registration`,
+      `${ApiService.apiBase}/users/registration`,
       userData
     );
     localStorage.setItem("token", response.data.accessToken);
     return response.data;
+  }
+
+  static async login(data) {
+    const response = await axios.post(
+      `${ApiService.apiBase}/users/login`,
+      data
+    );
+    localStorage.setItem("token", response.data.accessToken);
+
+    return response.status;
   }
 
   static async get() {
@@ -23,8 +33,7 @@ class ApiService {
     let ApiURL;
     if (getAll)
       ApiURL = `${ApiService.apiBase}/collections/all?page=${page}&limit=${limit}`;
-    else
-      ApiURL = `${ApiService.apiBase}/collections`;
+    else ApiURL = `${ApiService.apiBase}/collections`;
     const data = await axios.get(ApiURL, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
@@ -64,12 +73,6 @@ class ApiService {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
-  }
-
-  static async login(data) {
-    const response = await axios.post(`${ApiService.apiBase}/login`, data);
-    localStorage.setItem("token", response.data.accessToken);
-    return response.status;
   }
 }
 

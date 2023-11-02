@@ -10,7 +10,7 @@ const Registration = () => {
   ];
   const initialState = { name: "", email: "", password: "" };
 
-  useCheckLogin();
+  // useCheckLogin();
 
   return (
     <AuthForm

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import ApiService from "../services/ApiService";
 
-
 const useDataFetching = (endpoint, getAll, initialLimit) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -16,7 +15,6 @@ const useDataFetching = (endpoint, getAll, initialLimit) => {
 
         setData(collections || userItems);
         if (total) setTotal(total);
-
       } catch (e) {
         console.error(`Error fetching data from ${endpoint}:`, e);
       }
