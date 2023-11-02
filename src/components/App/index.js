@@ -10,12 +10,11 @@ import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import ErrorBoundary from "../HOC/ErrorBoundary";
 import AppNavbar from "../AppNavbar";
-import CollectionList from "../Collections/CollectionList";
-import ItemList from "../Items/ItemList/ItemList";
+import GenericList from "../GenericList";
 
 const App = () => {
   const [errors, setErrors] = useState([]);
-  const [page, setPage] = useState(1);
+
   return (
     <Router>
       <div>
@@ -23,22 +22,30 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route
-            path="/users"
+            path="/main-page"
             element={
               <WithAuth>
                 <AppNavbar />
-                <CollectionList getAll={false} />
-                <ItemList page={page} onSetPage={setPage} />
+                <GenericList getAll={false} type="collection" />
+                <GenericList getAll={false} type="item" />
               </WithAuth>
             }
           />
           <Route
-            path="/users/all"
+            path="collections"
             element={
               <WithAuth>
                 <AppNavbar />
-                <CollectionList getAll={true} />
-                <ItemList page={page} onSetPage={setPage} />
+                <GenericList getAll={true} type="collection" />
+              </WithAuth>
+            }
+          />
+          <Route
+            path="items"
+            element={
+              <WithAuth>
+                <AppNavbar />
+                <GenericList getAll={true} type="item" />
               </WithAuth>
             }
           />

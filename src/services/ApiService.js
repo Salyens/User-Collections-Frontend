@@ -19,25 +19,30 @@ class ApiService {
     return data;
   }
 
-  static async getCollections(getAll) {
+  static async getCollections(getAll, page, limit) {
     let ApiURL;
-    if(getAll) ApiURL = `${ApiService.apiBase}/collections/all`;
-    else ApiURL = `${ApiService.apiBase}/collections`;
+    if (getAll)
+      ApiURL = `${ApiService.apiBase}/collections/all?page=${page}&limit=${limit}`;
+    else
+      ApiURL = `${ApiService.apiBase}/collections`;
     const data = await axios.get(ApiURL, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
+
     return data;
   }
 
-
-  static async getItems(page, limit) {
-    const data = await axios.get(`${ApiService.apiBase}/items?page=${page}&limit=${limit}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+  static async getItems(getAll, page, limit) {
+    const data = await axios.get(
+      `${ApiService.apiBase}/items?page=${page}&limit=${limit}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     return data;
   }
 
-    static async getUserInfo() {
+  static async getUserInfo() {
     const data = await axios.get(`${ApiService.apiBase}/me`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });

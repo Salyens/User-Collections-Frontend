@@ -17,7 +17,7 @@ const CustomPagination = ({ page, limit, total, onSetPage }) => {
   });
 
   return (
-    <div className="d-flex justify-content-center">
+    <div className="d-flex justify-content-center mt-4">
       <Pagination>{items}</Pagination>
     </div>
   );

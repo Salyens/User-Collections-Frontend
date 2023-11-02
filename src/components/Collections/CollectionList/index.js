@@ -1,23 +1,24 @@
 import { Button } from "react-bootstrap";
-import ApiService from "../../../services/ApiService";
 import OneCollection from "../OneCollection";
-import { useEffect, useState } from "react";
+import useDataFetching from "../../../hooks/useDataFetching";
+import CustomPagination from "../../CustomPagination";
+import { useEffect } from "react";
 
 const CollectionList = ({ getAll }) => {
-  const [collections, setCollections] = useState([]);
-
-  const handleGetCollections = async () => {
-    try {
-      const response = await ApiService.getCollections(getAll);
-      setCollections(response.data);
-    } catch (e) {
-      console.error("Error fetching biggest collections:", e);
-    }
-  };
+  const {
+    data: collections,
+    page,
+    setPage,
+    limit,
+    setLimit,
+    total,
+  } = useDataFetching("getCollections", getAll, 5);
 
   useEffect(() => {
-    handleGetCollections();
-  }, []);
+    if (getAll) {
+      setLimit(6);
+    }
+  }, [getAll]);
 
   return (
     <>
@@ -35,9 +36,21 @@ const CollectionList = ({ getAll }) => {
           </div>
         ))}
       </div>
-      <div className="d-flex justify-content-center mt-3">
-        <Button variant="outline-success">See more Collections</Button>
-      </div>
+      {getAll ? (
+        ""
+      ) : (
+        <div className="d-flex justify-content-center mt-3">
+          <Button variant="outline-success">See more Collections</Button>
+        </div>
+      )}
+      {getAll && (
+        <CustomPagination
+          page={page}
+          limit={limit}
+          total={total}
+          onSetPage={setPage}
+        />
+      )}
     </>
   );
 };
