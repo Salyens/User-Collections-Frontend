@@ -1,5 +1,5 @@
 const handleLogOut = (navigate) => {
   localStorage.clear();
-  navigate("/login");
+  navigate("/main-page");
 }
 export default handleLogOut;

@@ -1,9 +1,9 @@
-import { Navigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 
-const WithAuth = ({ children }) => {
-  const token = localStorage.getItem("token");
-  if (!token) return <Navigate to="/login" />;
-  return <>{children}</>;
-};
+// const WithAuth = ({ children }) => {
+//   const token = localStorage.getItem("token");
+//   if (!token) return <Navigate to="/login" />;
+//   return <>{children}</>;
+// };
 
-export default WithAuth;
+// export default WithAuth;

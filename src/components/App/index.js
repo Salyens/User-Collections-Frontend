@@ -9,9 +9,11 @@ import WithAuth from "../HOC/WithAuth";
 import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import ErrorBoundary from "../HOC/ErrorBoundary";
-import AppNavbar from "../AppNavbar";
 import GenericList from "../GenericList";
 import Footer from "../Footer/Footer";
+import CustomNavBar from "../AppNavbar/CustomNavBar";
+import CollectionWrapper from "../Wrappers/CollectionWrapper";
+import ItemWrapper from "../Wrappers/ItemWrapper";
 
 const App = () => {
   const [errors, setErrors] = useState([]);
@@ -25,30 +27,62 @@ const App = () => {
           <Route
             path="/main-page"
             element={
-              <WithAuth>
-                <AppNavbar />
-                <GenericList getAll={false} type="collection" />
-                <GenericList getAll={false} type="item" />
-                <Footer/>
-              </WithAuth>
+              <>
+                <CustomNavBar />
+                <GenericList
+                  getAll={false}
+                  type="collections"
+                  header="Largest Collections"
+                  limit="5"
+                  Wrapper={CollectionWrapper}
+                  apiFunction="getCollections"
+                  button="outline-success"
+                />
+                <GenericList
+                  getAll={false}
+                  type="items"
+                  header="New Items"
+                  limit="12"
+                  Wrapper={ItemWrapper}
+                  apiFunction="getItems"
+                  button="outline-primary"
+                />
+                <Footer />
+              </>
             }
           />
           <Route
             path="/collections"
             element={
-              <WithAuth>
-                <AppNavbar />
-                <GenericList getAll={true} type="collection" />
-              </WithAuth>
+              <>
+                <CustomNavBar />
+                <GenericList
+                  getAll={true}
+                  type="collections"
+                  header="All Collections"
+                  limit="6"
+                  Wrapper={CollectionWrapper}
+                  apiFunction="getCollections"
+                  button="outline-success"
+                />
+              </>
             }
           />
           <Route
             path="/items"
             element={
-              <WithAuth>
-                <AppNavbar />
-                <GenericList getAll={true} type="item" />
-              </WithAuth>
+              <>
+                <CustomNavBar />
+                <GenericList
+                  getAll={true}
+                  type="items"
+                  header="All Items"
+                  limit="12"
+                  Wrapper={ItemWrapper}
+                  apiFunction="getItems"
+                  button="outline-primary"
+                />
+              </>
             }
           />
           <Route path="/" element={<Navigate to="/main-page" replace />} />
