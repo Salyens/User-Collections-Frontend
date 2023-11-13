@@ -9,80 +9,60 @@ import WithAuth from "../HOC/WithAuth";
 import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import ErrorBoundary from "../HOC/ErrorBoundary";
-import GenericList from "../GenericList";
-import Footer from "../Footer/Footer";
-import CustomNavBar from "../AppNavbar/CustomNavBar";
-import CollectionWrapper from "../Wrappers/CollectionWrapper";
-import ItemWrapper from "../Wrappers/ItemWrapper";
+import { useTranslation } from "react-i18next";
+import {  ThemeProvider } from "../../contexts/ThemeContext";
+import MainPage from "../MainPage";
+import CollectionsPage from "../CollectionsPage";
+import ItemsPage from "../ItemsPage";
+import UserPage from "../UserPage/UserPage";
 
 const App = () => {
   const [errors, setErrors] = useState([]);
+  const { t, i18n } = useTranslation();
+  const [currentLang, setCurrentLang] = useState(i18n.language);
+  if (localStorage.getItem("language"))
+    setCurrentLang(localStorage.getItem("language"));
 
   return (
-    <Router>
-      <div>
+    <ThemeProvider>
+      <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route
             path="/main-page"
             element={
-              <>
-                <CustomNavBar />
-                <GenericList
-                  getAll={false}
-                  type="collections"
-                  header="Largest Collections"
-                  limit="5"
-                  Wrapper={CollectionWrapper}
-                  apiFunction="getCollections"
-                  button="outline-success"
-                />
-                <GenericList
-                  getAll={false}
-                  type="items"
-                  header="New Items"
-                  limit="12"
-                  Wrapper={ItemWrapper}
-                  apiFunction="getItems"
-                  button="outline-primary"
-                />
-                <Footer />
-              </>
+              <MainPage
+                currentLang={currentLang}
+                onSetCurrentLang={setCurrentLang}
+              />
             }
           />
           <Route
             path="/collections"
             element={
-              <>
-                <CustomNavBar />
-                <GenericList
-                  getAll={true}
-                  type="collections"
-                  header="All Collections"
-                  limit="6"
-                  Wrapper={CollectionWrapper}
-                  apiFunction="getCollections"
-                  button="outline-success"
-                />
-              </>
+              <CollectionsPage
+                currentLang={currentLang}
+                onSetCurrentLang={setCurrentLang}
+              />
             }
           />
           <Route
             path="/items"
             element={
-              <>
-                <CustomNavBar />
-                <GenericList
-                  getAll={true}
-                  type="items"
-                  header="All Items"
-                  limit="12"
-                  Wrapper={ItemWrapper}
-                  apiFunction="getItems"
-                  button="outline-primary"
-                />
-              </>
+              <ItemsPage
+                currentLang={currentLang}
+                onSetCurrentLang={setCurrentLang}
+              />
+            }
+          />
+          <Route
+            path="/user-page"
+            element={
+              <UserPage
+                currentLang={currentLang}
+                onSetCurrentLang={setCurrentLang}
+              />
             }
           />
           <Route path="/" element={<Navigate to="/main-page" replace />} />
@@ -95,8 +75,8 @@ const App = () => {
             }
           />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 };
 

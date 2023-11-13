@@ -29,12 +29,15 @@ class ApiService {
     return data;
   }
 
-  static async getCollections(page, limit, getAll) {
-    let ApiURL;
-    if (getAll)
-      ApiURL = `${ApiService.apiBase}/collections/all?page=${page}&limit=${limit}`;
-    else ApiURL = `${ApiService.apiBase}/collections`;
-    const response = await axios.get(ApiURL, {
+  static async getCollections(page, limit, userId) {
+    console.log('userId: ', userId);
+
+    let URL;
+    if (userId)
+      URL = `${ApiService.apiBase}/collections?page=${page}&limit=${limit}&userId=${userId}`;
+    else URL = `${ApiService.apiBase}/collections?page=${page}&limit=${limit}`;
+
+    const response = await axios.get(URL, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     const { collections, total } = response.data;

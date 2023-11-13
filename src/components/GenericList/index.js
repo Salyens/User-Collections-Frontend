@@ -9,17 +9,18 @@ const GenericList = ({
   limit,
   Wrapper,
   apiFunction,
+  userId,
   button,
 }) => {
-
   const { data, page, setPage, total } = useDataFetching(
     apiFunction,
     getAll,
-    limit
+    limit,
+    userId
   );
 
   return (
-    <>
+    <div className="list-height">
       <h3 className="text-center mt-3 mb-3">{header}</h3>
       <div className="row d-flex justify-content-center align-items-stretch pb-3 me-3 ms-3 gx-2 gy-2">
         {data.map((item, index) => (
@@ -36,7 +37,7 @@ const GenericList = ({
           onSetPage={setPage}
         />
       )}
-    </>
+    </div>
   );
 };
 

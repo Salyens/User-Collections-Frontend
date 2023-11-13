@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ApiService from "../services/ApiService";
 
-const useDataFetching = (apiFunction, getAll, limit) => {
+const useDataFetching = (apiFunction, getAll, limit, userId) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -9,7 +9,7 @@ const useDataFetching = (apiFunction, getAll, limit) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await ApiService[apiFunction](page, limit, getAll);
+        const response = await ApiService[apiFunction](page, limit, getAll, userId);
         const { data, total } = response;
 
         setData(data);
