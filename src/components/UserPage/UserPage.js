@@ -11,22 +11,8 @@ import ApiService from "../../services/ApiService";
 const UserPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
-  const [userId, setUserId ] = useState("");
   const themeClass =
     theme === "light" ? "bg-light text-dark" : "bg-dark text-white";
-
-    const handleGetUserId = async () => {
-        try {
-          const response = await ApiService.getUserInfo();
-          setUserId(response.data._id)
-        } catch (e) {
-            console.log('e: ', e);
-        }
-      };
-
-      useEffect(() => {
-        handleGetUserId();
-      }, []);
 
   return (
     <div className={themeClass}>
@@ -41,7 +27,7 @@ const UserPage = ({ currentLang, onSetCurrentLang }) => {
         limit="20"
         Wrapper={CollectionWrapper}
         apiFunction="getCollections"
-        userId={userId}
+        userPage={true}
         button="outline-success"
       />
       <Footer />

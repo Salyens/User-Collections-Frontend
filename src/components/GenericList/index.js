@@ -9,14 +9,14 @@ const GenericList = ({
   limit,
   Wrapper,
   apiFunction,
-  userId,
+  userPage,
   button,
 }) => {
   const { data, page, setPage, total } = useDataFetching(
     apiFunction,
     getAll,
     limit,
-    userId
+    userPage
   );
 
   return (
