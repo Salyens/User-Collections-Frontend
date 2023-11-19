@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import CollectionWrapper from "../Wrappers/CollectionWrapper";
-import CustomNavBar from "../AppNavbar/CustomNavBar";
-import GenericList from "../GenericList";
-import Footer from "../Footer/Footer";
+import { ThemeContext } from "../../../contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
+import CustomNavBar from "../../AppNavbar/CustomNavBar";
+import GenericList from "../../GenericList";
+import Footer from "../../Footer/Footer";
+import CollectionWrapper from "../../Collection/CollectionWrapper.js";
 
 const CollectionsPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();
@@ -28,6 +28,7 @@ const CollectionsPage = ({ currentLang, onSetCurrentLang }) => {
           limit="10"
           Wrapper={CollectionWrapper}
           apiFunction="getCollections"
+          userPage={false}
           button="outline-success"
         />
       </div>

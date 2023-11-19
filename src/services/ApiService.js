@@ -38,8 +38,27 @@ class ApiService {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     const { collections, total } = response.data;
-    console.log(response.data);
     return { data: collections, total };
+  }
+
+  static async getOneCollection(name) {
+    const response = await axios.get(
+      `${ApiService.apiBase}/collections/${name}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+    return response.data[0];
+  }
+
+  static async getItemsInCollection(collectionName) {
+    const response = await axios.get(
+      `${ApiService.apiBase}/items/by-collection/${collectionName}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+    return response.data;
   }
 
   static async getItems(page, limit) {
@@ -60,21 +79,33 @@ class ApiService {
     return data;
   }
 
-  static async delete(ids) {
-    await axios.delete(`${ApiService.apiBase}/delete`, {
-      data: { idsToDelete: ids },
+  static async deleteCollection(collectionName) {
+    await axios.delete(`${ApiService.apiBase}/collections/${collectionName}`, {
+      name: collectionName,
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
   }
 
-  static async update(blockStatus, ids) {
+  static async updateCollection(updatedData, id) {
     await axios.patch(
-      `${ApiService.apiBase}/update`,
-      { blockStatus, ids },
+      `${ApiService.apiBase}/collections/${id}`,
+      { ...updatedData },
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
+  }
+
+  static async createCollection(data) {
+    const response = await axios.post(
+      `${ApiService.apiBase}/collections`,
+      data,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+
+    return response.data;
   }
 }
 

@@ -1,6 +1,5 @@
 import ApiService from "../../../services/ApiService";
 import AuthForm from "../AuthForm";
-import useCheckLogin from "../../../hooks/useCheckLogin";
 
 const Login = () => {
   const fields = [
@@ -9,7 +8,6 @@ const Login = () => {
   ];
   const initialState = { email: "", password: "" };
 
-  // useCheckLogin();
 
   return (
     <AuthForm

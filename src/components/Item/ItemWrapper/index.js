@@ -1,14 +1,14 @@
 import React from "react";
 import OneItem from "../OneItem";
 
-const ItemWrapper = ({ item }) => {
-  const userName = item?.user?.name || "";
+const ItemWrapper = ({ el }) => {
+  const userName = el?.user?.name || "";
 
   return (
     <div className="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 col-xxl-2">
       <OneItem
-        name={item.name}
-        collection={item.collectionName}
+        name={el.name}
+        collection={el.collectionName}
         author={userName}
       />
     </div>

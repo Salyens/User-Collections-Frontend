@@ -2,23 +2,27 @@ import { Button, Form, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import RegAndLoginItem from "../RegAndLoginItem";
 import useHandleForm from "../../../hooks/useHandleForm";
+import renderErrors from "../../../helpers/renderErrors";
+import { useContext, useEffect } from "react";
+import { ErrorsContext } from "../../../contexts/ErrorsContext";
 
 const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
   const navigate = useNavigate();
-  const { input, errors, isLoading, handleInputChange, handleSubmit } =
-    useHandleForm(initialState, apiServiceFunction, () => navigate("/main-page"));
+  const { errors, setErrors } = useContext(ErrorsContext);
+  const { input, isLoading, handleInputChange, handleSubmit } = useHandleForm(
+    initialState,
+    apiServiceFunction,
+    () => navigate("/main-page")
+  );
+
+  useEffect(() => {
+    setErrors([]);
+  }, []);
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center vh-100">
       <h2 className="mb-3 text-center">{title}</h2>
-
-      {errors && errors.length > 0 && (
-        <ul className="text-danger">
-          {errors.map((error, index) => (
-            <li key={index}>{error}</li>
-          ))}
-        </ul>
-      )}
+      {renderErrors(errors)}
 
       <Form
         className="col-10 col-sm-10 col-md-7 col-lg-6 col-xl-5 col-xxl-4 d-flex flex-column justify-content-center align-items-center"

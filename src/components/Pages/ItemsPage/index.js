@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import CustomNavBar from "../AppNavbar/CustomNavBar";
-import GenericList from "../GenericList";
-import Footer from "../Footer/Footer";
-import ItemWrapper from "../Wrappers/ItemWrapper";
 import { useTranslation } from "react-i18next";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import CustomNavBar from "../../AppNavbar/CustomNavBar";
+import GenericList from "../../GenericList";
+import Footer from "../../Footer/Footer";
+import ItemWrapper from "../../Item/ItemWrapper";
 
 const ItemsPage = ({ currentLang, onSetCurrentLang }) => {
   const { t } = useTranslation();

@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import CollectionWrapper from "../Wrappers/CollectionWrapper";
-import CustomNavBar from "../AppNavbar/CustomNavBar";
-import GenericList from "../GenericList";
-import Footer from "../Footer/Footer";
-import ItemWrapper from "../Wrappers/ItemWrapper";
 import { useTranslation } from "react-i18next";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+import CustomNavBar from "../../AppNavbar/CustomNavBar";
+import GenericList from "../../GenericList";
+import Footer from "../../Footer/Footer";
+import CollectionWrapper from "../../Collection/CollectionWrapper.js";
+import ItemWrapper from "../../Item/ItemWrapper/index.js";
+
 
 const MainPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();
@@ -20,7 +21,6 @@ const MainPage = ({ currentLang, onSetCurrentLang }) => {
         onSetCurrentLang={onSetCurrentLang}
       />
       <GenericList
-        getAll={false}
         type="collections"
         header={t("Home-collection-header")}
         limit="5"

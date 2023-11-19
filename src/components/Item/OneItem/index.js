@@ -3,7 +3,8 @@ import Card from "react-bootstrap/Card";
 import "./oneitem.css";
 import { useTranslation } from "react-i18next";
 import { useContext } from "react";
-import { ThemeContext } from "../../contexts/ThemeContext";
+import { ThemeContext } from "../../../contexts/ThemeContext";
+
 
 const OneItem = ({ name, collection, author }) => {
   const { t } = useTranslation();

@@ -26,21 +26,18 @@ const CustomNavBar = ({ currentLang, onSetCurrentLang }) => {
     { endpoint: "/registration", innerText: t("Sign up") },
   ];
 
-  const handleGetUserName = () => {
-    ApiService.getUserInfo()
-      .then((res) => {
-        if (res.status === 200) setIsLoggedIn(true);
-      })
-      .catch((e) => {
-        // onSetErrors([
-        //   "An error occurred while getting user info. Please try again later.",
-        // ]);
-      });
+  const handleGetUserName = async () => {
+    try {
+      const result = await ApiService.getUserInfo();
+      if (result.status === 200) setIsLoggedIn(true);
+    } catch (error) {
+      
+    }
   };
 
   useEffect(() => {
     handleGetUserName();
-  }, [isLoggedIn]);
+  }, []);
 
   const { theme } = useContext(ThemeContext);
   const themeClass =

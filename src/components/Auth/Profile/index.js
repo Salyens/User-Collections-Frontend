@@ -21,7 +21,7 @@ const Profile = ({ onSetIsLoggedIn }) => {
   return (
     <div className="d-flex justify-content-end align-items-center">
       <div className="me-2">
-        <Button className={themeClass} onClick={() => navigate("/user-page")}>
+        <Button className={themeClass} onClick={() => navigate("/user-collections")}>
           {t("User-page")}
         </Button>
       </div>

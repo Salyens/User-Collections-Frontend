@@ -1,0 +1,14 @@
+.edit-collection-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.4s;
+    background-color: rgba(6, 6, 6, 0.31);
+}
+
+.edit-collection-icon:hover {
+    font-size: 25px;
+    transition: all 0.4s;
+}
