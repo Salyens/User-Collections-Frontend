@@ -1,14 +1,17 @@
 import transformToDate from "../../../../helpers/transformToDate";
 
-const OneItem = ({ item, allFields, collection }) => {
+const OneRow = ({ item, allFields, collection }) => {
   const unWrappedItem = { ...item, ...item["additionalFields"] };
 
   const fieldsMap = {
     createdDate: (fieldValue) => transformToDate(fieldValue),
     tags: (fieldValue) => fieldValue.join(", "),
+    name: (fieldValue) => fieldValue,
     additionalFields: {
-      boolean: (fieldValue) => (fieldValue["value"] ? "Yes" : "No"),
-      date: (fieldValue) => transformToDate(fieldValue["value"]),
+      boolean: (fieldValue) => (fieldValue ? "Yes" : "No"),
+      date: (fieldValue) => transformToDate(fieldValue),
+      string: (fieldValue) => fieldValue,
+      number: (fieldValue) => fieldValue,
     },
   };
 
@@ -20,30 +23,15 @@ const OneItem = ({ item, allFields, collection }) => {
           const additionalField = collection["additionalFields"][field];
           let displayValue;
 
-          if (additionalField && additionalField["type"] === "date") {
-            displayValue = transformToDate(fieldValue.value);
-          } else if (additionalField && additionalField["type"] === "boolean") {
-            displayValue = fieldValue["value"] ? "Yes" : "No";
-          } 
-          
-          else if (field === "createdDate") {
-            displayValue = transformToDate(fieldValue);
-          } else if (field === "tags") {
-            displayValue = fieldValue.join(", ");
-          } else if (
-            fieldValue &&
-            typeof fieldValue === "object" &&
-            "value" in fieldValue
-          ) {
-            displayValue = fieldValue.value;
-          } else {
-            displayValue = fieldValue;
-          }
-
+          if (additionalField) {
+            displayValue = fieldsMap["additionalFields"][
+              additionalField["type"]
+            ](fieldValue["value"]);
+          } else displayValue = fieldsMap[field](fieldValue);
           return <td key={`${item._id}-${index}`}>{displayValue}</td>;
         })}
     </tr>
   );
 };
 
-export default OneItem;
+export default OneRow;

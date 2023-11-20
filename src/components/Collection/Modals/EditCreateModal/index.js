@@ -15,6 +15,7 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
 
   const handleInputChange = (key, value) => {
     setErrors([]);
+    console.log(value);
     setInput((prev) => ({
       ...prev,
       [key]: value,
@@ -38,16 +39,16 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
           }
           return acc;
         }, []);
-      
+
         if (errors.length > 0) {
           setErrors(errors);
           return true;
         }
-        return false; 
+        return false;
       };
 
       if (hasEmptyValues(input)) return;
-      
+
       const additionalFields = newFields.reduce((acc, field) => {
         if (field.type && field.value) {
           if (field.type === "text") {
@@ -68,8 +69,6 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
         ...input,
         additionalFields,
       };
-
-
 
       if (mode === "edit") {
         await ApiService.updateCollection(finalInput, collection._id);
@@ -123,6 +122,7 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
           <RequiredFields
             collection={collection}
             handleInputChange={handleInputChange}
+            input={input}
             onSetInput={setInput}
           />
           {mode === "create" && (

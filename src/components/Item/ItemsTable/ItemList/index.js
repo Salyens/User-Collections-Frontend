@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import OneItem from "../OneItem.js";
+import OneRow from "../OneItem.js";
 import $ from "jquery";
 import "datatables.net";
 import "datatables.net-dt/css/jquery.dataTables.css";
@@ -8,7 +8,7 @@ import "datatables.net-bs5";
 
 const ItemList = ({ collection, items }) => {
   const [allFields, setAllFields] = useState([]);
-  const requiredFields = [ "name", "tags", "createdDate"];
+  const requiredFields = ["name", "tags", "createdDate"];
 
   useEffect(() => {
     if (items && items.length > 0) {
@@ -43,8 +43,8 @@ const ItemList = ({ collection, items }) => {
       <Table id="myTable" striped>
         <thead>{renderHeaders()}</thead>
         <tbody>
-          {items.map((item, index) => (
-            <OneItem
+          {items.map((item) => (
+            <OneRow
               key={item._id}
               item={item}
               allFields={allFields}
