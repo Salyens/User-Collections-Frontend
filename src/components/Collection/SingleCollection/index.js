@@ -7,8 +7,8 @@ import { useParams } from "react-router-dom";
 import ApiService from "../../../services/ApiService";
 import "./singlecollection.css";
 
-const SingleCollection = ({ onSetItems, collection, onSetCollection }) => {
-  const { collectionName } = useParams();
+const SingleCollection = ({ collection }) => {
+
   const { theme } = useContext(ThemeContext);
   const { t } = useTranslation();
   const themeClass =
@@ -16,25 +16,6 @@ const SingleCollection = ({ onSetItems, collection, onSetCollection }) => {
       ? "bg-light text-dark col-12 col-md-6 col-lg-3 ms-auto me-auto p-0  "
       : "bg-dark text-white border-white col-12 col-md-6 col-lg-3 ms-auto me-auto p-0 ";
 
-  const handleGetCollectionInfo = async () => {
-    try {
-      const foundedCollection = await ApiService.getOneCollection(
-        collectionName
-      );
-      const foundedItems = await ApiService.getItemsInCollection(
-        collectionName
-      );
-      onSetItems(foundedItems);
-      onSetCollection(foundedCollection);
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  };
-
-
-  useEffect(() => {
-    handleGetCollectionInfo();
-  }, []);
 
   return (
     <div className="row m-0">

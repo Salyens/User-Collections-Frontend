@@ -35,7 +35,7 @@ const DeleteModal = ({ show, onHide, collectionName }) => {
 
         <Modal.Body>
           {renderErrors(errors)}
-          {errors.length === 0 && (
+          {!errors || errors.length === 0 && (
             <p>{`Are you sure you want to delete ${collectionName}?`}</p>
           )}
         </Modal.Body>

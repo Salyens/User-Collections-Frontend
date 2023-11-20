@@ -24,7 +24,7 @@ const ThemeDropdown = ({ collectionKey, onSetInput, prevValue }) => {
 
       <Dropdown.Menu>
         {themes.map((theme, index) => (
-          <Dropdown.Item key={index} eventKey={theme}>
+          <Dropdown.Item key={index} eventKey={theme} required>
             {theme}
           </Dropdown.Item>
         ))}

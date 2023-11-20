@@ -11,7 +11,6 @@ const RequiredFields = ({ collection, handleInputChange, onSetInput }) => {
         placeholder="Enter collection name"
         defaultValue={collection ? collection["name"] : ""}
         onChange={(e) => handleInputChange("name", e.target.value)}
-        required
       />
       <Form.Label>Collection description</Form.Label>
       <Form.Control
@@ -19,14 +18,12 @@ const RequiredFields = ({ collection, handleInputChange, onSetInput }) => {
         placeholder="Enter collection description"
         defaultValue={collection ? collection["description"] : ""}
         onChange={(e) => handleInputChange("description", e.target.value)}
-        required
       />
       <Form.Label>Collection theme</Form.Label>
       <ThemeDropdown
         collectionKey="theme"
         onSetInput={onSetInput}
         prevValue={collection ? collection["theme"] : ""}
-        required
       />
     </div>
   );

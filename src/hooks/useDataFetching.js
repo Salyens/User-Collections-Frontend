@@ -14,7 +14,8 @@ const useDataFetching = (apiFunction, limit, userPage, setData) => {
       setData(data);
       if (total) setTotal(total);
     } catch (error) {
-      setErrors("error.message");
+      setErrors("We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later.");
+
     }
   };
 

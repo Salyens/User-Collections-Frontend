@@ -9,20 +9,6 @@ const AdditionalFields = ({ newFields, onSetNewFields }) => {
     onSetNewFields(updatedFields);
   };
 
-  // const getInputType = (fieldType) => {
-  //   switch (fieldType) {
-  //     case "string":
-  //     case "text":
-  //       return "text";
-  //     case "number":
-  //       return "number";
-  //     case "date":
-  //       return "date";
-  //     default:
-  //       return "text";
-  //   }
-  // };
-
   return newFields.map((field, index) => (
     <div key={index} className="mb-3 d-flex">
       <NewFieldsDropDown

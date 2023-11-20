@@ -51,7 +51,6 @@ const UserPage = ({ currentLang, onSetCurrentLang }) => {
           show={modalShow}
           onHide={handleModalToggle}
           mode={"create"}
-          // collection={collection}
         />
       </div>
 

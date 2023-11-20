@@ -23,9 +23,33 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
 
   const handleSaveChanges = async () => {
     try {
+      if (
+        mode === "create" &&
+        (!input["name"] || !input["description"] || !input["theme"])
+      ) {
+        return setErrors(["Name, description and theme shouldn't be empty"]);
+      }
+
+      const hasEmptyValues = (data) => {
+        const errors = Object.keys(data).reduce((acc, key) => {
+          const value = data[key];
+          if (!value) {
+            acc.push(`Field ${key} shouldn't be empty`);
+          }
+          return acc;
+        }, []);
+      
+        if (errors.length > 0) {
+          setErrors(errors);
+          return true;
+        }
+        return false; 
+      };
+
+      if (hasEmptyValues(input)) return;
+      
       const additionalFields = newFields.reduce((acc, field) => {
         if (field.type && field.value) {
-          if (!field.value) setErrors("All fields are required");
           if (field.type === "text") {
             acc[field.value] = { type: "string" };
           } else if (field.type === "string") {
@@ -45,6 +69,8 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
         additionalFields,
       };
 
+
+
       if (mode === "edit") {
         await ApiService.updateCollection(finalInput, collection._id);
         setData((prev) =>
@@ -59,6 +85,7 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
       setInput({});
       onHide();
     } catch (error) {
+      console.log("error: ", error);
       !error.response
         ? setErrors(error.message)
         : setErrors(error.response.data.message);
