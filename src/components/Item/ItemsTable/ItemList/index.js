@@ -1,18 +1,38 @@
-import React, { useState, useEffect } from "react";
-import { Button, Form, Table } from "react-bootstrap";
-import OneRow from "../OneRow.js/index.js";
-import $ from "jquery";
-import "datatables.net";
-import "datatables.net-dt/css/jquery.dataTables.css";
-import "datatables.net-bs5";
-import ApiService from "../../../../services/ApiService.js";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  useTable,
+  useGlobalFilter,
+  useSortBy,
+  usePagination,
+} from "react-table";
+import { Table as BootstrapTable } from "react-bootstrap";
+import TableFilter from "../TableFilter/index.js";
+import TableButtons from "../TableButtons/index.js";
+import TableHeader from "../TableHeader/index.js";
+import TableBody from "../TableBody/index.js";
+import TablePageSize from "../TablePageSize/index.js";
+import TablePagination from "../TablePagination/index.js";
+import CurrentPage from "../CurrentPage/index.js";
+import useTableColumns from "../../../../hooks/useTableColumns.js";
+import "./tablelist.css";
 
 const ItemList = ({ collection, items, onSetItems }) => {
   const [isChecked, setIsChecked] = useState([]);
-  const [allFields, setAllFields] = useState([]);
   const requiredFields = ["name", "tags", "createdDate"];
+  const [allFields, setAllFields] = useState([]);
 
-  useEffect(() => {
+  const columns = useTableColumns(collection, allFields);
+  const data = useMemo(() => items, [items]);
+  const tableInstance = useTable(
+    { columns, data },
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
+  const { pageOptions, setPageSize, state, setGlobalFilter } = tableInstance;
+  const { globalFilter, pageIndex } = state;
+
+  const addAdditionalFields = () => {
     if (items && items.length > 0) {
       const additionalFields = items[0].additionalFields
         ? Object.keys(items[0].additionalFields)
@@ -23,88 +43,48 @@ const ItemList = ({ collection, items, onSetItems }) => {
           ? [...requiredFields, ...additionalFields]
           : requiredFields
       );
-
-      $(document).ready(() => {
-        $("#myTable").DataTable({ scrollY: 411 });
-      });
     }
+  };
+
+  useEffect(() => {
+    addAdditionalFields();
   }, [items]);
-
-  const handleFillAll = (e) => {
-    if (e.target.checked) {
-      setIsChecked(items.map((item) => item._id));
-    } else {
-      setIsChecked([]);
-    }
-  };
-
-  const handleDeleteItem = async () => {
-    try {
-      await ApiService.deleteItems(isChecked)
-      const updatedItems = items.filter((item) => !isChecked.includes(item._id));
-      // Обновление состояния items с помощью переданной функции onSetItems
-      onSetItems(updatedItems);
-    } catch (error) {
-      console.log('error: ', error);
-      
-    }
-    console.log(isChecked);
-  };
-
-  const renderHeaders = () => {
-    return (
-      <tr>
-        <th>
-          <Form.Check
-            type="checkbox"
-            aria-label="select user"
-            checked={isChecked.length === items.length && items.length > 0}
-            onChange={handleFillAll}
-          />
-        </th>
-        {allFields.map((field) => (
-          <th key={field}>{field}</th>
-        ))}
-      </tr>
-    );
-  };
 
   return (
     <div className="me-3 ms-3">
-      <div className="mb-1 edit-btn">
-        <Button
-          variant="primary"
-          className="me-1"
-          // onClick={handleModalToggle}
-        >
-          Create
-        </Button>
-        <Button
-          className="me-1"
-          variant="outline-primary"
-          // onClick={handleModalToggle}
-        >
-          Edit <i className="bi bi-pencil-fill"></i>
-        </Button>
-        <Button variant="outline-danger" onClick={handleDeleteItem}>
-          Delete <i className="bi bi-trash-fill"></i>
-        </Button>
+      <div className="d-flex justify-content-between">
+        <TableButtons
+          items={items}
+          onSetItems={onSetItems}
+          isChecked={isChecked}
+          onSetIsChecked={setIsChecked}
+        />
+        <TableFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
-      <Table id="myTable" striped>
-        <thead>{renderHeaders()}</thead>
-        <tbody>
-          {items.map((item) => (
-            <OneRow
-              key={item._id}
-              item={item}
-              allFields={allFields}
-              collection={collection}
-              isChecked={isChecked}
-              onSetIsChecked={setIsChecked}
-            />
-          ))}
-        </tbody>
-      </Table>
+
+      <div className="table-scroll">
+        <BootstrapTable {...tableInstance.getTableProps()} striped>
+          <TableHeader
+            items={items}
+            tableInstance={tableInstance}
+            isChecked={isChecked}
+            onSetIsChecked={setIsChecked}
+          />
+          <TableBody
+            tableInstance={tableInstance}
+            isChecked={isChecked}
+            onSetIsChecked={setIsChecked}
+          />
+        </BootstrapTable>
+      </div>
+
+      <div className="d-flex justify-content-between">
+        <CurrentPage pageIndex={pageIndex} pageOptions={pageOptions} />
+        <div className="d-flex justify-content-end gap-2">
+          <TablePageSize setPageSize={setPageSize} />
+          <TablePagination tableInstance={tableInstance} />
+        </div>
+      </div>
     </div>
   );
 };
