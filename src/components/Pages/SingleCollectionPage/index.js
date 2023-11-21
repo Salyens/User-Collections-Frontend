@@ -59,6 +59,7 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang }) => {
           onSetItems={setItems}
           collection={collection}
           onSetCollection={setCollection}
+          
         />
         <ItemList collection={collection} items={items} onSetItems={setItems} />
       </div>

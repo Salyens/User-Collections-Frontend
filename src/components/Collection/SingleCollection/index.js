@@ -26,7 +26,7 @@ const SingleCollection = ({ collection }) => {
   };
 
   return (
-    <div className="row m-0">
+    <div className="row m-0 mb-3">
       <Card className={themeClass}>
         <Card.Img src={myImage} />
         <Card.Body>
