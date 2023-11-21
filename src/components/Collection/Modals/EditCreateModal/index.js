@@ -15,7 +15,6 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
 
   const handleInputChange = (key, value) => {
     setErrors([]);
-    console.log(value);
     setInput((prev) => ({
       ...prev,
       [key]: value,

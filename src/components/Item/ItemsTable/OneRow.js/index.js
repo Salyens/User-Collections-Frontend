@@ -1,7 +1,9 @@
+import { Form } from "react-bootstrap";
 import transformToDate from "../../../../helpers/transformToDate";
 
-const OneRow = ({ item, allFields, collection }) => {
+const OneRow = ({ item, allFields, collection, isChecked, onSetIsChecked }) => {
   const unWrappedItem = { ...item, ...item["additionalFields"] };
+  const { _id } = item;
 
   const fieldsMap = {
     createdDate: (fieldValue) => transformToDate(fieldValue),
@@ -15,8 +17,23 @@ const OneRow = ({ item, allFields, collection }) => {
     },
   };
 
+  const handleCheckboxChange = (event) => {
+    const checked = event.target.checked;
+    onSetIsChecked((prevChecked) =>
+      checked ? [...prevChecked, _id] : prevChecked.filter((userId) => userId !== _id))
+  };
+  
+
   return (
     <tr>
+      <td>
+        <Form.Check
+          type="checkbox"
+          aria-label="select user"
+          onChange={handleCheckboxChange}
+          checked={isChecked.includes(_id)}
+        />
+      </td>
       {item &&
         allFields.map((field, index) => {
           const fieldValue = unWrappedItem[field];

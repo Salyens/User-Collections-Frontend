@@ -72,6 +72,13 @@ class ApiService {
     return { data: userItems, total };
   }
 
+  static async deleteItems(idsToDelete) {
+    await axios.delete(`${ApiService.apiBase}/items`, {
+      data: { idsToDelete },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+  }
+
   static async getUserInfo() {
     const data = await axios.get(`${ApiService.apiBase}/users/me`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

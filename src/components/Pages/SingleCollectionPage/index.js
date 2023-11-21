@@ -4,7 +4,6 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import Footer from "../../Footer/Footer";
 import SingleCollection from "../../Collection/SingleCollection/index.js";
-import ItemsTable from "../../Item/ItemsTable/ItemList/index.js";
 import ItemList from "../../Item/ItemsTable/ItemList/index.js";
 import { useParams } from "react-router-dom";
 import ApiService from "../../../services/ApiService.js";
@@ -61,7 +60,7 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang }) => {
           collection={collection}
           onSetCollection={setCollection}
         />
-        <ItemList collection={collection} items={items} />
+        <ItemList collection={collection} items={items} onSetItems={setItems} />
       </div>
 
       <Footer className="mt-auto" />

@@ -1,14 +1,11 @@
 import myImage from "./picture.jpg";
 import { Card } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
-import { useParams } from "react-router-dom";
-import ApiService from "../../../services/ApiService";
 import "./singlecollection.css";
 
 const SingleCollection = ({ collection }) => {
-
   const { theme } = useContext(ThemeContext);
   const { t } = useTranslation();
   const themeClass =
@@ -16,6 +13,17 @@ const SingleCollection = ({ collection }) => {
       ? "bg-light text-dark col-12 col-md-6 col-lg-3 ms-auto me-auto p-0  "
       : "bg-dark text-white border-white col-12 col-md-6 col-lg-3 ms-auto me-auto p-0 ";
 
+  const renderAdditionalFields = (fields) => {
+    const fieldKeys = Object.keys(fields);
+    return (
+      <>
+        <Card.Text>
+          <strong>Additional Fields:</strong>
+        </Card.Text>
+        {<Card.Text>{fieldKeys.join(", ")}</Card.Text>}
+      </>
+    );
+  };
 
   return (
     <div className="row m-0">
@@ -23,7 +31,11 @@ const SingleCollection = ({ collection }) => {
         <Card.Img src={myImage} />
         <Card.Body>
           <Card.Title>{collection.name}</Card.Title>
-          <Card.Text>{collection.description}</Card.Text>
+          <Card.Text
+            dangerouslySetInnerHTML={{ __html: collection.description }}
+          ></Card.Text>
+          {collection.additionalFields &&
+            renderAdditionalFields(collection.additionalFields)}
         </Card.Body>
       </Card>
     </div>

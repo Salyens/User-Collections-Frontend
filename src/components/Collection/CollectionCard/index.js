@@ -33,6 +33,7 @@ const CollectionCard = ({ collection, userPage }) => {
       <Card className={themeClass}>
         {userPage && (
           <div className="mb-1 position-absolute top-0 end-0 edit-btn">
+            
             <Button
               className="me-1"
               variant="outline-primary"
@@ -43,12 +44,13 @@ const CollectionCard = ({ collection, userPage }) => {
             <Button variant="outline-danger" onClick={handleDeleteModalToggle}>
               Delete <i className="bi bi-trash-fill"></i>
             </Button>
+
           </div>
         )}
         <Card.Img src={myImage} />
         <Card.Body>
           <Card.Title className="truncate">{name}</Card.Title>
-          <Card.Text className="truncate">{description}</Card.Text>
+          <Card.Text className="fixed-height-text" dangerouslySetInnerHTML={{ __html: description }}></Card.Text>
           <Link
             to={`/user-collections/${name}`}
             variant="success"
