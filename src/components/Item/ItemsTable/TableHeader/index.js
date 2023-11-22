@@ -23,6 +23,7 @@ const TableHeader = ({ items, tableInstance, isChecked, onSetIsChecked }) => {
               onChange={handleFillAll}
             />
           </th>
+          <th>Edit</th>
           {headerGroup.headers.map((column) => (
             <th {...column.getHeaderProps(column.getSortByToggleProps())}>
               {column.render("Header")}

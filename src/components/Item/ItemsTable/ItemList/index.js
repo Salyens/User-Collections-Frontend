@@ -15,11 +15,18 @@ import TablePagination from "../TablePagination/index.js";
 import CurrentPage from "../CurrentPage/index.js";
 import useTableColumns from "../../../../hooks/useTableColumns.js";
 import "./tablelist.css";
+import EditModal from "../Modals/EditModal/index.js";
 
 const ItemList = ({ collection, items, onSetItems }) => {
   const [isChecked, setIsChecked] = useState([]);
   const requiredFields = ["name", "tags", "createdDate"];
   const [allFields, setAllFields] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
+  const [mode, setMode] = useState("edit");
+  const [oneItem, setOneItem] = useState({});
+  const handleModalToggle = () => {
+    setModalShow(!modalShow);
+  };
 
   const columns = useTableColumns(collection, allFields);
   const data = useMemo(() => items, [items]);
@@ -48,7 +55,8 @@ const ItemList = ({ collection, items, onSetItems }) => {
 
   useEffect(() => {
     addAdditionalFields();
-  }, [items]);
+  }, [items, data]);
+
 
   return (
     <div className="me-3 ms-3">
@@ -58,6 +66,8 @@ const ItemList = ({ collection, items, onSetItems }) => {
           onSetItems={onSetItems}
           isChecked={isChecked}
           onSetIsChecked={setIsChecked}
+          handleModalToggle={handleModalToggle}
+          onSetMode={setMode}
         />
         <TableFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
@@ -74,6 +84,9 @@ const ItemList = ({ collection, items, onSetItems }) => {
             tableInstance={tableInstance}
             isChecked={isChecked}
             onSetIsChecked={setIsChecked}
+            handleModalToggle={handleModalToggle}
+            onSetOneItem={setOneItem}
+            onSetMode={setMode}
           />
         </BootstrapTable>
       </div>
@@ -85,6 +98,14 @@ const ItemList = ({ collection, items, onSetItems }) => {
           <TablePagination tableInstance={tableInstance} />
         </div>
       </div>
+      <EditModal
+        show={modalShow}
+        onHide={handleModalToggle}
+        oneItem={oneItem}
+        collection={collection}
+        onSetItems={onSetItems}
+        mode={mode}
+      />
     </div>
   );
 };

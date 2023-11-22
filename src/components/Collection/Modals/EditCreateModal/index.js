@@ -6,6 +6,7 @@ import RequiredFields from "../RequiredFields";
 import renderErrors from "../../../../helpers/renderErrors";
 import AdditionalFields from "../AdditionalFields";
 import { DataContext } from "../../../../contexts/DataContext";
+import hasEmptyValues from "../../../../helpers/validation";
 
 const EditCreateModal = ({ show, onHide, collection, mode }) => {
   const { setData } = useContext(DataContext);
@@ -30,23 +31,8 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
         return setErrors(["Name, description and theme shouldn't be empty"]);
       }
 
-      const hasEmptyValues = (data) => {
-        const errors = Object.keys(data).reduce((acc, key) => {
-          const value = data[key];
-          if (!value) {
-            acc.push(`Field ${key} shouldn't be empty`);
-          }
-          return acc;
-        }, []);
-
-        if (errors.length > 0) {
-          setErrors(errors);
-          return true;
-        }
-        return false;
-      };
-
-      if (hasEmptyValues(input)) return;
+      const isEmptyValue = hasEmptyValues(input);
+      if (isEmptyValue) return setErrors([isEmptyValue]);
 
       const additionalFields = newFields.reduce((acc, field) => {
         if (field.type && field.value) {
