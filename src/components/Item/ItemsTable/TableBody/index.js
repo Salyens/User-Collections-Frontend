@@ -1,8 +1,14 @@
 import React from "react";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 
-const TableBody = ({tableInstance, isChecked, onSetIsChecked}) => {
-    
+const TableBody = ({
+  tableInstance,
+  isChecked,
+  onSetIsChecked,
+  handleModalToggle,
+  onSetOneItem,
+  onSetMode
+}) => {
   const handleCheckboxChange = (rowId) => (event) => {
     const checked = event.target.checked;
     onSetIsChecked((prevChecked) => {
@@ -14,6 +20,12 @@ const TableBody = ({tableInstance, isChecked, onSetIsChecked}) => {
         return prevChecked.filter((userId) => userId !== rowId);
       }
     });
+  };
+  const handleEditItem = (row) => {
+    handleModalToggle();
+    onSetOneItem(row);
+    onSetIsChecked([]);
+    onSetMode("edit")
   };
   return (
     <tbody {...tableInstance.getTableBodyProps()}>
@@ -28,6 +40,15 @@ const TableBody = ({tableInstance, isChecked, onSetIsChecked}) => {
                 onChange={handleCheckboxChange(row.original._id)}
                 checked={isChecked.includes(row.original._id)}
               />
+            </td>
+            <td>
+              <Button
+                onClick={() => handleEditItem(row.original)}
+                className="me-1"
+                variant="outline-primary"
+              >
+                <i className="bi bi-pencil-fill"></i>
+              </Button>
             </td>
             {row.cells.map((cell) => (
               <td {...cell.getCellProps()}>{cell.render("Cell")}</td>

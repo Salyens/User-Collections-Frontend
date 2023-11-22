@@ -2,7 +2,14 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import ApiService from "../../../../services/ApiService";
 
-const TableButtons = ({ items, onSetItems, isChecked, onSetIsChecked }) => {
+const TableButtons = ({
+  items,
+  onSetItems,
+  isChecked,
+  onSetIsChecked,
+  handleModalToggle,
+  onSetMode,
+}) => {
   const handleDeleteItem = async () => {
     try {
       await ApiService.deleteItems(isChecked);
@@ -16,13 +23,20 @@ const TableButtons = ({ items, onSetItems, isChecked, onSetIsChecked }) => {
     }
     console.log(isChecked);
   };
+
+  const handleChangeModeAndToggle = () => {
+    onSetMode("create");
+    handleModalToggle();
+  };
+
   return (
     <div className="mb-1 edit-btn">
-      <Button variant="primary" className="me-1">
+      <Button
+        variant="primary"
+        className="me-1"
+        onClick={handleChangeModeAndToggle}
+      >
         Create
-      </Button>
-      <Button className="me-1" variant="outline-primary">
-        Edit <i className="bi bi-pencil-fill"></i>
       </Button>
       <Button variant="outline-danger" onClick={handleDeleteItem}>
         Delete <i className="bi bi-trash-fill"></i>

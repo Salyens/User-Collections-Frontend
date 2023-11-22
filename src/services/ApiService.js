@@ -22,13 +22,6 @@ class ApiService {
     return response.status;
   }
 
-  static async get() {
-    const data = await axios.get(ApiService.apiBase, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    return data;
-  }
-
   static async getCollections(page, limit, userPage) {
     let URL = `${ApiService.apiBase}/collections?page=${page}&limit=${limit}`;
     if (userPage)
@@ -78,6 +71,29 @@ class ApiService {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
   }
+
+  static async updateItem(updatedData, id) {
+    await axios.patch(
+      `${ApiService.apiBase}/items/${id}`,
+      { ...updatedData },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+  }
+
+  static async createItem(data) {
+    const response = await axios.post(
+      `${ApiService.apiBase}/items`,
+      data,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+
+    return response.data;
+  }
+
 
   static async getUserInfo() {
     const data = await axios.get(`${ApiService.apiBase}/users/me`, {

@@ -41,7 +41,7 @@ const GenericList = ({
   return (
     <div className="list-height">
       <h3 className="text-center mt-3 mb-3">{header}</h3>
-      {errors && errors.length > 0 && renderErrors(errors)}
+      <div>{errors && errors.length > 0 && renderErrors(errors)}</div>
       <div className="row d-flex justify-content-center align-items-stretch pb-3 me-3 ms-3 gx-2 gy-2">
         {renderElement()}
       </div>
