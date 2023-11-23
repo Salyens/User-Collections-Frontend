@@ -15,8 +15,8 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();
   const [collection, setCollection] = useState({});
   const [items, setItems] = useState([]);
-  const { theme } = useContext(ThemeContext);
   const { errors, setErrors } = useContext(ErrorsContext);
+  const { theme } = useContext(ThemeContext);
   const themeClass =
     theme === "light"
       ? "bg-light text-dark d-flex flex-column min-vh-100"
@@ -41,7 +41,7 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang }) => {
 
   useEffect(() => {
     handleGetCollectionInfo();
-  }, []);
+  }, [setItems]);
 
   return (
     <div className={themeClass}>

@@ -1,11 +1,17 @@
-const hasEmptyValues = (data) => {
-  const errors = Object.keys(data).reduce((acc, key) => {
-    const value = data[key];
-    if (!value) acc.push(`Field ${key} shouldn't be empty`);
-    return acc;
-  }, []);
+const hasEmptyValues = (requiredFields, additionalFields) => {
+  const errors = [];
 
-  if (errors.length > 0) return errors;
-  return false;
+  Object.keys(requiredFields).forEach(key => {
+    const value = requiredFields[key];
+    if (!value) errors.push(`Field ${key} shouldn't be empty`);
+  });
+
+  Object.keys(additionalFields).forEach(key => {
+    const value = additionalFields[key]["value"];
+    if (!value && typeof value !== "boolean" && key !== "additionalFields") errors.push(`Field ${key} shouldn't be empty`);
+  });
+
+  return errors.length > 0 ? errors : false;
 };
+
 export default hasEmptyValues;

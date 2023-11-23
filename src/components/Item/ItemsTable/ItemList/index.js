@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   useTable,
   useGlobalFilter,
@@ -16,6 +16,7 @@ import CurrentPage from "../CurrentPage/index.js";
 import useTableColumns from "../../../../hooks/useTableColumns.js";
 import "./tablelist.css";
 import EditModal from "../Modals/EditModal/index.js";
+import { ErrorsContext } from "../../../../contexts/ErrorsContext.js";
 
 const ItemList = ({ collection, items, onSetItems }) => {
   const [isChecked, setIsChecked] = useState([]);
@@ -24,8 +25,11 @@ const ItemList = ({ collection, items, onSetItems }) => {
   const [modalShow, setModalShow] = useState(false);
   const [mode, setMode] = useState("edit");
   const [oneItem, setOneItem] = useState({});
+  const { errors, setErrors } = useContext(ErrorsContext);
+
   const handleModalToggle = () => {
     setModalShow(!modalShow);
+    setErrors([]);
   };
 
   const columns = useTableColumns(collection, allFields);
@@ -57,7 +61,6 @@ const ItemList = ({ collection, items, onSetItems }) => {
     addAdditionalFields();
   }, [items, data]);
 
-
   return (
     <div className="me-3 ms-3">
       <div className="d-flex justify-content-between">
@@ -72,32 +75,39 @@ const ItemList = ({ collection, items, onSetItems }) => {
         <TableFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
 
-      <div className="table-scroll">
-        <BootstrapTable {...tableInstance.getTableProps()} striped>
-          <TableHeader
-            items={items}
-            tableInstance={tableInstance}
-            isChecked={isChecked}
-            onSetIsChecked={setIsChecked}
-          />
-          <TableBody
-            tableInstance={tableInstance}
-            isChecked={isChecked}
-            onSetIsChecked={setIsChecked}
-            handleModalToggle={handleModalToggle}
-            onSetOneItem={setOneItem}
-            onSetMode={setMode}
-          />
-        </BootstrapTable>
-      </div>
+      {items.length > 0 ? (
+        <div>
+          <div className="table-scroll">
+            <BootstrapTable {...tableInstance.getTableProps()} striped>
+              <TableHeader
+                items={items}
+                tableInstance={tableInstance}
+                isChecked={isChecked}
+                onSetIsChecked={setIsChecked}
+              />
+              <TableBody
+                tableInstance={tableInstance}
+                isChecked={isChecked}
+                onSetIsChecked={setIsChecked}
+                handleModalToggle={handleModalToggle}
+                onSetOneItem={setOneItem}
+                onSetMode={setMode}
+              />
+            </BootstrapTable>
+          </div>
 
-      <div className="d-flex justify-content-between">
-        <CurrentPage pageIndex={pageIndex} pageOptions={pageOptions} />
-        <div className="d-flex justify-content-end gap-2">
-          <TablePageSize setPageSize={setPageSize} />
-          <TablePagination tableInstance={tableInstance} />
+          <div className="d-flex justify-content-between">
+            <CurrentPage pageIndex={pageIndex} pageOptions={pageOptions} />
+            <div className="d-flex justify-content-end gap-2">
+              <TablePageSize setPageSize={setPageSize} />
+              <TablePagination tableInstance={tableInstance} />
+            </div>
+          </div>
         </div>
-      </div>
+      ) : 
+      <h2>There are no items yet</h2>
+      }
+
       <EditModal
         show={modalShow}
         onHide={handleModalToggle}

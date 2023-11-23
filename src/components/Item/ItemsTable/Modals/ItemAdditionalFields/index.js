@@ -1,7 +1,6 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 import DropdownBoolean from "../DropdownBoolean";
-import convertDateToTimestamp from "../../../../../helpers/date/convertDateToTimestamp";
 import timestampToDate from "../../../../../helpers/date/timestampToDate";
 
 const ItemAdditionalFields = ({
@@ -36,7 +35,6 @@ const ItemAdditionalFields = ({
       fieldValue = oneItem["additionalFields"][field]["value"];
       if (fieldType === "date") fieldValue = timestampToDate(fieldValue);
     }
-    console.log(mode);
 
     return (
       <div key={`${field}-${mode}`}>

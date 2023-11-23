@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Form } from "react-bootstrap";
+import { ThemeContext } from "../../../../contexts/ThemeContext";
 
 const TableBody = ({
   tableInstance,
@@ -7,8 +8,14 @@ const TableBody = ({
   onSetIsChecked,
   handleModalToggle,
   onSetOneItem,
-  onSetMode
+  onSetMode,
 }) => {
+  const { theme } = useContext(ThemeContext);
+  const themeClass =
+    theme === "light"
+      ? "bg-light text-dark  "
+      : "bg-dark text-white border border-light";
+
   const handleCheckboxChange = (rowId) => (event) => {
     const checked = event.target.checked;
     onSetIsChecked((prevChecked) => {
@@ -25,7 +32,7 @@ const TableBody = ({
     handleModalToggle();
     onSetOneItem(row);
     onSetIsChecked([]);
-    onSetMode("edit")
+    onSetMode("edit");
   };
   return (
     <tbody {...tableInstance.getTableBodyProps()}>
@@ -33,7 +40,7 @@ const TableBody = ({
         tableInstance.prepareRow(row);
         return (
           <tr {...row.getRowProps()}>
-            <td>
+            <td className={themeClass}>
               <Form.Check
                 type="checkbox"
                 aria-label="select user"
@@ -41,7 +48,7 @@ const TableBody = ({
                 checked={isChecked.includes(row.original._id)}
               />
             </td>
-            <td>
+            <td className={themeClass}>
               <Button
                 onClick={() => handleEditItem(row.original)}
                 className="me-1"
@@ -51,7 +58,9 @@ const TableBody = ({
               </Button>
             </td>
             {row.cells.map((cell) => (
-              <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+              <td className={themeClass} {...cell.getCellProps()}>
+                {cell.render("Cell")}
+              </td>
             ))}
           </tr>
         );

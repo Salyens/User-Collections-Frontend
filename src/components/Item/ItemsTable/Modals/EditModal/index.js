@@ -6,28 +6,45 @@ import { ErrorsContext } from "../../../../../contexts/ErrorsContext";
 import renderErrors from "../../../../../helpers/renderErrors";
 import ItemAdditionalFields from "../ItemAdditionalFields";
 import ItemRequiredFields from "../ItemRequiredFields";
+import hasEmptyValues from "../../../../../helpers/validation";
+import createItemValidation from "../../../../../helpers/validation/createItem";
+import { ThemeContext } from "../../../../../contexts/ThemeContext";
 
 const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
   const { errors, setErrors } = useContext(ErrorsContext);
   const [input, setInput] = useState({});
   const [separatedTags, setSeparatedTags] = useState([]);
   const [changedFields, setChangedFields] = useState({});
+  const { theme } = useContext(ThemeContext);
+  const themeClass =
+    theme === "light" ? "bg-light text-dark  " : "bg-dark text-white";
+
+  useEffect(() => {
+    if (mode === "edit" && oneItem) {
+      setInput({
+        name: oneItem.name || "",
+        tags:
+          Array.isArray(oneItem.tags) && oneItem.tags.length > 0
+            ? "#" + oneItem.tags.join("#")
+            : "#",
+      });
+      setSeparatedTags(oneItem.tags || []);
+    } else {
+      setInput({ tags: "#", name: "" });
+      setSeparatedTags([]);
+    }
+  }, [oneItem, mode]);
 
   const handleSaveChanges = async () => {
     const updatedAdditionalFields = {};
     Object.keys(changedFields).forEach((fieldName) => {
       const field = collection["additionalFields"][fieldName];
       let value = changedFields[fieldName].value;
-
-      console.log("value: ", value);
-      console.log(field.type);
       if (field.type === "number") {
         value = Number(value);
-      }
-      if (field.type === "date") {
+      } else if (field.type === "date") {
         value = convertDateToTimestamp(value);
       }
-      console.log("new", value);
 
       updatedAdditionalFields[fieldName] = {
         ...changedFields[fieldName],
@@ -35,18 +52,18 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
       };
     });
 
-    // const isEmptyValue = hasEmptyValues(input);
-    // if (isEmptyValue) return setErrors([isEmptyValue]);
-
     const wholeItemInfo = {
       ...input,
       additionalFields: updatedAdditionalFields,
       tags: separatedTags,
     };
-    console.log("wholeItemInfo: ", wholeItemInfo);
+
     if (mode === "edit") {
-      wholeItemInfo;
-      await ApiService.updateItem(wholeItemInfo, oneItem._id);
+      try {
+        const isEmpty = hasEmptyValues(input, updatedAdditionalFields);
+        if (isEmpty.length) return setErrors(isEmpty);
+        await ApiService.updateItem(wholeItemInfo, oneItem._id);
+      } catch (error) {}
 
       onSetItems((prev) =>
         prev.map((el) =>
@@ -64,18 +81,30 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
       );
     } else if (mode === "create") {
       try {
+        const isEmpty = createItemValidation(
+          collection.additionalFields,
+          wholeItemInfo
+        );
+        if (isEmpty.length) return setErrors(isEmpty);
+
         const wholeItemWithCollectionName = {
           ...wholeItemInfo,
           collectionName: collection["name"],
         };
+
         await ApiService.createItem(wholeItemWithCollectionName);
-        onSetItems((prev) => [...prev, wholeItemInfo]);
+        const itemWithDate = {
+          ...wholeItemInfo,
+          createdDate: Date.now(),
+        };
+        onSetItems((prev) => [...prev, itemWithDate]);
       } catch (error) {
         setErrors(error);
       }
     }
 
     setInput({});
+    setChangedFields({});
     onHide();
   };
 
@@ -86,10 +115,10 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
 
   return (
     <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className={themeClass}>
         <Modal.Title>{renderModalHeader()}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className={themeClass}>
         {renderErrors(errors)}
         <Form.Group>
           <ItemRequiredFields
@@ -110,7 +139,7 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
         </Form.Group>
       </Modal.Body>
 
-      <Modal.Footer>
+      <Modal.Footer className={themeClass}>
         <Button variant="secondary" onClick={onHide}>
           Close
         </Button>
