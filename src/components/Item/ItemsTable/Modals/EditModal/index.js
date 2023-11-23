@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import ApiService from "../../../../../services/ApiService";
-import convertDateToTimestamp from "../../../../../helpers/date/convertDateToTimestamp";
 import { ErrorsContext } from "../../../../../contexts/ErrorsContext";
 import renderErrors from "../../../../../helpers/renderErrors";
 import ItemAdditionalFields from "../ItemAdditionalFields";
@@ -9,6 +8,8 @@ import ItemRequiredFields from "../ItemRequiredFields";
 import hasEmptyValues from "../../../../../helpers/validation";
 import createItemValidation from "../../../../../helpers/validation/createItem";
 import { ThemeContext } from "../../../../../contexts/ThemeContext";
+import prepareAdditionalFields from "../../../../../helpers/prepareAdditionalFields";
+import updateItemState from "../../../../../helpers/updateItem/updateItemState";
 
 const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
   const { errors, setErrors } = useContext(ErrorsContext);
@@ -36,51 +37,27 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
   }, [oneItem, mode]);
 
   const handleSaveChanges = async () => {
-    const updatedAdditionalFields = {};
-    Object.keys(changedFields).forEach((fieldName) => {
-      const field = collection["additionalFields"][fieldName];
-      let value = changedFields[fieldName].value;
-      if (field.type === "number") {
-        value = Number(value);
-      } else if (field.type === "date") {
-        value = convertDateToTimestamp(value);
-      }
+    try {
+      const updatedAdditionalFields = prepareAdditionalFields(
+        changedFields,
+        collection
+      );
 
-      updatedAdditionalFields[fieldName] = {
-        ...changedFields[fieldName],
-        value,
+      const wholeItemInfo = {
+        ...input,
+        additionalFields: updatedAdditionalFields,
+        tags: separatedTags,
       };
-    });
 
-    const wholeItemInfo = {
-      ...input,
-      additionalFields: updatedAdditionalFields,
-      tags: separatedTags,
-    };
-
-    if (mode === "edit") {
-      try {
+      if (mode === "edit") {
         const isEmpty = hasEmptyValues(input, updatedAdditionalFields);
         if (isEmpty.length) return setErrors(isEmpty);
         await ApiService.updateItem(wholeItemInfo, oneItem._id);
-      } catch (error) {}
 
-      onSetItems((prev) =>
-        prev.map((el) =>
-          el._id === oneItem._id
-            ? {
-                ...el,
-                ...wholeItemInfo,
-                additionalFields: {
-                  ...el.additionalFields,
-                  ...wholeItemInfo.additionalFields,
-                },
-              }
-            : el
-        )
-      );
-    } else if (mode === "create") {
-      try {
+        onSetItems((prev) =>
+          prev.map((el) => updateItemState(el, wholeItemInfo, oneItem))
+        );
+      } else if (mode === "create") {
         const isEmpty = createItemValidation(
           collection.additionalFields,
           wholeItemInfo
@@ -98,14 +75,16 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
           createdDate: Date.now(),
         };
         onSetItems((prev) => [...prev, itemWithDate]);
-      } catch (error) {
-        setErrors(error);
       }
-    }
 
-    setInput({});
-    setChangedFields({});
-    onHide();
+      setInput({});
+      setChangedFields({});
+      onHide();
+    } catch (error) {
+      !error.response
+        ? setErrors(error.message)
+        : setErrors(error.response.data.message);
+    }
   };
 
   const renderModalHeader = () => {

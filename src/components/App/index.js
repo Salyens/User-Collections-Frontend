@@ -19,6 +19,7 @@ import SingleCollectionPage from "../Pages/SingleCollectionPage";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { ErrorsProvider } from "../../contexts/ErrorsContext";
 import { DataProvider } from "../../contexts/DataContext";
+import SingleItemPage from "../Pages/SingleItemPage";
 
 const App = () => {
   const { t, i18n } = useTranslation();
@@ -62,6 +63,15 @@ const App = () => {
                 }
               />
               <Route
+                path="/items/:itemName"
+                element={
+                  <SingleItemPage
+                    currentLang={currentLang}
+                    onSetCurrentLang={setCurrentLang}
+                  />
+                }
+              />
+              <Route
                 path="/user-collections"
                 element={
                   <UserPage
@@ -76,6 +86,17 @@ const App = () => {
                   <SingleCollectionPage
                     currentLang={currentLang}
                     onSetCurrentLang={setCurrentLang}
+                    userPage={true}
+                  />
+                }
+              />
+              <Route
+                path="collections/:collectionName"
+                element={
+                  <SingleCollectionPage
+                    currentLang={currentLang}
+                    onSetCurrentLang={setCurrentLang}
+                    userPage={false}
                   />
                 }
               />
