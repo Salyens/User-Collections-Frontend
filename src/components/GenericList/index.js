@@ -1,10 +1,11 @@
 import useDataFetching from "../../hooks/useDataFetching";
 import CustomPagination from "../CustomPagination";
 import NavigationButton from "../Buttons/NavigationButton";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../contexts/DataContext";
 import { ErrorsContext } from "../../contexts/ErrorsContext";
 import renderErrors from "../../helpers/renderErrors";
+import ElementsWrapper from "../ElementsWrapper";
 
 const GenericList = ({
   getAll,
@@ -15,36 +16,25 @@ const GenericList = ({
   apiFunction,
   userPage,
   button,
+  collection,
 }) => {
-  const { data, setData } = useContext(DataContext);
+  const [data, setData]  = useState([])
+
   const { errors } = useContext(ErrorsContext);
   const { page, setPage, total } = useDataFetching(
     apiFunction,
     limit,
     userPage,
-    setData
+    setData,
+    collection
   );
 
-  const renderElement = () => {
-    if (data.length === 0) {
-      return <p>No data available</p>;
-    }
-    return data.map((el, index) => (
-      <Wrapper el={el} key={index} userPage={userPage} />
-    ));
-  };
-
-  useEffect(() => {
-    renderElement();
-  }, [data]);
 
   return (
     <div className="list-height">
       <h3 className="text-center mt-3 mb-3">{header}</h3>
       <div>{errors && errors.length > 0 && renderErrors(errors)}</div>
-      <div className="row d-flex justify-content-center align-items-stretch pb-3 me-3 ms-3 gx-2 gy-2">
-        {renderElement()}
-      </div>
+      <ElementsWrapper data={data} Wrapper={Wrapper} userPage={userPage} />
 
       {!getAll ? (
         <NavigationButton type={type} button={button} />

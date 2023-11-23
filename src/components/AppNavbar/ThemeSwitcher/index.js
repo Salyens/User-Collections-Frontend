@@ -8,6 +8,7 @@ const ThemeSwitcher = () => {
 
   return (
     <Form>
+      <Form.Label>Theme</Form.Label>
       <Form.Check
         type="switch"
         id="custom-switch"

@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Form } from "react-bootstrap";
 import { useTable } from "react-table";
+import { ThemeContext } from "../../../../contexts/ThemeContext";
 
 const TableHeader = ({ items, tableInstance, isChecked, onSetIsChecked }) => {
+  const { theme } = useContext(ThemeContext);
+  const themeClass =
+    theme === "light"
+      ? "bg-light text-dark  "
+      : "bg-dark text-white border border-light";
+
   const handleFillAll = (e) => {
     if (e.target.checked) {
       onSetIsChecked(items.map((item) => item._id));
@@ -15,7 +22,7 @@ const TableHeader = ({ items, tableInstance, isChecked, onSetIsChecked }) => {
     <thead>
       {tableInstance.headerGroups.map((headerGroup) => (
         <tr {...headerGroup.getHeaderGroupProps()}>
-          <th>
+          <th className={themeClass}>
             <Form.Check
               type="checkbox"
               aria-label="select all"
@@ -23,9 +30,12 @@ const TableHeader = ({ items, tableInstance, isChecked, onSetIsChecked }) => {
               onChange={handleFillAll}
             />
           </th>
-          <th>Edit</th>
+          <th className={themeClass}>Edit</th>
           {headerGroup.headers.map((column) => (
-            <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+            <th
+              className={themeClass}
+              {...column.getHeaderProps(column.getSortByToggleProps())}
+            >
               {column.render("Header")}
               <span className="ms-1">
                 {column.isSorted ? (

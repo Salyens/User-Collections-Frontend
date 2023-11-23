@@ -4,6 +4,7 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import "./custompagination.css";
 
 const CustomPagination = ({ page, limit, total, onSetPage }) => {
+
   const numbers = Math.ceil(total / limit);
   const { theme } = useContext(ThemeContext);
   const themeClass = theme === "light" ? "light" : "dark";

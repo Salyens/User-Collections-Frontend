@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form } from "react-bootstrap";
 
-const ItemRequiredFields = ({ oneItem, input, onSetInput, mode, onSetSeparatedTags }) => {
+const ItemRequiredFields = ({
+  oneItem,
+  input,
+  onSetInput,
+  mode,
+  onSetSeparatedTags,
+}) => {
+
   const handleInputChange = (key, value) => {
     if (key === "tags") {
       const tags = value.split(" ").map((tag) => `#${tag}`);
@@ -17,9 +24,10 @@ const ItemRequiredFields = ({ oneItem, input, onSetInput, mode, onSetSeparatedTa
       .split("#")
       .filter((tag) => tag.trim() !== "");
 
-      onSetSeparatedTags(separatedTags);
+    onSetSeparatedTags(separatedTags);
     onSetInput((prev) => ({ ...prev, tags: updatedValue }));
   };
+
   return (
     <>
       <Form.Label>Item name</Form.Label>
@@ -32,7 +40,7 @@ const ItemRequiredFields = ({ oneItem, input, onSetInput, mode, onSetSeparatedTa
       <Form.Label>Item tags</Form.Label>
       <Form.Control
         type="text"
-        value={input["tags"] || "#"}
+        value={input["tags"] || ""}
         onChange={handleTagInputChange}
       />
     </>

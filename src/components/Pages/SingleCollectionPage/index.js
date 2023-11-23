@@ -9,28 +9,43 @@ import { useParams } from "react-router-dom";
 import ApiService from "../../../services/ApiService.js";
 import { ErrorsContext } from "../../../contexts/ErrorsContext.js";
 import renderErrors from "../../../helpers/renderErrors.js";
+import ItemWrapper from "../../Item/ItemWrapper/index.js";
+import ElementsWrapper from "../../ElementsWrapper/index.js";
+import CustomPagination from "../../CustomPagination/index.js";
 
-const SingleCollectionPage = ({ currentLang, onSetCurrentLang }) => {
+const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage }) => {
   const { collectionName } = useParams();
   const { t, i18n } = useTranslation();
   const [collection, setCollection] = useState({});
   const [items, setItems] = useState([]);
-  const { theme } = useContext(ThemeContext);
   const { errors, setErrors } = useContext(ErrorsContext);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [limit, setLimit] = useState(12);
+
+  const { theme } = useContext(ThemeContext);
   const themeClass =
     theme === "light"
       ? "bg-light text-dark d-flex flex-column min-vh-100"
       : "bg-dark text-white d-flex flex-column min-vh-100";
 
   const handleGetCollectionInfo = async () => {
+    if (!collectionName) return;
     try {
       const foundedCollection = await ApiService.getOneCollection(
         collectionName
       );
-      const foundedItems = await ApiService.getItemsInCollection(
-        collectionName
-      );
-      setItems(foundedItems);
+      let foundedItems;
+      if (!userPage)
+        foundedItems = await ApiService.getItems(page, limit, collectionName);
+      else
+        foundedItems = await ApiService.getItemsInCollection(
+          page,
+          limit,
+          collectionName
+        );
+      setTotal(!userPage && foundedItems.total);
+      setItems(userPage ? foundedItems : foundedItems.data);
       setCollection(foundedCollection);
     } catch (error) {
       setErrors(
@@ -41,7 +56,7 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang }) => {
 
   useEffect(() => {
     handleGetCollectionInfo();
-  }, []);
+  }, [page]);
 
   return (
     <div className={themeClass}>
@@ -55,12 +70,26 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang }) => {
       )}
 
       <div className="flex-grow-1">
-        <SingleCollection
-          onSetItems={setItems}
-          collection={collection}
-          onSetCollection={setCollection}
+        <SingleCollection collection={collection} />
+        {userPage ? (
+          <ItemList
+            collection={collection}
+            items={items}
+            onSetItems={setItems}
+          />
+        ) : (
+          <ElementsWrapper
+            data={items}
+            Wrapper={ItemWrapper}
+            userPage={userPage}
+          />
+        )}
+        <CustomPagination
+          page={page}
+          limit={12}
+          total={total}
+          onSetPage={setPage}
         />
-        <ItemList collection={collection} items={items} onSetItems={setItems} />
       </div>
 
       <Footer className="mt-auto" />
