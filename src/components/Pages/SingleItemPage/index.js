@@ -40,7 +40,9 @@ const SingleItemPage = ({ currentLang, onSetCurrentLang }) => {
     handleGetItemInfo();
   }, []);
 
-  const additionalFieldsKeys = Object.keys(item["additionalFields"]);
+  // const additionalFieldsKeys = item.additionalFields
+  //   ? Object.keys(item.additionalFields)
+  //   : [];
 
   return (
     <div className={themeClass}>
@@ -61,12 +63,12 @@ const SingleItemPage = ({ currentLang, onSetCurrentLang }) => {
             <Card.Text>Collection: {item.collectionName}</Card.Text>
             <Card.Text>Created date: {item.createdDate}</Card.Text>
             <Card.Text>Tags: {item.tags}</Card.Text>
-            {Object.keys(item).length > 0 &&
+            {/* {Object.keys(item).length > 0 &&
               additionalFieldsKeys.map((field) => (
                 <Card.Text>
                   {field}: {item[field]["value"]}
                 </Card.Text>
-              ))}
+              ))} */}
           </Card.Body>
         </Card>
       </div>
