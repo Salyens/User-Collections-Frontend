@@ -54,9 +54,11 @@ class ApiService {
     return response.data;
   }
 
-  static async getItems(page, limit, collectionName=null) {
+  static async getItems(page, limit, collectionName = null) {
     const response = await axios.get(
-      `${ApiService.apiBase}/items?page=${page}&limit=${limit}${collectionName ? `&collectionName=${collectionName}` : ""}`,
+      `${ApiService.apiBase}/items?page=${page}&limit=${limit}${
+        collectionName ? `&collectionName=${collectionName}` : ""
+      }`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
@@ -74,7 +76,6 @@ class ApiService {
     );
     return response.data[0];
   }
-
 
   static async deleteItems(idsToDelete) {
     await axios.delete(`${ApiService.apiBase}/items`, {

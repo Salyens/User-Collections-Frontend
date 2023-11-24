@@ -8,6 +8,7 @@ import { ErrorsContext } from "../../../contexts/ErrorsContext";
 import ApiService from "../../../services/ApiService";
 import { Card } from "react-bootstrap";
 import transformToDate from "../../../helpers/transformToDate";
+import ErrorBoundary from "../../HOC/ErrorBoundary";
 
 const SingleItemPage = ({ currentLang, onSetCurrentLang }) => {
   const { itemName } = useParams();
@@ -70,26 +71,31 @@ const SingleItemPage = ({ currentLang, onSetCurrentLang }) => {
 
   return (
     <div className={`${themeClass} d-flex flex-column min-vh-100`}>
-      <CustomNavBar
-        currentLang={currentLang}
-        onSetCurrentLang={onSetCurrentLang}
-      />
+      <ErrorBoundary componentName="CustomNavBar">
+        <CustomNavBar
+          currentLang={currentLang}
+          onSetCurrentLang={onSetCurrentLang}
+        />
+      </ErrorBoundary>
+
       {errors && errors.length > 0 && <div>{renderErrors(errors)}</div>}
       <div className="flex-grow-1 d-flex justify-content-center ">
         <div className="mt-5">
-          <Card style={{width:300}}>
-            <Card.Body className={themeClass}>
-              <Card.Title>Item name: {item.name}</Card.Title>
-              <Card.Text className="">
-                Collection: {item.collectionName}
-              </Card.Text>
-              <Card.Text>
-                Created date: {transformToDate(item.createdDate)}
-              </Card.Text>
-              <Card.Text>Tags: {item.tags}</Card.Text>
-              {renderAdditionalFields()}
-            </Card.Body>
-          </Card>
+          <ErrorBoundary componentName="Card">
+            <Card style={{ width: 300 }}>
+              <Card.Body className={themeClass}>
+                <Card.Title>Item name: {item.name}</Card.Title>
+                <Card.Text className="">
+                  Collection: {item.collectionName}
+                </Card.Text>
+                <Card.Text>
+                  Created date: {transformToDate(item.createdDate)}
+                </Card.Text>
+                <Card.Text>Tags: {item.tags}</Card.Text>
+                {renderAdditionalFields()}
+              </Card.Body>
+            </Card>
+          </ErrorBoundary>
         </div>
       </div>
 

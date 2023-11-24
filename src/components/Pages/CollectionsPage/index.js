@@ -39,9 +39,7 @@ const CollectionsPage = ({ currentLang, onSetCurrentLang }) => {
         </ErrorBoundary>
       </div>
 
-      <ErrorBoundary componentName="Footer">
-        <Footer />
-      </ErrorBoundary>
+      <Footer />
     </div>
   );
 };
