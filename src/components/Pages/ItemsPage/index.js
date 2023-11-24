@@ -5,6 +5,7 @@ import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
 import ItemWrapper from "../../Item/ItemWrapper";
+import ErrorBoundary from "../../HOC/ErrorBoundary";
 
 const ItemsPage = ({ currentLang, onSetCurrentLang }) => {
   const { t } = useTranslation();
@@ -16,20 +17,25 @@ const ItemsPage = ({ currentLang, onSetCurrentLang }) => {
 
   return (
     <div className={themeClass}>
-      <CustomNavBar
-        currentLang={currentLang}
-        onSetCurrentLang={onSetCurrentLang}
-      />
-      <div className="flex-grow-1">
-        <GenericList
-          getAll={true}
-          type="items"
-          header={t("All-items-header")}
-          limit="12"
-          Wrapper={ItemWrapper}
-          apiFunction="getItems"
-          button="outline-primary"
+      <ErrorBoundary componentName="CustomNavBar">
+        <CustomNavBar
+          currentLang={currentLang}
+          onSetCurrentLang={onSetCurrentLang}
         />
+      </ErrorBoundary>
+
+      <div className="flex-grow-1">
+        <ErrorBoundary componentName="CustomNavBar">
+          <GenericList
+            getAll={true}
+            type="items"
+            header={t("All-items-header")}
+            limit="12"
+            Wrapper={ItemWrapper}
+            apiFunction="getItems"
+            button="outline-primary"
+          />
+        </ErrorBoundary>
       </div>
       <Footer className="mt-auto" />
     </div>

@@ -4,7 +4,7 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import "./themeswitcher.css"
 
 const ThemeSwitcher = () => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { toggleTheme } = useContext(ThemeContext);
 
   return (
     <Form>

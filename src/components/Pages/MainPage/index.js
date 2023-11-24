@@ -4,9 +4,9 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper.js";
+import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
 import ItemWrapper from "../../Item/ItemWrapper/index.js";
-
+import ErrorBoundary from "../../HOC/ErrorBoundary";
 
 const MainPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();
@@ -16,27 +16,34 @@ const MainPage = ({ currentLang, onSetCurrentLang }) => {
 
   return (
     <div className={themeClass}>
-      <CustomNavBar
-        currentLang={currentLang}
-        onSetCurrentLang={onSetCurrentLang}
-      />
-      <GenericList
-        type="collections"
-        header={t("Home-collection-header")}
-        limit="5"
-        Wrapper={CollectionWrapper}
-        apiFunction="getCollections"
-        button="outline-success"
-      />
-      <GenericList
-        getAll={false}
-        type="items"
-        header={t("Home-items-header")}
-        limit="12"
-        Wrapper={ItemWrapper}
-        apiFunction="getItems"
-        button="outline-primary"
-      />
+      <ErrorBoundary componentName="CustomNavBar">
+        <CustomNavBar
+          currentLang={currentLang}
+          onSetCurrentLang={onSetCurrentLang}
+        />
+      </ErrorBoundary>
+      <ErrorBoundary componentName="GenericList">
+        <GenericList
+          type="collections"
+          header={t("Home-collection-header")}
+          limit="5"
+          Wrapper={CollectionWrapper}
+          apiFunction="getCollections"
+          button="outline-success"
+        />
+      </ErrorBoundary>
+      <ErrorBoundary componentName="GenericList">
+        <GenericList
+          getAll={false}
+          type="items"
+          header={t("Home-items-header")}
+          limit="12"
+          Wrapper={ItemWrapper}
+          apiFunction="getItems"
+          button="outline-primary"
+        />
+      </ErrorBoundary>
+
       <Footer />
     </div>
   );

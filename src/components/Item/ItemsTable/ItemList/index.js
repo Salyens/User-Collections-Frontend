@@ -14,9 +14,9 @@ import TablePageSize from "../TablePageSize/index.js";
 import TablePagination from "../TablePagination/index.js";
 import CurrentPage from "../CurrentPage/index.js";
 import useTableColumns from "../../../../hooks/useTableColumns.js";
-import "./tablelist.css";
 import EditModal from "../Modals/EditModal/index.js";
 import { ErrorsContext } from "../../../../contexts/ErrorsContext.js";
+import "./tablelist.css";
 
 const ItemList = ({ collection, items, onSetItems }) => {
   const [isChecked, setIsChecked] = useState([]);

@@ -12,6 +12,7 @@ import renderErrors from "../../../helpers/renderErrors.js";
 import ItemWrapper from "../../Item/ItemWrapper/index.js";
 import ElementsWrapper from "../../ElementsWrapper/index.js";
 import CustomPagination from "../../CustomPagination/index.js";
+import ErrorBoundary from "../../HOC/ErrorBoundary";
 
 const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage }) => {
   const { collectionName } = useParams();
@@ -60,36 +61,46 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage }) => {
 
   return (
     <div className={themeClass}>
-      <CustomNavBar
-        currentLang={currentLang}
-        onSetCurrentLang={onSetCurrentLang}
-      />
+      <ErrorBoundary componentName="CustomNavBar">
+        <CustomNavBar
+          currentLang={currentLang}
+          onSetCurrentLang={onSetCurrentLang}
+        />
+      </ErrorBoundary>
 
       {errors && errors.length > 0 && (
         <div className="flex-grow-1 mt-5">{renderErrors(errors)}</div>
       )}
 
       <div className="flex-grow-1">
-        <SingleCollection collection={collection} />
+        <ErrorBoundary componentName="SingleCollection">
+          <SingleCollection collection={collection} />
+        </ErrorBoundary>
         {userPage ? (
-          <ItemList
-            collection={collection}
-            items={items}
-            onSetItems={setItems}
-          />
+          <ErrorBoundary componentName="ItemList">
+            <ItemList
+              collection={collection}
+              items={items}
+              onSetItems={setItems}
+            />
+          </ErrorBoundary>
         ) : (
-          <ElementsWrapper
-            data={items}
-            Wrapper={ItemWrapper}
-            userPage={userPage}
-          />
+          <ErrorBoundary componentName="ElementsWrapper">
+            <ElementsWrapper
+              data={items}
+              Wrapper={ItemWrapper}
+              userPage={userPage}
+            />
+          </ErrorBoundary>
         )}
-        <CustomPagination
-          page={page}
-          limit={12}
-          total={total}
-          onSetPage={setPage}
-        />
+        <ErrorBoundary componentName="CustomPagination">
+          <CustomPagination
+            page={page}
+            limit={12}
+            total={total}
+            onSetPage={setPage}
+          />
+        </ErrorBoundary>
       </div>
 
       <Footer className="mt-auto" />

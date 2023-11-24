@@ -7,27 +7,26 @@ import renderErrors from "../../../helpers/renderErrors";
 import { ErrorsContext } from "../../../contexts/ErrorsContext";
 import ApiService from "../../../services/ApiService";
 import { Card } from "react-bootstrap";
+import transformToDate from "../../../helpers/transformToDate";
+import ErrorBoundary from "../../HOC/ErrorBoundary";
 
 const SingleItemPage = ({ currentLang, onSetCurrentLang }) => {
   const { itemName } = useParams();
   const { errors, setErrors } = useContext(ErrorsContext);
   const [item, setItem] = useState({});
-  // if (!Object.keys(item).length) return "Loading";
+  const [collection, setCollection] = useState({});
+
   const { theme } = useContext(ThemeContext);
   const themeClass =
-    theme === "light" ? "light d-flex flex-column " : "dark d-flex flex-column";
-
-  //   const { name, collectionName, createdDate, tags, user, ...rest } = item;
-
-  //   userName = user["name"]
-  //   console.log('userName: ', userName);
-  //   const requiredValues = [name, collectionName, createdDate, tags];
-  //   const additionalFieldsKeys = Object.keys(item["additionalFields"])
-  //   console.log('additionalFieldsKeys: ', additionalFieldsKeys);
+    theme === "light" ? "bg-light text-dark " : "bg-dark text-white";
 
   const handleGetItemInfo = async () => {
     try {
       const foundedItem = await ApiService.getOneItem(itemName);
+      const foundedCollection = await ApiService.getOneCollection(
+        foundedItem["collectionName"]
+      );
+      setCollection(foundedCollection);
       setItem(foundedItem);
     } catch (error) {
       setErrors(
@@ -40,37 +39,64 @@ const SingleItemPage = ({ currentLang, onSetCurrentLang }) => {
     handleGetItemInfo();
   }, []);
 
-  // const additionalFieldsKeys = item.additionalFields
-  //   ? Object.keys(item.additionalFields)
-  //   : [];
+  const renderAdditionalFields = () => {
+    if (!item || Object.keys(item).length === 0) {
+      return <div>Loading...</div>;
+    }
+
+    const additionalFieldsKeys = Object.keys(item["additionalFields"]);
+    return additionalFieldsKeys.map((key) => {
+      const fieldValue = item["additionalFields"][key]["value"];
+      const fieldType = collection["additionalFields"][key]["type"];
+      if (fieldType === "date") {
+        return (
+          <Card.Text key={key}>
+            {key}: {transformToDate(fieldValue)}
+          </Card.Text>
+        );
+      } else if (fieldType === "boolean") {
+        return (
+          <Card.Text key={key}>
+            {key}: {fieldValue ? "Yes" : "No"}
+          </Card.Text>
+        );
+      }
+      return (
+        <Card.Text key={key}>
+          {key}: {fieldValue}
+        </Card.Text>
+      );
+    });
+  };
 
   return (
-    <div className={themeClass}>
-      <CustomNavBar
-        currentLang={currentLang}
-        onSetCurrentLang={onSetCurrentLang}
-      />
-      {errors && errors.length > 0 && (
-        <div className="flex-grow-1 mt-5">{renderErrors(errors)}</div>
-      )}
-      <div className="flex-grow-1">
-        <Card className={themeClass}>
-          <Card.Body className="d-flex flex-column justify-content-between fs-6">
-            {/* {requiredFields.map((itemField) => (
-              <Card.Text>{item[itemField]}</Card.Text>
-            ))} */}
-            <Card.Title>Item name: {item.name}</Card.Title>
-            <Card.Text>Collection: {item.collectionName}</Card.Text>
-            <Card.Text>Created date: {item.createdDate}</Card.Text>
-            <Card.Text>Tags: {item.tags}</Card.Text>
-            {/* {Object.keys(item).length > 0 &&
-              additionalFieldsKeys.map((field) => (
-                <Card.Text>
-                  {field}: {item[field]["value"]}
+    <div className={`${themeClass} d-flex flex-column min-vh-100`}>
+      <ErrorBoundary componentName="CustomNavBar">
+        <CustomNavBar
+          currentLang={currentLang}
+          onSetCurrentLang={onSetCurrentLang}
+        />
+      </ErrorBoundary>
+
+      {errors && errors.length > 0 && <div>{renderErrors(errors)}</div>}
+      <div className="flex-grow-1 d-flex justify-content-center ">
+        <div className="mt-5">
+          <ErrorBoundary componentName="Card">
+            <Card style={{ width: 300 }}>
+              <Card.Body className={themeClass}>
+                <Card.Title>Item name: {item.name}</Card.Title>
+                <Card.Text className="">
+                  Collection: {item.collectionName}
                 </Card.Text>
-              ))} */}
-          </Card.Body>
-        </Card>
+                <Card.Text>
+                  Created date: {transformToDate(item.createdDate)}
+                </Card.Text>
+                <Card.Text>Tags: {item.tags}</Card.Text>
+                {renderAdditionalFields()}
+              </Card.Body>
+            </Card>
+          </ErrorBoundary>
+        </div>
       </div>
 
       <Footer className="mt-auto" />
