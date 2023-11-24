@@ -7,7 +7,12 @@ const ElementsWrapper = ({ data, Wrapper, userPage }) => {
   return (
     <div className="row d-flex justify-content-center align-items-stretch pb-3 me-3 ms-3 gx-2 gy-2">
       {data.map((el, index) => (
-        <Wrapper el={el} key={`${el}-${index}`} userPage={userPage} />
+        <Wrapper
+          el={el}
+          key={`${el}-${index}`}
+          userPage={userPage}
+          data={data}
+        />
       ))}
     </div>
   );

@@ -1,11 +1,11 @@
 import useDataFetching from "../../hooks/useDataFetching";
 import CustomPagination from "../CustomPagination";
 import NavigationButton from "../Buttons/NavigationButton";
-import { useContext, useEffect, useState } from "react";
-import { DataContext } from "../../contexts/DataContext";
+import { useContext } from "react";
 import { ErrorsContext } from "../../contexts/ErrorsContext";
 import renderErrors from "../../helpers/renderErrors";
 import ElementsWrapper from "../ElementsWrapper";
+import { DataContext } from "../../contexts/DataContext";
 
 const GenericList = ({
   getAll,
@@ -18,8 +18,7 @@ const GenericList = ({
   button,
   collection,
 }) => {
-  const [data, setData]  = useState([])
-
+  const { data, setData } = useContext(DataContext);
   const { errors } = useContext(ErrorsContext);
   const { page, setPage, total } = useDataFetching(
     apiFunction,
@@ -29,12 +28,16 @@ const GenericList = ({
     collection
   );
 
-
   return (
     <div className="list-height">
       <h3 className="text-center mt-3 mb-3">{header}</h3>
       <div>{errors && errors.length > 0 && renderErrors(errors)}</div>
-      <ElementsWrapper data={data} Wrapper={Wrapper} userPage={userPage} />
+      <ElementsWrapper
+        data={data}
+        onSetData={setData}
+        Wrapper={Wrapper}
+        userPage={userPage}
+      />
 
       {!getAll ? (
         <NavigationButton type={type} button={button} />

@@ -4,7 +4,7 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper.js";
+import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
 import { Button } from "react-bootstrap";
 import EditCreateModal from "../../Collection/Modals/EditCreateModal/index.js";
 import "./userpage.css";

@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper.js";
+import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
+import ErrorBoundary from "../../HOC/ErrorBoundary.js";
 
 const CollectionsPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();
@@ -16,24 +17,31 @@ const CollectionsPage = ({ currentLang, onSetCurrentLang }) => {
 
   return (
     <div className={themeClass}>
-      <CustomNavBar
-        currentLang={currentLang}
-        onSetCurrentLang={onSetCurrentLang}
-      />
-      <div className="flex-grow-1">
-        <GenericList
-          getAll={true}
-          type="collections"
-          header={t("All-collections-header")}
-          limit="10"
-          Wrapper={CollectionWrapper}
-          apiFunction="getCollections"
-          userPage={false}
-          button="outline-success"
+      <ErrorBoundary componentName="CustomNavBar">
+        <CustomNavBar
+          currentLang={currentLang}
+          onSetCurrentLang={onSetCurrentLang}
         />
+      </ErrorBoundary>
+
+      <div className="flex-grow-1">
+        <ErrorBoundary componentName="GenericList">
+          <GenericList
+            getAll={true}
+            type="collections"
+            header={t("All-collections-header")}
+            limit="10"
+            Wrapper={CollectionWrapper}
+            apiFunction="getCollections"
+            userPage={false}
+            button="outline-success"
+          />
+        </ErrorBoundary>
       </div>
 
-      <Footer />
+      <ErrorBoundary componentName="Footer">
+        <Footer />
+      </ErrorBoundary>
     </div>
   );
 };

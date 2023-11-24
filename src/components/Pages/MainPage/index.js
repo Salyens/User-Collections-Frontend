@@ -4,9 +4,8 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper.js";
+import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
 import ItemWrapper from "../../Item/ItemWrapper/index.js";
-
 
 const MainPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();

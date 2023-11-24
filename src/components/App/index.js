@@ -74,20 +74,24 @@ const App = () => {
               <Route
                 path="/user-collections"
                 element={
-                  <UserPage
-                    currentLang={currentLang}
-                    onSetCurrentLang={setCurrentLang}
-                  />
+                  <WithAuth>
+                    <UserPage
+                      currentLang={currentLang}
+                      onSetCurrentLang={setCurrentLang}
+                    />
+                  </WithAuth>
                 }
               />
               <Route
                 path="/user-collections/:collectionName"
                 element={
-                  <SingleCollectionPage
-                    currentLang={currentLang}
-                    onSetCurrentLang={setCurrentLang}
-                    userPage={true}
-                  />
+                  <WithAuth>
+                    <SingleCollectionPage
+                      currentLang={currentLang}
+                      onSetCurrentLang={setCurrentLang}
+                      userPage={true}
+                    />
+                  </WithAuth>
                 }
               />
               <Route

@@ -1,4 +1,3 @@
-import myImage from "./picture.jpg";
 import { Button, Card } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useContext, useState } from "react";
@@ -8,7 +7,8 @@ import EditCreateModal from "../Modals/EditCreateModal";
 import DeleteModal from "../Modals/DeleteModal";
 import "./onecollection.css";
 
-const CollectionCard = ({ collection, userPage }) => {
+const CollectionCard = ({ collection, userPage, onSetData }) => {
+  
   const { name, description } = collection;
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
@@ -45,7 +45,7 @@ const CollectionCard = ({ collection, userPage }) => {
             </Button>
           </div>
         )}
-        <Card.Img src={myImage} />
+        <Card.Img src="https://via.placeholder.com/150" alt="Collection Image" />
         <Card.Body>
           <Card.Title className="truncate">{name}</Card.Title>
           <Card.Text
@@ -65,11 +65,13 @@ const CollectionCard = ({ collection, userPage }) => {
         onHide={handleModalToggle}
         collection={collection}
         mode={"edit"}
+        onSetData={onSetData}
       />
       <DeleteModal
         show={deleteModalShow}
         onHide={handleDeleteModalToggle}
         collectionName={name}
+        onSetData={onSetData}
       />
     </div>
   );
