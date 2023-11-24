@@ -18,7 +18,6 @@ import UserPage from "../Pages/UserPage";
 import SingleCollectionPage from "../Pages/SingleCollectionPage";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { ErrorsProvider } from "../../contexts/ErrorsContext";
-import { DataProvider } from "../../contexts/DataContext";
 import SingleItemPage from "../Pages/SingleItemPage";
 
 const App = () => {
@@ -30,7 +29,6 @@ const App = () => {
   return (
     <ThemeProvider>
       <ErrorsProvider>
-        <DataProvider>
           <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -115,7 +113,6 @@ const App = () => {
               />
             </Routes>
           </Router>
-        </DataProvider>
       </ErrorsProvider>
     </ThemeProvider>
   );

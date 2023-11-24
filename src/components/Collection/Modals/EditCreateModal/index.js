@@ -5,11 +5,8 @@ import { ErrorsContext } from "../../../../contexts/ErrorsContext";
 import RequiredFields from "../RequiredFields";
 import renderErrors from "../../../../helpers/renderErrors";
 import AdditionalFields from "../AdditionalFields";
-import { DataContext } from "../../../../contexts/DataContext";
 
-
-const EditCreateModal = ({ show, onHide, collection, mode }) => {
-  const { setData } = useContext(DataContext);
+const EditCreateModal = ({ show, onHide, collection, mode, onSetData }) => {
   const [input, setInput] = useState({});
   const [newFields, setNewFields] = useState([]);
   const { errors, setErrors } = useContext(ErrorsContext);
@@ -54,14 +51,13 @@ const EditCreateModal = ({ show, onHide, collection, mode }) => {
 
       if (mode === "edit") {
         await ApiService.updateCollection(finalInput, collection._id);
-        setData((prev) =>
+        onSetData((prev) =>
           prev.map((el) =>
             el._id === collection._id ? { ...el, ...finalInput } : el
           )
         );
       } else if (mode === "create") {
-        const newCollection = await ApiService.createCollection(finalInput);
-        setData((prev) => [...prev, newCollection]);
+        await ApiService.createCollection(finalInput);
       }
       setInput({});
       onHide();

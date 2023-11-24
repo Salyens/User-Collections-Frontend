@@ -1,6 +1,6 @@
 import React from "react";
 
-const ElementsWrapper = ({ data, Wrapper, userPage }) => {
+const ElementsWrapper = ({ data, Wrapper, userPage, onSetData }) => {
   if (data.length === 0) {
     return <p>No data available</p>;
   }
@@ -11,7 +11,7 @@ const ElementsWrapper = ({ data, Wrapper, userPage }) => {
           el={el}
           key={`${el}-${index}`}
           userPage={userPage}
-          data={data}
+          onSetData={onSetData}
         />
       ))}
     </div>

@@ -8,8 +8,7 @@ import DeleteModal from "../Modals/DeleteModal";
 import "./onecollection.css";
 
 const CollectionCard = ({ collection, userPage, onSetData }) => {
-  
-  const { name, description } = collection;
+    const { name, description } = collection;
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
