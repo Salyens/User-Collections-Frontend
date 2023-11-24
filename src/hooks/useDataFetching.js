@@ -10,10 +10,9 @@ const useDataFetching = (apiFunction, limit, userPage, setData, collection) => {
   const fetchData = async () => {
     try {
       let response;
-      if (collection && !userPage)
+      if (collection)
         response = await ApiService[apiFunction](page, limit, userPage, collection);
       else response = await ApiService[apiFunction](page, limit, userPage);
-
       const { data, total } = response;
       setData(data);
       if (total) setTotal(total);

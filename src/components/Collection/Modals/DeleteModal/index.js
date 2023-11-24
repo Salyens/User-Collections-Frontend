@@ -4,15 +4,13 @@ import ApiService from "../../../../services/ApiService";
 import renderErrors from "../../../../helpers/renderErrors";
 import { useContext } from "react";
 import { ErrorsContext } from "../../../../contexts/ErrorsContext";
-import { DataContext } from "../../../../contexts/DataContext";
 
-const DeleteModal = ({ show, onHide, collectionName }) => {
-  const { setData } = useContext(DataContext);
+const DeleteModal = ({ show, onHide, collectionName, onSetData }) => {
   const { errors, setErrors } = useContext(ErrorsContext);
   const handleDeleteCollection = async () => {
     try {
       await ApiService.deleteCollection(collectionName);
-      setData((prev) =>
+      onSetData((prev) =>
         prev.filter((collection) => collection.name !== collectionName)
       );
       onHide();
