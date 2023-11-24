@@ -12,7 +12,9 @@ const MainPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const themeClass =
-    theme === "light" ? "bg-light text-dark" : "bg-dark text-white";
+    theme === "light"
+      ? "bg-light text-dark d-flex flex-column min-vh-100"
+      : "bg-dark text-whited-flex flex-column min-vh-100";
 
   return (
     <div className={themeClass}>
@@ -22,27 +24,30 @@ const MainPage = ({ currentLang, onSetCurrentLang }) => {
           onSetCurrentLang={onSetCurrentLang}
         />
       </ErrorBoundary>
-      <ErrorBoundary componentName="GenericList">
-        <GenericList
-          type="collections"
-          header={t("Home-collection-header")}
-          limit="5"
-          Wrapper={CollectionWrapper}
-          apiFunction="getCollections"
-          button="outline-success"
-        />
-      </ErrorBoundary>
-      <ErrorBoundary componentName="GenericList">
-        <GenericList
-          getAll={false}
-          type="items"
-          header={t("Home-items-header")}
-          limit="12"
-          Wrapper={ItemWrapper}
-          apiFunction="getItems"
-          button="outline-primary"
-        />
-      </ErrorBoundary>
+
+      <div className="flex-grow-1">
+        <ErrorBoundary componentName="GenericList">
+          <GenericList
+            type="collections"
+            header={t("Home-collection-header")}
+            limit="5"
+            Wrapper={CollectionWrapper}
+            apiFunction="getCollections"
+            button="outline-success"
+          />
+        </ErrorBoundary>
+        <ErrorBoundary componentName="GenericList">
+          <GenericList
+            getAll={false}
+            type="items"
+            header={t("Home-items-header")}
+            limit="12"
+            Wrapper={ItemWrapper}
+            apiFunction="getItems"
+            button="outline-primary"
+          />
+        </ErrorBoundary>
+      </div>
 
       <Footer />
     </div>
