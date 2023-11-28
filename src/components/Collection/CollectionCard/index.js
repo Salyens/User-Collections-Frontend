@@ -3,12 +3,13 @@ import { useTranslation } from "react-i18next";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { Link } from "react-router-dom";
-import EditCreateModal from "../Modals/EditCreateModal";
-import DeleteModal from "../Modals/DeleteModal";
+import EditCollectionModal from "../Modals/EditCollectionModal";
+import DeleteCollectionModal from "../Modals/DeleteModal";
 import "./onecollection.css";
+import CreateCollectionModal from "../Modals/CreateCollectionModal";
 
 const CollectionCard = ({ collection, userPage, onSetData }) => {
-    const { name, description } = collection;
+  const { name, description } = collection;
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -44,7 +45,10 @@ const CollectionCard = ({ collection, userPage, onSetData }) => {
             </Button>
           </div>
         )}
-        <Card.Img src="https://via.placeholder.com/150" alt="Collection Image" />
+        <Card.Img
+          src="https://via.placeholder.com/150"
+          alt="Collection Image"
+        />
         <Card.Body>
           <Card.Title className="truncate">{name}</Card.Title>
           <Card.Text
@@ -59,14 +63,13 @@ const CollectionCard = ({ collection, userPage, onSetData }) => {
           </Link>
         </Card.Body>
       </Card>
-      <EditCreateModal
+      <EditCollectionModal
         show={modalShow}
         onHide={handleModalToggle}
         collection={collection}
-        mode={"edit"}
         onSetData={onSetData}
       />
-      <DeleteModal
+      <DeleteCollectionModal
         show={deleteModalShow}
         onHide={handleDeleteModalToggle}
         collectionName={name}

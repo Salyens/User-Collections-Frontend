@@ -19,8 +19,10 @@ import SingleCollectionPage from "../Pages/SingleCollectionPage";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { ErrorsProvider } from "../../contexts/ErrorsContext";
 import SingleItemPage from "../Pages/SingleItemPage";
+import { DataContext } from "../../contexts/DataContext";
 
 const App = () => {
+  const [data, setData] = useState([]);
   const { t, i18n } = useTranslation();
   const [currentLang, setCurrentLang] = useState(i18n.language);
   if (localStorage.getItem("language"))
@@ -29,6 +31,7 @@ const App = () => {
   return (
     <ThemeProvider>
       <ErrorsProvider>
+        <DataContext.Provider value={{data, setData}}>
           <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -76,6 +79,8 @@ const App = () => {
                     <UserPage
                       currentLang={currentLang}
                       onSetCurrentLang={setCurrentLang}
+                      data={data}
+                      onSetData={setData}
                     />
                   </WithAuth>
                 }
@@ -113,6 +118,7 @@ const App = () => {
               />
             </Routes>
           </Router>
+        </DataContext.Provider>
       </ErrorsProvider>
     </ThemeProvider>
   );

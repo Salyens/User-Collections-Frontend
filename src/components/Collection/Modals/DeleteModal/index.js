@@ -5,7 +5,7 @@ import renderErrors from "../../../../helpers/renderErrors";
 import { useContext } from "react";
 import { ErrorsContext } from "../../../../contexts/ErrorsContext";
 
-const DeleteModal = ({ show, onHide, collectionName, onSetData }) => {
+const DeleteCollectionModal = ({ show, onHide, collectionName, onSetData }) => {
   const { errors, setErrors } = useContext(ErrorsContext);
   const handleDeleteCollection = async () => {
     try {
@@ -51,4 +51,4 @@ const DeleteModal = ({ show, onHide, collectionName, onSetData }) => {
   );
 };
 
-export default DeleteModal;
+export default DeleteCollectionModal;

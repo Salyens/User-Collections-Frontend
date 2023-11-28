@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { ErrorsContext } from "../../contexts/ErrorsContext";
 import renderErrors from "../../helpers/renderErrors";
 import ElementsWrapper from "../ElementsWrapper";
+import { DataContext } from "../../contexts/DataContext";
 
 const GenericList = ({
   getAll,
@@ -17,8 +18,8 @@ const GenericList = ({
   button,
   collection,
 }) => {
-  const [data, setData] = useState([]);
   const { errors } = useContext(ErrorsContext);
+  const { data, setData } = useContext(DataContext);
   const { page, setPage, total } = useDataFetching(
     apiFunction,
     limit,

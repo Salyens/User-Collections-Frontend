@@ -6,9 +6,9 @@ import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
 import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
 import { Button } from "react-bootstrap";
-import EditCreateModal from "../../Collection/Modals/EditCreateModal/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
 import "./userpage.css";
+import CreateCollectionModal from "../../Collection/Modals/CreateCollectionModal/index.js";
 
 const UserPage = ({ currentLang, onSetCurrentLang }) => {
   const { t, i18n } = useTranslation();
@@ -57,11 +57,7 @@ const UserPage = ({ currentLang, onSetCurrentLang }) => {
         </ErrorBoundary>
 
         <ErrorBoundary componentName="EditCreateModal">
-          <EditCreateModal
-            show={modalShow}
-            onHide={handleModalToggle}
-            mode={"create"}
-          />
+        <CreateCollectionModal show={modalShow} onHide={handleModalToggle} />
         </ErrorBoundary>
       </div>
 
