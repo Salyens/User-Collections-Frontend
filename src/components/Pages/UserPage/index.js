@@ -2,15 +2,28 @@ import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
-import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
 import { Button } from "react-bootstrap";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
-import "./userpage.css";
 import CreateCollectionModal from "../../Collection/Modals/CreateCollectionModal/index.js";
+import { DataContext } from "../../../contexts/DataContext.js";
+import useDataFetching from "../../../hooks/useDataFetching.js";
+import CollectionList from "../../Collection/CollectionList/index.js";
+import CustomPagination from "../../CustomPagination/index.js";
+import { LangContext } from "../../../contexts/LangContext.js";
+import "./userpage.css";
 
-const UserPage = ({ currentLang, onSetCurrentLang }) => {
+const UserPage = () => {
+  const { data, setData } = useContext(DataContext);
+  const { currentLang, setCurrentLang } = useContext(LangContext);
+  const pageParams = {
+    apiFunction: "getCollections",
+    limit: 5,
+    userPage: true,
+    setData,
+    isCollection: true,
+  };
+  const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const themeClass =
@@ -22,16 +35,12 @@ const UserPage = ({ currentLang, onSetCurrentLang }) => {
   const handleModalToggle = () => {
     setModalShow(!modalShow);
   };
-
+  
   return (
     <div className={themeClass}>
       <ErrorBoundary componentName="CustomNavBar">
-        <CustomNavBar
-          currentLang={currentLang}
-          onSetCurrentLang={onSetCurrentLang}
-        />
+        <CustomNavBar />
       </ErrorBoundary>
-
       <div className="flex-grow-1 position-relative">
         <ErrorBoundary componentName="Button">
           <Button
@@ -43,23 +52,20 @@ const UserPage = ({ currentLang, onSetCurrentLang }) => {
           </Button>
         </ErrorBoundary>
 
-        <ErrorBoundary componentName="GenericList">
-          <GenericList
-            getAll={true}
-            type="collections"
-            header={t("My collections")}
-            limit="20"
-            Wrapper={CollectionWrapper}
-            apiFunction="getCollections"
-            userPage={true}
-            button="outline-success"
-          />
+        <ErrorBoundary componentName="Button">
+          <CollectionList data={data.collections.list} />
         </ErrorBoundary>
 
         <ErrorBoundary componentName="EditCreateModal">
-        <CreateCollectionModal show={modalShow} onHide={handleModalToggle} />
+          <CreateCollectionModal show={modalShow} onHide={handleModalToggle} />
         </ErrorBoundary>
       </div>
+      <CustomPagination
+        page={page}
+        limit={pageParams.limit}
+        total={data.collections.total}
+        onSetPage={setPage}
+      />
 
       <Footer className="mt-auto" />
     </div>

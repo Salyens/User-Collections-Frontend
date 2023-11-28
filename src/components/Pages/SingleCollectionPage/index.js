@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import ApiService from "../../../services/ApiService.js";
 import { ErrorsContext } from "../../../contexts/ErrorsContext.js";
 import renderErrors from "../../../helpers/renderErrors.js";
-import ItemWrapper from "../../Item/ItemWrapper/index.js";
+import ItemWrapper from "../../Item/ItemList/index.js";
 import ElementsWrapper from "../../ElementsWrapper/index.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary";

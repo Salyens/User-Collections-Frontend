@@ -6,9 +6,9 @@ import { Link } from "react-router-dom";
 import EditCollectionModal from "../Modals/EditCollectionModal";
 import DeleteCollectionModal from "../Modals/DeleteModal";
 import "./onecollection.css";
-import CreateCollectionModal from "../Modals/CreateCollectionModal";
+import CreateModalButtons from "../../Buttons/CreateModalButtons";
 
-const CollectionCard = ({ collection, userPage, onSetData }) => {
+const CollectionCard = ({ collection }) => {
   const { name, description } = collection;
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
@@ -31,20 +31,11 @@ const CollectionCard = ({ collection, userPage, onSetData }) => {
   return (
     <div>
       <Card className={themeClass}>
-        {userPage && (
-          <div className="mb-1 position-absolute top-0 end-0 edit-btn">
-            <Button
-              className="me-1"
-              variant="outline-primary"
-              onClick={handleModalToggle}
-            >
-              Edit <i className="bi bi-pencil-fill"></i>
-            </Button>
-            <Button variant="outline-danger" onClick={handleDeleteModalToggle}>
-              Delete <i className="bi bi-trash-fill"></i>
-            </Button>
-          </div>
-        )}
+        <CreateModalButtons
+          handleModalToggle={handleModalToggle}
+          handleDeleteModalToggle={handleDeleteModalToggle}
+        />
+
         <Card.Img
           src="https://via.placeholder.com/150"
           alt="Collection Image"
@@ -56,7 +47,7 @@ const CollectionCard = ({ collection, userPage, onSetData }) => {
             dangerouslySetInnerHTML={{ __html: description }}
           ></Card.Text>
           <Link
-            to={userPage ? `/user-collections/${name}` : `/collections/${name}`}
+            to={`/user-collections/${name}`}
             className="d-flex justify-content-center btn btn-success"
           >
             {t("Open-button")}
@@ -67,13 +58,11 @@ const CollectionCard = ({ collection, userPage, onSetData }) => {
         show={modalShow}
         onHide={handleModalToggle}
         collection={collection}
-        onSetData={onSetData}
       />
       <DeleteCollectionModal
         show={deleteModalShow}
         onHide={handleDeleteModalToggle}
         collectionName={name}
-        onSetData={onSetData}
       />
     </div>
   );

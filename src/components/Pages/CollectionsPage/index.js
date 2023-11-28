@@ -2,12 +2,23 @@ import React, { useContext } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
-import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary.js";
+import { DataContext } from "../../../contexts/DataContext.js";
+import CollectionList from "../../Collection/CollectionList/index.js";
+import useDataFetching from "../../../hooks/useDataFetching.js";
+import CustomPagination from "../../CustomPagination/index.js";
 
-const CollectionsPage = ({ currentLang, onSetCurrentLang }) => {
+const CollectionsPage = () => {
+  const { data, setData } = useContext(DataContext);
+  const pageParams = {
+    apiFunction: "getCollections",
+    limit: 12,
+    userPage: false,
+    setData,
+    isCollection: true,
+  };
+  const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const themeClass =
@@ -18,27 +29,21 @@ const CollectionsPage = ({ currentLang, onSetCurrentLang }) => {
   return (
     <div className={themeClass}>
       <ErrorBoundary componentName="CustomNavBar">
-        <CustomNavBar
-          currentLang={currentLang}
-          onSetCurrentLang={onSetCurrentLang}
-        />
+        <CustomNavBar />
       </ErrorBoundary>
 
       <div className="flex-grow-1">
         <ErrorBoundary componentName="GenericList">
-          <GenericList
-            getAll={true}
-            type="collections"
-            header={t("All-collections-header")}
-            limit="10"
-            Wrapper={CollectionWrapper}
-            apiFunction="getCollections"
-            userPage={false}
-            button="outline-success"
-          />
+          <h1 className="text-center m-3">All collections</h1>
+          <CollectionList data={data.collections.list} />
         </ErrorBoundary>
       </div>
-
+      <CustomPagination
+        page={page}
+        limit={pageParams.limit}
+        total={data.collections.total}
+        onSetPage={setPage}
+      />
       <Footer />
     </div>
   );

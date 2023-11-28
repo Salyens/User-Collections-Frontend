@@ -11,8 +11,10 @@ import { useTranslation } from "react-i18next";
 import AppLanguage from "../AppLanguage";
 import ThemeSwitcher from "../ThemeSwitcher";
 import { ThemeContext } from "../../../contexts/ThemeContext";
+import { LangContext } from "../../../contexts/LangContext";
 
-const CustomNavBar = ({ currentLang, onSetCurrentLang }) => {
+const CustomNavBar = () => {
+  const { currentLang } = useContext(LangContext);
   const { t, i18n } = useTranslation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -30,9 +32,7 @@ const CustomNavBar = ({ currentLang, onSetCurrentLang }) => {
     try {
       const result = await ApiService.getUserInfo();
       if (result.status === 200) setIsLoggedIn(true);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -51,10 +51,7 @@ const CustomNavBar = ({ currentLang, onSetCurrentLang }) => {
         <Nav className="col-12 col-lg-5 col-xl-4 col-xxl-3 flex-row justify-content-evenly justify-content-lg-between">
           <NavButtonsList buttons={navButtons} />
           <div className="d-flex flex-column flex-sm-row  justify-content-center align-items-center">
-            <AppLanguage
-              currentLang={currentLang}
-              onSetCurrentLang={onSetCurrentLang}
-            />
+            <AppLanguage />
             <ThemeSwitcher />
           </div>
         </Nav>

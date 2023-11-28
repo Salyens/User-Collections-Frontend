@@ -10,7 +10,7 @@ import { Card } from "react-bootstrap";
 import transformToDate from "../../../helpers/transformToDate";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
 
-const SingleItemPage = ({ currentLang, onSetCurrentLang }) => {
+const SingleItemPage = () => {
   const { itemName } = useParams();
   const { errors, setErrors } = useContext(ErrorsContext);
   const [item, setItem] = useState({});
@@ -72,10 +72,7 @@ const SingleItemPage = ({ currentLang, onSetCurrentLang }) => {
   return (
     <div className={`${themeClass} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
-        <CustomNavBar
-          currentLang={currentLang}
-          onSetCurrentLang={onSetCurrentLang}
-        />
+        <CustomNavBar />
       </ErrorBoundary>
 
       {errors && errors.length > 0 && <div>{renderErrors(errors)}</div>}

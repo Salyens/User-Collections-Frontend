@@ -1,6 +1,6 @@
 import useDataFetching from "../../hooks/useDataFetching";
 import CustomPagination from "../CustomPagination";
-import NavigationButton from "../Buttons/NavigationButton";
+import NavigationButton from "../Buttons/NavigationButtons";
 import { useContext, useState } from "react";
 import { ErrorsContext } from "../../contexts/ErrorsContext";
 import renderErrors from "../../helpers/renderErrors";

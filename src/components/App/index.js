@@ -20,104 +20,78 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { ErrorsProvider } from "../../contexts/ErrorsContext";
 import SingleItemPage from "../Pages/SingleItemPage";
 import { DataContext } from "../../contexts/DataContext";
+import { LangContext } from "../../contexts/LangContext";
 
 const App = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    collections: { list: [], total: 0, isLoading: true },
+    items: { list: [], total: 0, isLoading: true },
+    errors: [],
+  });
   const { t, i18n } = useTranslation();
   const [currentLang, setCurrentLang] = useState(i18n.language);
+  
   if (localStorage.getItem("language"))
     setCurrentLang(localStorage.getItem("language"));
 
   return (
     <ThemeProvider>
       <ErrorsProvider>
-        <DataContext.Provider value={{data, setData}}>
-          <Router>
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/registration" element={<Registration />} />
-              <Route
-                path="/main-page"
-                element={
-                  <MainPage
-                    currentLang={currentLang}
-                    onSetCurrentLang={setCurrentLang}
-                  />
-                }
-              />
-              <Route
-                path="/collections"
-                element={
-                  <CollectionsPage
-                    currentLang={currentLang}
-                    onSetCurrentLang={setCurrentLang}
-                  />
-                }
-              />
-              <Route
-                path="/items"
-                element={
-                  <ItemsPage
-                    currentLang={currentLang}
-                    onSetCurrentLang={setCurrentLang}
-                  />
-                }
-              />
-              <Route
-                path="/items/:itemName"
-                element={
-                  <SingleItemPage
-                    currentLang={currentLang}
-                    onSetCurrentLang={setCurrentLang}
-                  />
-                }
-              />
-              <Route
-                path="/user-collections"
-                element={
-                  <WithAuth>
-                    <UserPage
-                      currentLang={currentLang}
-                      onSetCurrentLang={setCurrentLang}
-                      data={data}
-                      onSetData={setData}
-                    />
-                  </WithAuth>
-                }
-              />
-              <Route
-                path="/user-collections/:collectionName"
-                element={
-                  <WithAuth>
+        <DataContext.Provider value={{ data, setData }}>
+          <LangContext.Provider value={{ currentLang, setCurrentLang }}>
+            <Router>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/registration" element={<Registration />} />
+                <Route path="/main-page" element={<MainPage />} />
+                <Route path="/collections" element={<CollectionsPage />} />
+                <Route path="/items" element={<ItemsPage />} />
+                <Route path="/items/:itemName" element={<SingleItemPage />} />
+                <Route
+                  path="/user-collections"
+                  element={
+                    <WithAuth>
+                      <UserPage />
+                    </WithAuth>
+                  }
+                />
+                <Route
+                  path="/user-collections/:collectionName"
+                  element={
+                    <WithAuth>
+                      <SingleCollectionPage
+                        currentLang={currentLang}
+                        onSetCurrentLang={setCurrentLang}
+                        userPage={true}
+                      />
+                    </WithAuth>
+                  }
+                />
+                <Route
+                  path="collections/:collectionName"
+                  element={
                     <SingleCollectionPage
                       currentLang={currentLang}
                       onSetCurrentLang={setCurrentLang}
-                      userPage={true}
+                      userPage={false}
                     />
-                  </WithAuth>
-                }
-              />
-              <Route
-                path="collections/:collectionName"
-                element={
-                  <SingleCollectionPage
-                    currentLang={currentLang}
-                    onSetCurrentLang={setCurrentLang}
-                    userPage={false}
-                  />
-                }
-              />
-              <Route path="/" element={<Navigate to="/main-page" replace />} />
-              <Route
-                path="/*"
-                element={
-                  <h1 className="text-center text-danger">
-                    404 Error! Page is not found
-                  </h1>
-                }
-              />
-            </Routes>
-          </Router>
+                  }
+                />
+                <Route
+                  path="/"
+                  element={<Navigate to="/main-page" replace />}
+                />
+                <Route
+                  path="/*"
+                  element={
+                    <h1 className="text-center text-danger">
+                      404 Error! Page is not found
+                    </h1>
+                  }
+                />
+              </Routes>
+            </Router>
+          </LangContext.Provider>
         </DataContext.Provider>
       </ErrorsProvider>
     </ThemeProvider>

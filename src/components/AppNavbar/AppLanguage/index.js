@@ -3,8 +3,10 @@ import { useTranslation } from "react-i18next";
 import { US, RU } from "country-flag-icons/react/3x2";
 import { useContext } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
+import { LangContext } from "../../../contexts/LangContext";
 
-const AppLanguage = ({ currentLang, onSetCurrentLang }) => {
+const AppLanguage = () => {
+  const { currentLang, setCurrentLang } = useContext(LangContext);
   const { i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const themeClass =
@@ -14,7 +16,7 @@ const AppLanguage = ({ currentLang, onSetCurrentLang }) => {
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
-    onSetCurrentLang(lng);
+    setCurrentLang(lng);
     localStorage.setItem("currentLanguage", lng);
   };
 

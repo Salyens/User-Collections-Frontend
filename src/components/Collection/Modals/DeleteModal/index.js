@@ -2,17 +2,29 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ApiService from "../../../../services/ApiService";
 import renderErrors from "../../../../helpers/renderErrors";
-import { useContext } from "react";
-import { ErrorsContext } from "../../../../contexts/ErrorsContext";
+import { useContext, useState } from "react";
+import { DataContext } from "../../../../contexts/DataContext";
 
-const DeleteCollectionModal = ({ show, onHide, collectionName, onSetData }) => {
-  const { errors, setErrors } = useContext(ErrorsContext);
+const DeleteCollectionModal = ({ show, onHide, collectionName }) => {
+  const { setData } = useContext(DataContext);
+  const [errors, setErrors] = useState([]);
   const handleDeleteCollection = async () => {
     try {
       await ApiService.deleteCollection(collectionName);
-      onSetData((prev) =>
-        prev.filter((collection) => collection.name !== collectionName)
-      );
+      const removeCollectionById = () => {
+        setData((prevData) => {
+          return {
+            ...prevData,
+            collections: {
+              ...prevData.collections,
+              list: prevData.collections.list.filter(
+                (collection) => collection.name !== collectionName
+              ),
+            },
+          };
+        });
+      };
+      removeCollectionById();
       onHide();
     } catch (error) {
       !error.response
@@ -33,9 +45,10 @@ const DeleteCollectionModal = ({ show, onHide, collectionName, onSetData }) => {
 
         <Modal.Body>
           {renderErrors(errors)}
-          {!errors || errors.length === 0 && (
-            <p>{`Are you sure you want to delete ${collectionName}?`}</p>
-          )}
+          {!errors ||
+            (errors.length === 0 && (
+              <p>{`Are you sure you want to delete ${collectionName}?`}</p>
+            ))}
         </Modal.Body>
 
         <Modal.Footer>

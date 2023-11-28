@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import ApiService from "../../../../services/ApiService";
-import { ErrorsContext } from "../../../../contexts/ErrorsContext";
 import RequiredFields from "../RequiredFields";
 import renderErrors from "../../../../helpers/renderErrors";
 import AdditionalFields from "../AdditionalFields";
+import { DataContext } from "../../../../contexts/DataContext";
 
-const EditCollectionModal = ({ show, onHide, collection, onSetData }) => {
+const EditCollectionModal = ({ show, onHide, collection }) => {
+  const { setData } = useContext(DataContext);
+  const [errors, setErrors] = useState([]);
   const [input, setInput] = useState({});
   const [newFields, setNewFields] = useState([]);
-  const { errors, setErrors } = useContext(ErrorsContext);
 
   const handleInputChange = (key, value) => {
     setErrors([]);
@@ -23,14 +24,21 @@ const EditCollectionModal = ({ show, onHide, collection, onSetData }) => {
     try {
       await ApiService.updateCollection(input, collection._id);
 
-      onSetData((prev) =>
-        prev.map((el) =>
-          el._id === collection._id ? { ...el, ...input } : el
-        )
-      );
+      const updateCollection = () => {
+        setData(prevData => ({
+          ...prevData,
+          collections: {
+            ...prevData.collections,
+            list: prevData.collections.list.map(el =>
+              el._id === collection._id ? { ...el, ...input } : el
+            )
+          }
+        }));
+      };
+      updateCollection()
 
       setInput({});
-      onHide();
+      onHide(false);
     } catch (error) {
       !error.response
         ? setErrors(error.message)
