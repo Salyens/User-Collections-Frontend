@@ -9,10 +9,6 @@ const AppLanguage = () => {
   const { currentLang, setCurrentLang } = useContext(LangContext);
   const { i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-  theme === "light"
-    ? "bg-primary text-white border-0"
-    : "bg-dark text-white border-0";
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -22,7 +18,7 @@ const AppLanguage = () => {
 
   return (
     <Dropdown>
-      <Dropdown.Toggle className={themeClass} variant="primary" id="dropdown-basic">
+      <Dropdown.Toggle className={`${theme} border-0`} variant="primary" id="dropdown-basic">
         {currentLang}
       </Dropdown.Toggle>
 

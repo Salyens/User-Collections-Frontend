@@ -10,7 +10,7 @@ import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
 import ErrorBoundary from "../HOC/ErrorBoundary";
 import { useTranslation } from "react-i18next";
-import { ThemeProvider } from "../../contexts/ThemeContext";
+import { ThemeContext, ThemeProvider } from "../../contexts/ThemeContext";
 import MainPage from "../Pages/MainPage";
 import CollectionsPage from "../Pages/CollectionsPage";
 import ItemsPage from "../Pages/ItemsPage";
@@ -23,21 +23,31 @@ import { DataContext } from "../../contexts/DataContext";
 import { LangContext } from "../../contexts/LangContext";
 
 const App = () => {
-  const [data, setData] = useState({
-    collections: { list: [], total: 0, isLoading: true },
-    items: { list: [], total: 0, isLoading: true },
-    errors: [],
+  const [collections, setCollections] = useState({
+    data: [],
+    total: 0,
+    isLoading: true,
   });
+  const [items, setItems] = useState({
+    data: [],
+    total: 0,
+    isLoading: true,
+  });
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "bg-light text-dark"
+  );
   const { t, i18n } = useTranslation();
   const [currentLang, setCurrentLang] = useState(i18n.language);
-  
+
   if (localStorage.getItem("language"))
     setCurrentLang(localStorage.getItem("language"));
 
   return (
-    <ThemeProvider>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       <ErrorsProvider>
-        <DataContext.Provider value={{ data, setData }}>
+        <DataContext.Provider
+          value={{ collections, setCollections, items, setItems }}
+        >
           <LangContext.Provider value={{ currentLang, setCurrentLang }}>
             <Router>
               <Routes>
@@ -69,13 +79,7 @@ const App = () => {
                 />
                 <Route
                   path="collections/:collectionName"
-                  element={
-                    <SingleCollectionPage
-                      currentLang={currentLang}
-                      onSetCurrentLang={setCurrentLang}
-                      userPage={false}
-                    />
-                  }
+                  element={<SingleCollectionPage/>}
                 />
                 <Route
                   path="/"
@@ -94,7 +98,7 @@ const App = () => {
           </LangContext.Provider>
         </DataContext.Provider>
       </ErrorsProvider>
-    </ThemeProvider>
+    </ThemeContext.Provider>
   );
 };
 

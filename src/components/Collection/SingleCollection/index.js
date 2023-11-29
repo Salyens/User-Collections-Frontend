@@ -5,10 +5,6 @@ import "./singlecollection.css";
 
 const SingleCollection = ({ collection }) => {
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark col-12 col-md-6 col-lg-3 ms-auto me-auto p-0  "
-      : "bg-dark text-white border-white col-12 col-md-6 col-lg-3 ms-auto me-auto p-0 ";
 
   const renderAdditionalFields = (fields) => {
     const fieldKeys = Object.keys(fields);
@@ -24,7 +20,7 @@ const SingleCollection = ({ collection }) => {
 
   return (
     <div className="row m-0 mb-3">
-      <Card className={themeClass}>
+      <Card className={`${theme} col-12 col-md-6 col-lg-3 ms-auto me-auto p-0`}>
         <Card.Img
           src="https://via.placeholder.com/150"
           alt="Collection Image"

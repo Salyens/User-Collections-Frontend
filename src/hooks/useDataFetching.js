@@ -6,12 +6,10 @@ const useDataFetching = ({
   limit,
   userPage,
   setData,
-  isCollection,
-  isItem,
   collection = null,
 }) => {
-  const [page, setPage] = useState(1)
-
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState(null);
   const fetchData = async () => {
     try {
       const response = await ApiService[apiFunction](
@@ -21,38 +19,22 @@ const useDataFetching = ({
         collection
       );
       const { data, total } = response;
-      if (isCollection) {
-        setData((prevData) => {
-          return {
-            ...prevData,
-            collections: {
-              ...prevData.collections,
-              list: data,
-              total,
-              isLoading: false,
-            },
-          };
-        });
-      } else if (isItem) {
-        setData((prevData) => {
-          return {
-            ...prevData,
-            items: {
-              ...prevData.collections,
-              total,
-              list: data,
-              isLoading: false,
-            },
-          };
-        });
-      }
-    } catch (error) {
       setData((prevData) => {
         return {
           ...prevData,
-          errors: [
-            "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later.",
-          ],
+          data,
+          total,
+          isLoading: false,
+        };
+      });
+    } catch (error) {
+      error =
+        "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later.";
+      setError(error);
+      setData((prevData) => {
+        return {
+          ...prevData,
+          isLoading: false,
         };
       });
     }
@@ -62,7 +44,7 @@ const useDataFetching = ({
     fetchData();
   }, [limit, page]);
 
-  return { page, setPage };
+  return { page, setPage, error };
 };
 
 export default useDataFetching;

@@ -12,11 +12,7 @@ const TableButtons = ({
   onSetMode,
 }) => {
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark  "
-      : "bg-dark text-white";
-
+  
   const handleDeleteItem = async () => {
     try {
       await ApiService.deleteItems(isChecked);
@@ -36,7 +32,7 @@ const TableButtons = ({
   };
 
   return (
-    <div className={themeClass}>
+    <div className={theme}>
       <Button
         variant="primary"
         className="me-1"

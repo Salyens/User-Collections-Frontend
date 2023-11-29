@@ -6,25 +6,23 @@ import { useContext, useState } from "react";
 import { DataContext } from "../../../../contexts/DataContext";
 
 const DeleteCollectionModal = ({ show, onHide, collectionName }) => {
-  const { setData } = useContext(DataContext);
+  const { setCollections } = useContext(DataContext);
   const [errors, setErrors] = useState([]);
   const handleDeleteCollection = async () => {
     try {
       await ApiService.deleteCollection(collectionName);
-      const removeCollectionById = () => {
-        setData((prevData) => {
+      const updateCollectionState = () => {
+        setCollections((prevData) => {
           return {
             ...prevData,
-            collections: {
               ...prevData.collections,
-              list: prevData.collections.list.filter(
+              data: prevData.data.filter(
                 (collection) => collection.name !== collectionName
               ),
-            },
           };
         });
       };
-      removeCollectionById();
+      updateCollectionState();
       onHide();
     } catch (error) {
       !error.response

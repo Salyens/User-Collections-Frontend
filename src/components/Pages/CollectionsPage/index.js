@@ -10,38 +10,34 @@ import useDataFetching from "../../../hooks/useDataFetching.js";
 import CustomPagination from "../../CustomPagination/index.js";
 
 const CollectionsPage = () => {
-  const { data, setData } = useContext(DataContext);
+  const { collections, setCollections } = useContext(DataContext);
   const pageParams = {
     apiFunction: "getCollections",
     limit: 12,
     userPage: false,
-    setData,
+    setData:setCollections,
     isCollection: true,
   };
   const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark d-flex flex-column min-vh-100"
-      : "bg-dark text-white d-flex flex-column min-vh-100";
 
   return (
-    <div className={themeClass}>
+    <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
         <CustomNavBar />
       </ErrorBoundary>
 
       <div className="flex-grow-1">
-        <ErrorBoundary componentName="GenericList">
+        <ErrorBoundary componentName="CollectionList">
           <h1 className="text-center m-3">All collections</h1>
-          <CollectionList data={data.collections.list} />
+          <CollectionList collections={collections} />
         </ErrorBoundary>
       </div>
       <CustomPagination
         page={page}
         limit={pageParams.limit}
-        total={data.collections.total}
+        total={collections.total}
         onSetPage={setPage}
       />
       <Footer />

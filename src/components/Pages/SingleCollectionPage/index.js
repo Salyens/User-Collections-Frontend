@@ -4,32 +4,25 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import Footer from "../../Footer/Footer";
 import SingleCollection from "../../Collection/SingleCollection/index.js";
-import ItemList from "../../Item/ItemsTable/ItemList/index.js";
 import { useParams } from "react-router-dom";
 import ApiService from "../../../services/ApiService.js";
-import { ErrorsContext } from "../../../contexts/ErrorsContext.js";
 import renderErrors from "../../../helpers/renderErrors.js";
-import ItemWrapper from "../../Item/ItemList/index.js";
-import ElementsWrapper from "../../ElementsWrapper/index.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
+import ItemsTable from "../../Item/ItemsTable/ItemsTable/index.js";
 
-const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage }) => {
+const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage=false }) => {
   const { collectionName } = useParams();
   const { t, i18n } = useTranslation();
   const [collection, setCollection] = useState({});
   const [items, setItems] = useState([]);
-  const { errors, setErrors } = useContext(ErrorsContext);
+  const [errors, setErrors]  = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(12);
-
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark d-flex flex-column min-vh-100"
-      : "bg-dark text-white d-flex flex-column min-vh-100";
 
+  
   const handleGetCollectionInfo = async () => {
     if (!collectionName) return;
     try {
@@ -60,7 +53,7 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage }) => {
   }, [page]);
 
   return (
-    <div className={themeClass}>
+    <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
         <CustomNavBar
           currentLang={currentLang}
@@ -76,23 +69,14 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage }) => {
         <ErrorBoundary componentName="SingleCollection">
           <SingleCollection collection={collection} />
         </ErrorBoundary>
-        {userPage ? (
-          <ErrorBoundary componentName="ItemList">
-            <ItemList
-              collection={collection}
-              items={items}
-              onSetItems={setItems}
-            />
-          </ErrorBoundary>
-        ) : (
-          <ErrorBoundary componentName="ElementsWrapper">
-            <ElementsWrapper
-              data={items}
-              Wrapper={ItemWrapper}
-              userPage={userPage}
-            />
-          </ErrorBoundary>
-        )}
+        <ErrorBoundary componentName="ItemList">
+          <ItemsTable
+            collection={collection}
+            items={items}
+            onSetItems={setItems}
+          />
+        </ErrorBoundary>
+
         <ErrorBoundary componentName="CustomPagination">
           <CustomPagination
             page={page}

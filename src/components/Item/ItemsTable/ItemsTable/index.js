@@ -5,7 +5,7 @@ import {
   useSortBy,
   usePagination,
 } from "react-table";
-import { Table as BootstrapTable } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import TableFilter from "../TableFilter/index.js";
 import TableButtons from "../TableButtons/index.js";
 import TableHeader from "../TableHeader/index.js";
@@ -15,17 +15,16 @@ import TablePagination from "../TablePagination/index.js";
 import CurrentPage from "../CurrentPage/index.js";
 import useTableColumns from "../../../../hooks/useTableColumns.js";
 import EditModal from "../Modals/EditModal/index.js";
-import { ErrorsContext } from "../../../../contexts/ErrorsContext.js";
 import "./tablelist.css";
 
-const ItemList = ({ collection, items, onSetItems }) => {
+const ItemsTable = ({ collection, items, onSetItems }) => {
   const [isChecked, setIsChecked] = useState([]);
   const requiredFields = ["name", "tags", "createdDate"];
   const [allFields, setAllFields] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [mode, setMode] = useState("edit");
   const [oneItem, setOneItem] = useState({});
-  const { errors, setErrors } = useContext(ErrorsContext);
+
 
   const handleModalToggle = () => {
     setModalShow(!modalShow);
@@ -78,7 +77,7 @@ const ItemList = ({ collection, items, onSetItems }) => {
       {items.length > 0 ? (
         <div>
           <div className="table-scroll">
-            <BootstrapTable {...tableInstance.getTableProps()} striped>
+            <Table {...tableInstance.getTableProps()} striped>
               <TableHeader
                 items={items}
                 tableInstance={tableInstance}
@@ -93,7 +92,7 @@ const ItemList = ({ collection, items, onSetItems }) => {
                 onSetOneItem={setOneItem}
                 onSetMode={setMode}
               />
-            </BootstrapTable>
+            </Table>
           </div>
 
           <div className="d-flex justify-content-between">
@@ -120,4 +119,4 @@ const ItemList = ({ collection, items, onSetItems }) => {
   );
 };
 
-export default ItemList;
+export default ItemsTable;

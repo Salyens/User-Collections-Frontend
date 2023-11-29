@@ -10,7 +10,7 @@ import validRequiredFields from "../../../../helpers/validation/createCollection
 import { DataContext } from "../../../../contexts/DataContext";
 
 const CreateCollectionModal = ({ show, onHide }) => {
-  const { setData } = useContext(DataContext);
+  const { setCollections } = useContext(DataContext);
   const [input, setInput] = useState({});
   const [newFields, setNewFields] = useState([]);
   const { errors, setErrors } = useContext(ErrorsContext);
@@ -33,7 +33,11 @@ const CreateCollectionModal = ({ show, onHide }) => {
 
       const finalInput = { ...input, additionalFields };
       const newCollection = await ApiService.createCollection(finalInput);
-      setData((prev) => [...prev, newCollection]);
+      setCollections((prevData) => ({
+        ...prevData,
+        data: [...prevData.data, newCollection],
+      }));
+
       setInput({});
       onHide();
     } catch (error) {

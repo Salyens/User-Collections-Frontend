@@ -7,7 +7,7 @@ import AdditionalFields from "../AdditionalFields";
 import { DataContext } from "../../../../contexts/DataContext";
 
 const EditCollectionModal = ({ show, onHide, collection }) => {
-  const { setData } = useContext(DataContext);
+  const { setCollections } = useContext(DataContext);
   const [errors, setErrors] = useState([]);
   const [input, setInput] = useState({});
   const [newFields, setNewFields] = useState([]);
@@ -23,19 +23,15 @@ const EditCollectionModal = ({ show, onHide, collection }) => {
   const handleSaveChanges = async () => {
     try {
       await ApiService.updateCollection(input, collection._id);
-
-      const updateCollection = () => {
-        setData(prevData => ({
+      const updateCollectionState = () => {
+        setCollections((prevData) => ({
           ...prevData,
-          collections: {
-            ...prevData.collections,
-            list: prevData.collections.list.map(el =>
-              el._id === collection._id ? { ...el, ...input } : el
-            )
-          }
+          data: prevData.data.map((el) =>
+            el._id === collection._id ? { ...el, ...input } : el
+          ),
         }));
       };
-      updateCollection()
+      updateCollectionState();
 
       setInput({});
       onHide(false);
@@ -45,7 +41,6 @@ const EditCollectionModal = ({ show, onHide, collection }) => {
         : setErrors(error.response.data.message);
     }
   };
-
 
   useEffect(() => {
     if (!show) {

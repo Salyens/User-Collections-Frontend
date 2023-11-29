@@ -11,10 +11,6 @@ const TableBody = ({
   onSetMode,
 }) => {
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark  "
-      : "bg-dark text-white border border-light";
 
   const handleCheckboxChange = (rowId) => (event) => {
     const checked = event.target.checked;
@@ -40,7 +36,7 @@ const TableBody = ({
         tableInstance.prepareRow(row);
         return (
           <tr {...row.getRowProps()}>
-            <td className={themeClass}>
+            <td className={`${theme} border`}>
               <Form.Check
                 type="checkbox"
                 aria-label="select user"
@@ -48,7 +44,7 @@ const TableBody = ({
                 checked={isChecked.includes(row.original._id)}
               />
             </td>
-            <td className={themeClass}>
+            <td className={`${theme} border`}>
               <Button
                 onClick={() => handleEditItem(row.original)}
                 className="me-1"
@@ -58,7 +54,7 @@ const TableBody = ({
               </Button>
             </td>
             {row.cells.map((cell) => (
-              <td className={themeClass} {...cell.getCellProps()}>
+              <td className={`${theme} border`} {...cell.getCellProps()}>
                 {cell.render("Cell")}
               </td>
             ))}

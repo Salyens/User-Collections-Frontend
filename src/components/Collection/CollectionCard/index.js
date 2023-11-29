@@ -13,13 +13,7 @@ const CollectionCard = ({ collection }) => {
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
-
   const { t } = useTranslation();
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark"
-      : "bg-dark text-white border-white";
-
   const handleModalToggle = () => {
     setModalShow(!modalShow);
   };
@@ -30,7 +24,7 @@ const CollectionCard = ({ collection }) => {
 
   return (
     <div>
-      <Card className={themeClass}>
+      <Card className={theme}>
         <CreateModalButtons
           handleModalToggle={handleModalToggle}
           handleDeleteModalToggle={handleDeleteModalToggle}
