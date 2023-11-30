@@ -1,19 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { ThemeContext } from "../../../contexts/ThemeContext";
-import "./themeswitcher.css"
 
 const ThemeSwitcher = () => {
-  const { toggleTheme } = useContext(ThemeContext);
+  const { theme, setTheme } = useContext(ThemeContext);
+  const toggleTheme = () => {
+    setTheme(
+      theme === "bg-light text-dark"
+        ? "bg-dark text-white border-light"
+        : "bg-light text-dark"
+    );
+    localStorage.setItem("theme", theme);
+  };
+  useEffect(() => localStorage.setItem("theme", theme), [theme]);
 
   return (
     <Form>
       <Form.Label>Theme</Form.Label>
-      <Form.Check
-        type="switch"
-        id="custom-switch"
-        onClick={toggleTheme}
-      />
+      <Form.Check type="switch" className={theme} onClick={toggleTheme} />
     </Form>
   );
 };

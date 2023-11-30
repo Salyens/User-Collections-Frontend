@@ -2,37 +2,41 @@ import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
-import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
 import { Button } from "react-bootstrap";
-import EditCreateModal from "../../Collection/Modals/EditCreateModal/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
+import CreateCollectionModal from "../../Collection/Modals/CreateCollectionModal/index.js";
+import { DataContext } from "../../../contexts/DataContext.js";
+import useDataFetching from "../../../hooks/useDataFetching.js";
+import CollectionList from "../../Collection/CollectionList/index.js";
+import CustomPagination from "../../CustomPagination/index.js";
 import "./userpage.css";
 
-const UserPage = ({ currentLang, onSetCurrentLang }) => {
+const UserPage = () => {
+  const { collections, setCollections } = useContext(DataContext);
+
+  const pageParams = {
+    apiFunction: "getCollections",
+    limit: 5,
+    userPage: true,
+    setData:setCollections,
+    isCollection: true,
+  };
+  const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark d-flex flex-column min-vh-100"
-      : "bg-dark text-white d-flex flex-column min-vh-100";
-
   const [modalShow, setModalShow] = useState(false);
   const handleModalToggle = () => {
     setModalShow(!modalShow);
   };
-
+  
   return (
-    <div className={themeClass}>
+    <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
-        <CustomNavBar
-          currentLang={currentLang}
-          onSetCurrentLang={onSetCurrentLang}
-        />
+        <CustomNavBar />
       </ErrorBoundary>
-
       <div className="flex-grow-1 position-relative">
+      <h2 className="text-center m-3">My collections</h2>
         <ErrorBoundary componentName="Button">
           <Button
             variant="primary"
@@ -43,27 +47,20 @@ const UserPage = ({ currentLang, onSetCurrentLang }) => {
           </Button>
         </ErrorBoundary>
 
-        <ErrorBoundary componentName="GenericList">
-          <GenericList
-            getAll={true}
-            type="collections"
-            header={t("My collections")}
-            limit="20"
-            Wrapper={CollectionWrapper}
-            apiFunction="getCollections"
-            userPage={true}
-            button="outline-success"
-          />
+        <ErrorBoundary componentName="Button">
+          <CollectionList collections={collections} />
         </ErrorBoundary>
 
         <ErrorBoundary componentName="EditCreateModal">
-          <EditCreateModal
-            show={modalShow}
-            onHide={handleModalToggle}
-            mode={"create"}
-          />
+          <CreateCollectionModal show={modalShow} onHide={handleModalToggle} />
         </ErrorBoundary>
       </div>
+      <CustomPagination
+        page={page}
+        limit={pageParams.limit}
+        total={collections.total}
+        onSetPage={setPage}
+      />
 
       <Footer className="mt-auto" />
     </div>

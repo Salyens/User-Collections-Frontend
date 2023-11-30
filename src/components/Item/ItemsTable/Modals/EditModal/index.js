@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Spinner } from "react-bootstrap";
 import ApiService from "../../../../../services/ApiService";
-import { ErrorsContext } from "../../../../../contexts/ErrorsContext";
 import renderErrors from "../../../../../helpers/renderErrors";
 import ItemAdditionalFields from "../ItemAdditionalFields";
 import ItemRequiredFields from "../ItemRequiredFields";
@@ -11,15 +10,24 @@ import { ThemeContext } from "../../../../../contexts/ThemeContext";
 import prepareAdditionalFields from "../../../../../helpers/prepareAdditionalFields";
 import updateItemState from "../../../../../helpers/updateItem/updateItemState";
 
-const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
-  const { errors, setErrors } = useContext(ErrorsContext);
+const EditModal = ({
+  show,
+  onHide,
+  oneItem,
+  collection,
+  onSetItems,
+  mode,
+  errors,
+  onSetErrors,
+}) => {
   const [input, setInput] = useState({});
   const [separatedTags, setSeparatedTags] = useState([]);
   const [changedFields, setChangedFields] = useState({});
   const { theme } = useContext(ThemeContext);
   const themeClass =
     theme === "light" ? "bg-light text-dark  " : "bg-dark text-white";
-
+  const [editLoading, setEditLoading] = useState(false);
+  const [createLoading, setCreateLoading] = useState(false);
   useEffect(() => {
     if (mode === "edit" && oneItem) {
       setInput({
@@ -50,19 +58,27 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
       };
 
       if (mode === "edit") {
+        setCreateLoading(true);
         const isEmpty = hasEmptyValues(input, updatedAdditionalFields);
-        if (isEmpty.length) return setErrors(isEmpty);
+        if (isEmpty.length) return onSetErrors(isEmpty);
         await ApiService.updateItem(wholeItemInfo, oneItem._id);
-
-        onSetItems((prev) =>
-          prev.map((el) => updateItemState(el, wholeItemInfo, oneItem))
-        );
+        setCreateLoading(false);
+        onSetItems((prevData) => ({
+          ...prevData,
+          data: prevData.data.map((el) =>
+            updateItemState(el, wholeItemInfo, oneItem)
+          ),
+        }));
       } else if (mode === "create") {
+        setCreateLoading(true);
         const isEmpty = createItemValidation(
           collection.additionalFields,
           wholeItemInfo
         );
-        if (isEmpty.length) return setErrors(isEmpty);
+        if (isEmpty.length) {
+          setCreateLoading(false);
+          return onSetErrors(isEmpty);
+        }
 
         const wholeItemWithCollectionName = {
           ...wholeItemInfo,
@@ -74,16 +90,21 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
           ...wholeItemInfo,
           createdDate: Date.now(),
         };
-        onSetItems((prev) => [...prev, itemWithDate]);
+        setCreateLoading(false);
+        onSetItems((prevData) => ({
+          ...prevData,
+          data: [...prevData.data, itemWithDate],
+        }));
       }
 
       setInput({});
       setChangedFields({});
       onHide();
     } catch (error) {
+      setCreateLoading(false);
       !error.response
-        ? setErrors(error.message)
-        : setErrors(error.response.data.message);
+        ? onSetErrors(error.message)
+        : onSetErrors(error.response.data.message);
     }
   };
 
@@ -123,7 +144,7 @@ const EditModal = ({ show, onHide, oneItem, collection, onSetItems, mode }) => {
           Close
         </Button>
         <Button variant="primary" onClick={handleSaveChanges}>
-          Save
+          {createLoading ? <Spinner animation="border" size="sm" /> : "Save"}
         </Button>
       </Modal.Footer>
     </Modal>

@@ -1,8 +1,4 @@
-#dark {
-  background-color: rgb(33 37 41);
-  border: 0;
-  color: white;
-}
-#light {
-  border: 0;
+#transparent-background {
+  background: rgba(0, 0, 0, 0.217);
+  border: 0
 }

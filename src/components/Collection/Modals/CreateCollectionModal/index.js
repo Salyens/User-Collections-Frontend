@@ -6,8 +6,11 @@ import RequiredFields from "../RequiredFields";
 import renderErrors from "../../../../helpers/renderErrors";
 import AdditionalFields from "../AdditionalFields";
 import typeCastAdditionalFields from "../../../../helpers/modals/typeCastAdditionalFields";
+import validRequiredFields from "../../../../helpers/validation/createCollection";
+import { DataContext } from "../../../../contexts/DataContext";
 
-const EditCreateModal = ({ show, onHide, collection, mode, onSetData }) => {
+const CreateCollectionModal = ({ show, onHide }) => {
+  const { setCollections } = useContext(DataContext);
   const [input, setInput] = useState({});
   const [newFields, setNewFields] = useState([]);
   const { errors, setErrors } = useContext(ErrorsContext);
@@ -22,32 +25,19 @@ const EditCreateModal = ({ show, onHide, collection, mode, onSetData }) => {
 
   const handleSaveChanges = async () => {
     try {
-      // validation
-      if (
-        mode === "create" &&
-        (!input["name"] || !input["description"] || !input["theme"])
-      ) {
-        return setErrors(["Name, description and theme shouldn't be empty"]);
-      }
+      const error = validRequiredFields(input);
+      if (error) return setErrors(error);
 
-      //type cast
-      const additionalFields = typeCastAdditionalFields(newFields);
+      const { additionalFields, errors } = typeCastAdditionalFields(newFields);
+      if (errors.length) return setErrors(errors);
 
-      const finalInput = {
-        ...input,
-        additionalFields,
-      };
+      const finalInput = { ...input, additionalFields };
+      const newCollection = await ApiService.createCollection(finalInput);
+      setCollections((prevData) => ({
+        ...prevData,
+        data: [...prevData.data, newCollection],
+      }));
 
-      if (mode === "edit") {
-        await ApiService.updateCollection(finalInput, collection._id);
-        onSetData((prev) =>
-          prev.map((el) =>
-            el._id === collection._id ? { ...el, ...finalInput } : el
-          )
-        );
-      } else if (mode === "create") {
-        await ApiService.createCollection(finalInput);
-      }
       setInput({});
       onHide();
     } catch (error) {
@@ -61,15 +51,6 @@ const EditCreateModal = ({ show, onHide, collection, mode, onSetData }) => {
     setNewFields([...newFields, { type: "string", value: "" }]);
   };
 
-  const renderTitle = () => {
-    if (mode === "edit") {
-      return collection ? `Edit ${collection.name}` : "Edit collection";
-    }
-    if (mode === "create") {
-      return "Create collection";
-    }
-  };
-
   useEffect(() => {
     if (!show) {
       setErrors([]);
@@ -80,22 +61,21 @@ const EditCreateModal = ({ show, onHide, collection, mode, onSetData }) => {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{renderTitle()}</Modal.Title>
+        <Modal.Title>Create collection</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {renderErrors(errors)}
         <Form.Group>
           <RequiredFields
-            collection={collection}
             handleInputChange={handleInputChange}
             input={input}
             onSetInput={setInput}
           />
-          {mode === "create" && (
-            <Button variant="primary" onClick={addNewField} className="mb-3">
-              + Add new field
-            </Button>
-          )}
+
+          <Button variant="primary" onClick={addNewField} className="mb-3">
+            + Add new field
+          </Button>
+
           <AdditionalFields
             newFields={newFields}
             onSetNewFields={setNewFields}
@@ -115,4 +95,4 @@ const EditCreateModal = ({ show, onHide, collection, mode, onSetData }) => {
   );
 };
 
-export default EditCreateModal;
+export default CreateCollectionModal;

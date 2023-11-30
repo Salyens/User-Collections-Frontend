@@ -1,25 +1,44 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import ApiService from "../services/ApiService";
-import { ErrorsContext } from "../contexts/ErrorsContext";
 
-const useDataFetching = (apiFunction, limit, userPage, setData, collection) => {
+const useDataFetching = ({
+  apiFunction,
+  limit,
+  userPage,
+  setData,
+  collectionName = null,
+}) => {
+
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const { setErrors } = useContext(ErrorsContext);
-
+  const [error, setError] = useState(null);
   const fetchData = async () => {
     try {
-      let response;
-      if (collection)
-        response = await ApiService[apiFunction](page, limit, userPage, collection);
-      else response = await ApiService[apiFunction](page, limit, userPage);
-      const { data, total } = response;
-      setData(data);
-      if (total) setTotal(total);
-    } catch (error) {
-      setErrors(
-        "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later."
+      const response = await ApiService[apiFunction](
+        page,
+        limit,
+        userPage,
+        collectionName
       );
+      const { data, total } = response;
+
+      setData((prevData) => {
+        return {
+          ...prevData,
+          data,
+          total,
+          isLoading: false,
+        };
+      });
+    } catch (error) {
+      error =
+        "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later.";
+      setError(error);
+      setData((prevData) => {
+        return {
+          ...prevData,
+          isLoading: false,
+        };
+      });
     }
   };
 
@@ -27,7 +46,7 @@ const useDataFetching = (apiFunction, limit, userPage, setData, collection) => {
     fetchData();
   }, [limit, page]);
 
-  return { page, setPage, total };
+  return { page, setPage, error };
 };
 
 export default useDataFetching;

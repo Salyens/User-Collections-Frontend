@@ -2,17 +2,27 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ApiService from "../../../../services/ApiService";
 import renderErrors from "../../../../helpers/renderErrors";
-import { useContext } from "react";
-import { ErrorsContext } from "../../../../contexts/ErrorsContext";
+import { useContext, useState } from "react";
+import { DataContext } from "../../../../contexts/DataContext";
 
-const DeleteModal = ({ show, onHide, collectionName, onSetData }) => {
-  const { errors, setErrors } = useContext(ErrorsContext);
+const DeleteCollectionModal = ({ show, onHide, collectionName }) => {
+  const { setCollections } = useContext(DataContext);
+  const [errors, setErrors] = useState([]);
   const handleDeleteCollection = async () => {
     try {
       await ApiService.deleteCollection(collectionName);
-      onSetData((prev) =>
-        prev.filter((collection) => collection.name !== collectionName)
-      );
+      const updateCollectionState = () => {
+        setCollections((prevData) => {
+          return {
+            ...prevData,
+              ...prevData.collections,
+              data: prevData.data.filter(
+                (collection) => collection.name !== collectionName
+              ),
+          };
+        });
+      };
+      updateCollectionState();
       onHide();
     } catch (error) {
       !error.response
@@ -33,9 +43,10 @@ const DeleteModal = ({ show, onHide, collectionName, onSetData }) => {
 
         <Modal.Body>
           {renderErrors(errors)}
-          {!errors || errors.length === 0 && (
-            <p>{`Are you sure you want to delete ${collectionName}?`}</p>
-          )}
+          {!errors ||
+            (errors.length === 0 && (
+              <p>{`Are you sure you want to delete ${collectionName}?`}</p>
+            ))}
         </Modal.Body>
 
         <Modal.Footer>
@@ -51,4 +62,4 @@ const DeleteModal = ({ show, onHide, collectionName, onSetData }) => {
   );
 };
 
-export default DeleteModal;
+export default DeleteCollectionModal;

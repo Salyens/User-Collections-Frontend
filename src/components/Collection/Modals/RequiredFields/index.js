@@ -4,7 +4,7 @@ import ThemeDropdown from "../../DropDowns/ThemeDropDown";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
 
-const RequiredFields = ({ collection, handleInputChange, input, onSetInput }) => {
+const RequiredFields = ({ collection, handleInputChange, onSetInput }) => {
   return (
     <div className="mb-3">
       <Form.Label>Collection name</Form.Label>

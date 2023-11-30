@@ -1,51 +1,53 @@
 import React, { useContext } from "react";
-import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
-import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
-import ItemWrapper from "../../Item/ItemWrapper/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
+import { DataContext } from "../../../contexts/DataContext.js";
+import useDataFetching from "../../../hooks/useDataFetching.js";
+import CollectionList from "../../Collection/CollectionList/index.js";
+import ItemList from "../../Item/ItemList/index.js";
+import renderErrors from "../../../helpers/renderErrors.js";
 
-const MainPage = ({ currentLang, onSetCurrentLang }) => {
-  const { t, i18n } = useTranslation();
+const MainPage = () => {
+  const { collections, setCollections, items, setItems } =
+    useContext(DataContext);
+
+  const pageParamsCollection = {
+    apiFunction: "getCollections",
+    limit: 5,
+    userPage: false,
+    setData: setCollections,
+  };
+  const pageParamsItem = {
+    apiFunction: "getItems",
+    limit: 12,
+    userPage: false,
+    setData: setItems,
+  };
+  const { error: errorCollection } = useDataFetching(pageParamsCollection);
+  const { error: errorItem } = useDataFetching(pageParamsItem);
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark d-flex flex-column min-vh-100"
-      : "bg-dark text-whited-flex flex-column min-vh-100";
 
   return (
-    <div className={themeClass}>
+    <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
-        <CustomNavBar
-          currentLang={currentLang}
-          onSetCurrentLang={onSetCurrentLang}
-        />
+        <CustomNavBar />
       </ErrorBoundary>
 
       <div className="flex-grow-1">
-        <ErrorBoundary componentName="GenericList">
-          <GenericList
-            type="collections"
-            header={t("Home-collection-header")}
-            limit="5"
-            Wrapper={CollectionWrapper}
-            apiFunction="getCollections"
-            button="outline-success"
-          />
+        <ErrorBoundary componentName="CollectionList">
+          <h1 className="text-center m-3">Largest collections</h1>
+          {errorCollection &&
+            errorCollection.length > 0 &&
+            renderErrors(errorCollection)}
+          <CollectionList collections={collections} />
         </ErrorBoundary>
+        
         <ErrorBoundary componentName="GenericList">
-          <GenericList
-            getAll={false}
-            type="items"
-            header={t("Home-items-header")}
-            limit="12"
-            Wrapper={ItemWrapper}
-            apiFunction="getItems"
-            button="outline-primary"
-          />
+          <h1 className="text-center m-3">Last items</h1>
+          {errorItem && errorItem.length > 0 && renderErrors(errorItem)}
+          <ItemList items={items} />
         </ErrorBoundary>
       </div>
 

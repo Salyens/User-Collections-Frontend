@@ -2,43 +2,44 @@ import React, { useContext } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
-import GenericList from "../../GenericList";
 import Footer from "../../Footer/Footer";
-import CollectionWrapper from "../../Collection/CollectionWrapper/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary.js";
+import { DataContext } from "../../../contexts/DataContext.js";
+import CollectionList from "../../Collection/CollectionList/index.js";
+import useDataFetching from "../../../hooks/useDataFetching.js";
+import CustomPagination from "../../CustomPagination/index.js";
 
-const CollectionsPage = ({ currentLang, onSetCurrentLang }) => {
+const CollectionsPage = () => {
+  const { collections, setCollections } = useContext(DataContext);
+  const pageParams = {
+    apiFunction: "getCollections",
+    limit: 12,
+    userPage: false,
+    setData:setCollections,
+    isCollection: true,
+  };
+  const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light"
-      ? "bg-light text-dark d-flex flex-column min-vh-100"
-      : "bg-dark text-white d-flex flex-column min-vh-100";
 
   return (
-    <div className={themeClass}>
+    <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
-        <CustomNavBar
-          currentLang={currentLang}
-          onSetCurrentLang={onSetCurrentLang}
-        />
+        <CustomNavBar />
       </ErrorBoundary>
 
       <div className="flex-grow-1">
-        <ErrorBoundary componentName="GenericList">
-          <GenericList
-            getAll={true}
-            type="collections"
-            header={t("All-collections-header")}
-            limit="10"
-            Wrapper={CollectionWrapper}
-            apiFunction="getCollections"
-            userPage={false}
-            button="outline-success"
-          />
+        <ErrorBoundary componentName="CollectionList">
+          <h1 className="text-center m-3">All collections</h1>
+          <CollectionList collections={collections} />
         </ErrorBoundary>
       </div>
-
+      <CustomPagination
+        page={page}
+        limit={pageParams.limit}
+        total={collections.total}
+        onSetPage={setPage}
+      />
       <Footer />
     </div>
   );
