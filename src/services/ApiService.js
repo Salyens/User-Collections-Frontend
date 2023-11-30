@@ -34,24 +34,26 @@ class ApiService {
     return { data: collections, total };
   }
 
-  static async getOneCollection(collectionName) {
+  static async getOneCollection(page, limit, userPage, collectionName) {
     const response = await axios.get(
       `${ApiService.apiBase}/collections/${collectionName}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
-    return response.data[0];
+
+    return { data: response.data};
+    
   }
 
-  static async getItemsInCollection(page, limit, collection) {
+  static async getItemsInCollection(page, limit,userPage, collectionName) {
     const response = await axios.get(
-      `${ApiService.apiBase}/items/by-collection/${collection}?page=${page}&limit=${limit}`,
+      `${ApiService.apiBase}/items/by-collection/${collectionName}?page=${page}&limit=${limit}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
-    return response.data;
+    return response;
   }
 
   static async getItems(page, limit, collectionName = null) {

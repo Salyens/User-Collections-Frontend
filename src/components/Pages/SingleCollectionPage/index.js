@@ -10,55 +10,43 @@ import renderErrors from "../../../helpers/renderErrors.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
 import ItemsTable from "../../Item/ItemsTable/ItemsTable/index.js";
+import useDataFetching from "../../../hooks/useDataFetching.js";
+import { DataContext } from "../../../contexts/DataContext.js";
 
-const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage=false }) => {
+const SingleCollectionPage = () => {
   const { collectionName } = useParams();
   const { t, i18n } = useTranslation();
-  const [collection, setCollection] = useState({});
-  const [items, setItems] = useState([]);
-  const [errors, setErrors]  = useState([]);
-  const [page, setPage] = useState(1);
+  const [errors, setErrors] = useState([]);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(12);
   const { theme } = useContext(ThemeContext);
 
-  
-  const handleGetCollectionInfo = async () => {
-    if (!collectionName) return;
-    try {
-      const foundedCollection = await ApiService.getOneCollection(
-        collectionName
-      );
-      let foundedItems;
-      if (!userPage)
-        foundedItems = await ApiService.getItems(page, limit, collectionName);
-      else
-        foundedItems = await ApiService.getItemsInCollection(
-          page,
-          limit,
-          collectionName
-        );
-      setTotal(!userPage && foundedItems.total);
-      setItems(userPage ? foundedItems : foundedItems.data);
-      setCollection(foundedCollection);
-    } catch (error) {
-      setErrors(
-        "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later."
-      );
-    }
+  const { collections, setCollections, items, setItems } =
+    useContext(DataContext);
+  const pageParamsOneCollection = {
+    apiFunction: "getOneCollection",
+    limit: 12,
+    userPage: false,
+    setData: setCollections,
+    isCollection: true,
+    collectionName,
+  };
+  const pageParamsItems = {
+    apiFunction: "getItemsInCollection",
+    limit: 12,
+    userPage: false,
+    setData: setItems,
+    isItem: true,
+    collectionName,
   };
 
-  useEffect(() => {
-    handleGetCollectionInfo();
-  }, [page]);
+  useDataFetching(pageParamsOneCollection);
+  useDataFetching(pageParamsItems);
 
   return (
     <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
-        <CustomNavBar
-          currentLang={currentLang}
-          onSetCurrentLang={onSetCurrentLang}
-        />
+        <CustomNavBar />
       </ErrorBoundary>
 
       {errors && errors.length > 0 && (
@@ -67,24 +55,24 @@ const SingleCollectionPage = ({ currentLang, onSetCurrentLang, userPage=false })
 
       <div className="flex-grow-1">
         <ErrorBoundary componentName="SingleCollection">
-          <SingleCollection collection={collection} />
+          <SingleCollection collection={collections} />
         </ErrorBoundary>
         <ErrorBoundary componentName="ItemList">
           <ItemsTable
-            collection={collection}
-            items={items}
+            collection={collections.data[0]}
+            items={items.data}
             onSetItems={setItems}
           />
         </ErrorBoundary>
 
-        <ErrorBoundary componentName="CustomPagination">
+        {/* <ErrorBoundary componentName="CustomPagination">
           <CustomPagination
             page={page}
             limit={12}
-            total={total}
+            total={items.total}
             onSetPage={setPage}
           />
-        </ErrorBoundary>
+        </ErrorBoundary> */}
       </div>
 
       <Footer className="mt-auto" />

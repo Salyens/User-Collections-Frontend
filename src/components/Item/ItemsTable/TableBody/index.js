@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 
@@ -25,6 +25,7 @@ const TableBody = ({
     });
   };
   const handleEditItem = (row) => {
+
     handleModalToggle();
     onSetOneItem(row);
     onSetIsChecked([]);

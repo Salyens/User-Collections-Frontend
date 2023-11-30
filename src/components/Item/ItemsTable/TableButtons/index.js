@@ -1,31 +1,37 @@
-import React, { useContext } from "react";
-import { Button } from "react-bootstrap";
+import React, { useContext, useState } from "react";
+import { Button, Spinner } from "react-bootstrap";
 import ApiService from "../../../../services/ApiService";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 
 const TableButtons = ({
-  items,
   onSetItems,
   isChecked,
   onSetIsChecked,
   handleModalToggle,
   onSetMode,
+  onSetErrors,
 }) => {
   const { theme } = useContext(ThemeContext);
-  
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const handleDeleteItem = async () => {
     try {
+      setDeleteIsLoading(true);
       await ApiService.deleteItems(isChecked);
-      const updatedItems = items.filter(
-        (item) => !isChecked.includes(item._id)
-      );
-      onSetItems(updatedItems);
+      onSetItems((prevData) => {
+        return {
+          ...prevData,
+          ...prevData.collections,
+          data: prevData.data.filter((item) => !isChecked.includes(item._id)),
+        };
+      });
+      setDeleteIsLoading(false);
+      onSetErrors([]);
       onSetIsChecked([]);
     } catch (error) {
-      console.log("error: ", error);
+      onSetErrors("Something went wrong while deleting the item");
+      setDeleteIsLoading(false);
     }
   };
-
   const handleChangeModeAndToggle = () => {
     onSetMode("create");
     handleModalToggle();
@@ -41,7 +47,8 @@ const TableButtons = ({
         Create
       </Button>
       <Button variant="outline-danger" onClick={handleDeleteItem}>
-        Delete <i className="bi bi-trash-fill"></i>
+        {deleteIsLoading ? <Spinner animation="border" size="sm" /> : "Delete"}
+        <i className="bi bi-trash-fill"></i>
       </Button>
     </div>
   );

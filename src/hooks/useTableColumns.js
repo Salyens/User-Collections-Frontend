@@ -16,7 +16,7 @@ const useTableColumns = (collection, allFields) => {
 
   const columns = useMemo(() => {
     return allFields.map((field) => {
-      const additionalField = collection["additionalFields"][field];
+      const additionalField = collection[0]["additionalFields"][field];
 
       return {
         Header: field,

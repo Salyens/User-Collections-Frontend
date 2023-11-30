@@ -5,7 +5,7 @@ import {
   useSortBy,
   usePagination,
 } from "react-table";
-import { Table } from "react-bootstrap";
+import { Table as BootstrapTable, Spinner, Table } from "react-bootstrap";
 import TableFilter from "../TableFilter/index.js";
 import TableButtons from "../TableButtons/index.js";
 import TableHeader from "../TableHeader/index.js";
@@ -16,23 +16,28 @@ import CurrentPage from "../CurrentPage/index.js";
 import useTableColumns from "../../../../hooks/useTableColumns.js";
 import EditModal from "../Modals/EditModal/index.js";
 import "./tablelist.css";
+import { DataContext } from "../../../../contexts/DataContext.js";
+import renderErrors from "../../../../helpers/renderErrors.js";
 
-const ItemsTable = ({ collection, items, onSetItems }) => {
+const ItemsTable = () => {
+  const { collections, setCollections, items, setItems } =
+    useContext(DataContext);
+
   const [isChecked, setIsChecked] = useState([]);
   const requiredFields = ["name", "tags", "createdDate"];
   const [allFields, setAllFields] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [mode, setMode] = useState("edit");
   const [oneItem, setOneItem] = useState({});
-
+  const [errors, setErrors] = useState([]);
 
   const handleModalToggle = () => {
     setModalShow(!modalShow);
-    setErrors([]);
+    setErrors([])
   };
 
-  const columns = useTableColumns(collection, allFields);
-  const data = useMemo(() => items, [items]);
+  const columns = useTableColumns(collections.data, allFields);
+  const data = useMemo(() => items.data, [items.data]);
   const tableInstance = useTable(
     { columns, data },
     useGlobalFilter,
@@ -43,9 +48,9 @@ const ItemsTable = ({ collection, items, onSetItems }) => {
   const { globalFilter, pageIndex } = state;
 
   const addAdditionalFields = () => {
-    if (items && items.length > 0) {
-      const additionalFields = items[0].additionalFields
-        ? Object.keys(items[0].additionalFields)
+    if (items && items.data.length > 0) {
+      const additionalFields = items.data[0].additionalFields
+        ? Object.keys(items.data[0].additionalFields)
         : [];
 
       setAllFields(
@@ -58,64 +63,77 @@ const ItemsTable = ({ collection, items, onSetItems }) => {
 
   useEffect(() => {
     addAdditionalFields();
-  }, [items, data]);
+  }, [items.data, data]);
 
   return (
-    <div className="me-3 ms-3">
-      <div className="d-flex justify-content-between">
-        <TableButtons
-          items={items}
-          onSetItems={onSetItems}
-          isChecked={isChecked}
-          onSetIsChecked={setIsChecked}
-          handleModalToggle={handleModalToggle}
-          onSetMode={setMode}
+    <>
+      {collections.isLoading ? (
+        <Spinner
+          className="d-flex ms-auto me-auto mt-5"
+          animation="border"
+          size="lg"
         />
-        <TableFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      </div>
-
-      {items.length > 0 ? (
-        <div>
-          <div className="table-scroll">
-            <Table {...tableInstance.getTableProps()} striped>
-              <TableHeader
-                items={items}
-                tableInstance={tableInstance}
-                isChecked={isChecked}
-                onSetIsChecked={setIsChecked}
-              />
-              <TableBody
-                tableInstance={tableInstance}
-                isChecked={isChecked}
-                onSetIsChecked={setIsChecked}
-                handleModalToggle={handleModalToggle}
-                onSetOneItem={setOneItem}
-                onSetMode={setMode}
-              />
-            </Table>
-          </div>
-
+      ) : (
+        <div className="me-3 ms-3">
+          {renderErrors(errors)}
           <div className="d-flex justify-content-between">
-            <CurrentPage pageIndex={pageIndex} pageOptions={pageOptions} />
-            <div className="d-flex justify-content-end gap-2">
-              <TablePageSize setPageSize={setPageSize} />
-              <TablePagination tableInstance={tableInstance} />
-            </div>
+            <TableButtons
+              onSetItems={setItems}
+              isChecked={isChecked}
+              onSetIsChecked={setIsChecked}
+              handleModalToggle={handleModalToggle}
+              onSetMode={setMode}
+              onSetErrors={setErrors}
+            />
+            <TableFilter filter={globalFilter} setFilter={setGlobalFilter} />
           </div>
-        </div>
-      ) : 
-      <h2>There are no items yet</h2>
-      }
 
-      <EditModal
-        show={modalShow}
-        onHide={handleModalToggle}
-        oneItem={oneItem}
-        collection={collection}
-        onSetItems={onSetItems}
-        mode={mode}
-      />
-    </div>
+          {items.data.length > 0 ? (
+            <div>
+              <div className="table-scroll">
+                <Table {...tableInstance.getTableProps()} striped>
+                  <TableHeader
+                    items={items.data}
+                    tableInstance={tableInstance}
+                    isChecked={isChecked}
+                    onSetIsChecked={setIsChecked}
+                  />
+                  <TableBody
+                    tableInstance={tableInstance}
+                    isChecked={isChecked}
+                    onSetIsChecked={setIsChecked}
+                    handleModalToggle={handleModalToggle}
+                    onSetOneItem={setOneItem}
+                    onSetMode={setMode}
+                  />
+                </Table>
+              </div>
+
+              <div className="d-flex justify-content-between">
+                <CurrentPage pageIndex={pageIndex} pageOptions={pageOptions} />
+                <div className="d-flex justify-content-end gap-2">
+                  <TablePageSize setPageSize={setPageSize} />
+                  <TablePagination tableInstance={tableInstance} />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <h2>There are no items yet</h2>
+          )}
+
+          <EditModal
+            show={modalShow}
+            onHide={handleModalToggle}
+            oneItem={oneItem}
+            collection={collections.data[0]}
+            onSetItems={setItems}
+            mode={mode}
+            errors={errors}
+            onSetErrors={setErrors}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

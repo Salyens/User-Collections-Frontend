@@ -6,8 +6,9 @@ const useDataFetching = ({
   limit,
   userPage,
   setData,
-  collection = null,
+  collectionName = null,
 }) => {
+
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
   const fetchData = async () => {
@@ -16,9 +17,10 @@ const useDataFetching = ({
         page,
         limit,
         userPage,
-        collection
+        collectionName
       );
       const { data, total } = response;
+
       setData((prevData) => {
         return {
           ...prevData,
