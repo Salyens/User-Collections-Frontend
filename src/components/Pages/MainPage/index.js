@@ -12,17 +12,17 @@ import renderErrors from "../../../helpers/renderErrors.js";
 const MainPage = () => {
   const { collections, setCollections, items, setItems } =
     useContext(DataContext);
-
+  const userPage = false;
   const pageParamsCollection = {
     apiFunction: "getCollections",
     limit: 5,
-    userPage: false,
+    userPage,
     setData: setCollections,
   };
   const pageParamsItem = {
     apiFunction: "getItems",
     limit: 12,
-    userPage: false,
+    userPage,
     setData: setItems,
   };
   const { error: errorCollection } = useDataFetching(pageParamsCollection);
@@ -41,9 +41,9 @@ const MainPage = () => {
           {errorCollection &&
             errorCollection.length > 0 &&
             renderErrors(errorCollection)}
-          <CollectionList collections={collections} />
+          <CollectionList collections={collections} userPage={userPage} />
         </ErrorBoundary>
-        
+
         <ErrorBoundary componentName="GenericList">
           <h1 className="text-center m-3">Last items</h1>
           {errorItem && errorItem.length > 0 && renderErrors(errorItem)}

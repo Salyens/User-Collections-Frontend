@@ -22,7 +22,6 @@ import renderErrors from "../../../../helpers/renderErrors.js";
 const ItemsTable = () => {
   const { collections, setCollections, items, setItems } =
     useContext(DataContext);
-
   const [isChecked, setIsChecked] = useState([]);
   const requiredFields = ["name", "tags", "createdDate"];
   const [allFields, setAllFields] = useState([]);
@@ -33,7 +32,7 @@ const ItemsTable = () => {
 
   const handleModalToggle = () => {
     setModalShow(!modalShow);
-    setErrors([])
+    setErrors([]);
   };
 
   const columns = useTableColumns(collections.data, allFields);
@@ -64,6 +63,7 @@ const ItemsTable = () => {
   useEffect(() => {
     addAdditionalFields();
   }, [items.data, data]);
+
 
   return (
     <>

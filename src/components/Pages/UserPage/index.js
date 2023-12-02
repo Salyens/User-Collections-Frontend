@@ -12,14 +12,14 @@ import CollectionList from "../../Collection/CollectionList/index.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import "./userpage.css";
 
-const UserPage = () => {
+const UserPage = ({ userPage }) => {
   const { collections, setCollections } = useContext(DataContext);
 
   const pageParams = {
     apiFunction: "getCollections",
     limit: 5,
     userPage: true,
-    setData:setCollections,
+    setData: setCollections,
     isCollection: true,
   };
   const { page, setPage } = useDataFetching(pageParams);
@@ -29,14 +29,14 @@ const UserPage = () => {
   const handleModalToggle = () => {
     setModalShow(!modalShow);
   };
-  
+
   return (
     <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
         <CustomNavBar />
       </ErrorBoundary>
       <div className="flex-grow-1 position-relative">
-      <h2 className="text-center m-3">My collections</h2>
+        <h2 className="text-center m-3">My collections</h2>
         <ErrorBoundary componentName="Button">
           <Button
             variant="primary"
@@ -48,7 +48,7 @@ const UserPage = () => {
         </ErrorBoundary>
 
         <ErrorBoundary componentName="Button">
-          <CollectionList collections={collections} />
+          <CollectionList collections={collections} userPage={userPage} />
         </ErrorBoundary>
 
         <ErrorBoundary componentName="EditCreateModal">

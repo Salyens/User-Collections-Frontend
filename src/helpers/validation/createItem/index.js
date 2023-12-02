@@ -1,4 +1,5 @@
 const createItemValidation = (additionalFields, input) => {
+  if(!additionalFields) return true;
   const basicKeys = ["name", "tags"];
   const errors = [];
   basicKeys.forEach((key) => {

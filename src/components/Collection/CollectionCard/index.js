@@ -8,7 +8,7 @@ import DeleteCollectionModal from "../Modals/DeleteModal";
 import "./onecollection.css";
 import CreateModalButtons from "../../Buttons/CreateModalButtons";
 
-const CollectionCard = ({ collection }) => {
+const CollectionCard = ({ collection, userPage }) => {
   const { name, description } = collection;
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
@@ -25,10 +25,12 @@ const CollectionCard = ({ collection }) => {
   return (
     <div>
       <Card className={theme}>
-        <CreateModalButtons
-          handleModalToggle={handleModalToggle}
-          handleDeleteModalToggle={handleDeleteModalToggle}
-        />
+        {userPage && (
+          <CreateModalButtons
+            handleModalToggle={handleModalToggle}
+            handleDeleteModalToggle={handleDeleteModalToggle}
+          />
+        )}
 
         <Card.Img
           src="https://via.placeholder.com/150"
@@ -41,7 +43,7 @@ const CollectionCard = ({ collection }) => {
             dangerouslySetInnerHTML={{ __html: description }}
           ></Card.Text>
           <Link
-            to={`/user-collections/${name}`}
+            to={userPage ? `/user-collections/${name}` : `/collections/${name}`}
             className="d-flex justify-content-center btn btn-success"
           >
             {t("Open-button")}

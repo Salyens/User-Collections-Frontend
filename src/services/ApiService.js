@@ -41,22 +41,21 @@ class ApiService {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
-
-    return { data: response.data};
-    
+    return { data: response.data };
   }
 
-  static async getItemsInCollection(page, limit,userPage, collectionName) {
-    const response = await axios.get(
-      `${ApiService.apiBase}/items/by-collection/${collectionName}?page=${page}&limit=${limit}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    );
-    return response;
-  }
+  // static async getItemsInCollection(page, limit, userPage, collectionName) {
+  //   const response = await axios.get(
+  //     `${ApiService.apiBase}/items/by-collection/${collectionName}?page=${page}&limit=${limit}`,
+  //     {
+  //       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  //     }
+  //   );
+  //   const { userItems, total } = response.data;
+  //   return { data: userItems, total };
+  // }
 
-  static async getItems(page, limit, collectionName = null) {
+  static async getItems(page, limit, userPage, collectionName = null) {
     const response = await axios.get(
       `${ApiService.apiBase}/items?page=${page}&limit=${limit}${
         collectionName ? `&collectionName=${collectionName}` : ""
@@ -65,18 +64,19 @@ class ApiService {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
+
     const { userItems, total } = response.data;
     return { data: userItems, total };
   }
 
-  static async getOneItem(itemName) {
+  static async getOneItem(page, limit, userPage, collectionName, itemName) {
     const response = await axios.get(
       `${ApiService.apiBase}/items/${itemName}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
-    return response.data[0];
+    return response;
   }
 
   static async deleteItems(idsToDelete) {
@@ -100,8 +100,7 @@ class ApiService {
     const response = await axios.post(`${ApiService.apiBase}/items`, data, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-
-    return response.data;
+    return response.data[0];
   }
 
   static async getUserInfo() {

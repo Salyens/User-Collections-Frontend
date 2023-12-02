@@ -13,6 +13,7 @@ const TableBody = ({
   const { theme } = useContext(ThemeContext);
 
   const handleCheckboxChange = (rowId) => (event) => {
+
     const checked = event.target.checked;
     onSetIsChecked((prevChecked) => {
       if (checked) {
@@ -25,7 +26,6 @@ const TableBody = ({
     });
   };
   const handleEditItem = (row) => {
-
     handleModalToggle();
     onSetOneItem(row);
     onSetIsChecked([]);

@@ -2,8 +2,9 @@ import Pagination from "react-bootstrap/Pagination";
 import "./custompagination.css";
 
 const CustomPagination = ({ page, limit, total, onSetPage }) => {
-  const numbers = Math.ceil(total / limit);
 
+  const numbers = Math.ceil(total / limit);
+  if (!numbers) return;
   const items = [...Array(numbers)].map((_, index) => {
     const number = index + 1;
     return (
