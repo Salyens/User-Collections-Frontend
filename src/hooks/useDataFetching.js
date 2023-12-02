@@ -6,18 +6,19 @@ const useDataFetching = ({
   limit,
   userPage,
   setData,
+  setError,
   collectionName = null,
+  itemName,
 }) => {
-
   const [page, setPage] = useState(1);
-  const [error, setError] = useState(null);
   const fetchData = async () => {
     try {
       const response = await ApiService[apiFunction](
         page,
         limit,
         userPage,
-        collectionName
+        collectionName,
+        itemName
       );
       const { data, total } = response;
 
@@ -29,10 +30,10 @@ const useDataFetching = ({
           isLoading: false,
         };
       });
-    } catch (error) {
-      error =
-        "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later.";
-      setError(error);
+    } catch (e) {
+      setError(
+        "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later."
+      );
       setData((prevData) => {
         return {
           ...prevData,
@@ -44,9 +45,9 @@ const useDataFetching = ({
 
   useEffect(() => {
     fetchData();
-  }, [limit, page]);
+  }, [limit, page, collectionName, itemName]);
 
-  return { page, setPage, error };
+  return { page, setPage };
 };
 
 export default useDataFetching;

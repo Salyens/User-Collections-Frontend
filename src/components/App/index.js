@@ -61,7 +61,7 @@ const App = () => {
                   path="/user-collections"
                   element={
                     <WithAuth>
-                      <UserPage />
+                      <UserPage userPage={true} />
                     </WithAuth>
                   }
                 />
@@ -79,7 +79,7 @@ const App = () => {
                 />
                 <Route
                   path="collections/:collectionName"
-                  element={<SingleCollectionPage/>}
+                  element={<SingleCollectionPage userPage={false} />}
                 />
                 <Route
                   path="/"

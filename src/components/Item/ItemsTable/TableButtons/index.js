@@ -11,6 +11,7 @@ const TableButtons = ({
   onSetMode,
   onSetErrors,
 }) => {
+
   const { theme } = useContext(ThemeContext);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const handleDeleteItem = async () => {

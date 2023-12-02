@@ -1,47 +1,42 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import Footer from "../../Footer/Footer";
 import SingleCollection from "../../Collection/SingleCollection/index.js";
 import { useParams } from "react-router-dom";
-import ApiService from "../../../services/ApiService.js";
 import renderErrors from "../../../helpers/renderErrors.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
 import ItemsTable from "../../Item/ItemsTable/ItemsTable/index.js";
 import useDataFetching from "../../../hooks/useDataFetching.js";
 import { DataContext } from "../../../contexts/DataContext.js";
+import ItemList from "../../Item/ItemList/index.js";
 
-const SingleCollectionPage = () => {
+const SingleCollectionPage = ({ userPage }) => {
   const { collectionName } = useParams();
-  const { t, i18n } = useTranslation();
   const [errors, setErrors] = useState([]);
-  const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(12);
   const { theme } = useContext(ThemeContext);
-
   const { collections, setCollections, items, setItems } =
     useContext(DataContext);
+
   const pageParamsOneCollection = {
     apiFunction: "getOneCollection",
     limit: 12,
-    userPage: false,
+    userPage,
     setData: setCollections,
-    isCollection: true,
     collectionName,
   };
   const pageParamsItems = {
-    apiFunction: "getItemsInCollection",
+    apiFunction: "getItems",
     limit: 12,
-    userPage: false,
+    userPage,
     setData: setItems,
-    isItem: true,
     collectionName,
   };
 
   useDataFetching(pageParamsOneCollection);
-  useDataFetching(pageParamsItems);
+  const { page, setPage } = useDataFetching(pageParamsItems);
 
   return (
     <div className={`${theme} d-flex flex-column min-vh-100`}>
@@ -57,22 +52,26 @@ const SingleCollectionPage = () => {
         <ErrorBoundary componentName="SingleCollection">
           <SingleCollection collection={collections} />
         </ErrorBoundary>
-        <ErrorBoundary componentName="ItemList">
-          <ItemsTable
-            collection={collections.data[0]}
-            items={items.data}
-            onSetItems={setItems}
-          />
-        </ErrorBoundary>
+        {userPage ? (
+          <ErrorBoundary componentName="ItemList">
+            <ItemsTable />
+          </ErrorBoundary>
+        ) : (
+          <>
+            <ErrorBoundary componentName="CustomPagination">
+              <ItemList items={items}/>
+            </ErrorBoundary>
 
-        {/* <ErrorBoundary componentName="CustomPagination">
-          <CustomPagination
-            page={page}
-            limit={12}
-            total={items.total}
-            onSetPage={setPage}
-          />
-        </ErrorBoundary> */}
+            <ErrorBoundary componentName="CustomPagination">
+              <CustomPagination
+                page={page}
+                limit={limit}
+                total={items.total}
+                onSetPage={setPage}
+              />
+            </ErrorBoundary>
+          </>
+        )}
       </div>
 
       <Footer className="mt-auto" />

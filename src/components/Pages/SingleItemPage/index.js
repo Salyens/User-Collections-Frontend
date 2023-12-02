@@ -4,50 +4,53 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import Footer from "../../Footer/Footer";
 import renderErrors from "../../../helpers/renderErrors";
-import { ErrorsContext } from "../../../contexts/ErrorsContext";
-import ApiService from "../../../services/ApiService";
-import { Card } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 import transformToDate from "../../../helpers/transformToDate";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
+import useDataFetching from "../../../hooks/useDataFetching";
 
 const SingleItemPage = () => {
   const { itemName } = useParams();
-  const { errors, setErrors } = useContext(ErrorsContext);
-  const [item, setItem] = useState({});
-  const [collection, setCollection] = useState({});
-
+  const [error, setError] = useState("");
   const { theme } = useContext(ThemeContext);
   const themeClass =
     theme === "light" ? "bg-light text-dark " : "bg-dark text-white";
 
-  const handleGetItemInfo = async () => {
-    try {
-      const foundedItem = await ApiService.getOneItem(itemName);
-      const foundedCollection = await ApiService.getOneCollection(
-        foundedItem["collectionName"]
-      );
-      setCollection(foundedCollection);
-      setItem(foundedItem);
-    } catch (error) {
-      setErrors(
-        "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later."
-      );
-    }
+  const [collection, setCollection] = useState({ data: [] });
+  const [item, setItem] = useState({ data: [] });
+
+  const pageParamsItems = {
+    apiFunction: "getOneItem",
+    limit: 12,
+    userPage: false,
+    setData: setItem,
+    setError,
+    itemName,
   };
 
-  useEffect(() => {
-    handleGetItemInfo();
-  }, []);
+  const pageParamsOneCollection = {
+    apiFunction: "getOneCollection",
+    limit: 1,
+    userPage: false,
+    setData: setCollection,
+    setError,
+    collectionName: item.data.length ? item.data[0].collectionName : null,
+  };
+
+  useDataFetching(pageParamsItems);
+  useDataFetching(pageParamsOneCollection);
+
+  const oneItem = item.data[0];
+  const oneCollection = collection.data[0];
 
   const renderAdditionalFields = () => {
-    if (!item || Object.keys(item).length === 0) {
-      return <div>Loading...</div>;
-    }
-
-    const additionalFieldsKeys = Object.keys(item["additionalFields"]);
+    const additionalFieldsKeys = Object.keys(oneItem["additionalFields"]);
     return additionalFieldsKeys.map((key) => {
-      const fieldValue = item["additionalFields"][key]["value"];
-      const fieldType = collection["additionalFields"][key]["type"];
+      const fieldValue = oneItem["additionalFields"][key]["value"];
+      const fieldType = oneCollection["additionalFields"][key]["type"];
+      // if (typeof fieldValue === "object" && fieldValue !== null) {
+      //   fieldValue = fieldValue.value; 
+      // }
       if (fieldType === "date") {
         return (
           <Card.Text key={key}>
@@ -75,25 +78,39 @@ const SingleItemPage = () => {
         <CustomNavBar />
       </ErrorBoundary>
 
-      {errors && errors.length > 0 && <div>{renderErrors(errors)}</div>}
+      {error && <div>{renderErrors(error)}</div>}
       <div className="flex-grow-1 d-flex justify-content-center ">
-        <div className="mt-5">
-          <ErrorBoundary componentName="Card">
-            <Card style={{ width: 300 }}>
-              <Card.Body className={themeClass}>
-                <Card.Title>Item name: {item.name}</Card.Title>
-                <Card.Text className="">
-                  Collection: {item.collectionName}
-                </Card.Text>
-                <Card.Text>
-                  Created date: {transformToDate(item.createdDate)}
-                </Card.Text>
-                <Card.Text>Tags: {item.tags}</Card.Text>
-                {renderAdditionalFields()}
-              </Card.Body>
-            </Card>
-          </ErrorBoundary>
-        </div>
+        {!item ? (
+          <Spinner
+            className="ms-auto me-auto mt-5"
+            animation="border"
+            size="lg"
+          />
+        ) : (
+          <div className="mt-5">
+            <ErrorBoundary componentName="Card">
+              <Card style={{ width: 300 }}>
+                <Card.Body className={themeClass}>
+                  <Card.Title>Item name: {oneItem?.name}</Card.Title>
+                  <Card.Text>Collection: {oneItem?.collectionName}</Card.Text>
+                  <Card.Text>
+                    Created date: {transformToDate(oneItem?.createdDate)}
+                  </Card.Text>
+                  <Card.Text>Tags: {oneItem?.tags}</Card.Text>
+                  {oneCollection ? (
+                    renderAdditionalFields()
+                  ) : (
+                    <Spinner
+                      className="ms-auto me-auto mt-5"
+                      animation="border"
+                      size="lg"
+                    />
+                  )}
+                </Card.Body>
+              </Card>
+            </ErrorBoundary>
+          </div>
+        )}
       </div>
 
       <Footer className="mt-auto" />

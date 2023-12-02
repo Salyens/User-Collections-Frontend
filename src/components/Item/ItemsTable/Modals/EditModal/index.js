@@ -85,15 +85,19 @@ const EditModal = ({
           collectionName: collection["name"],
         };
 
-        await ApiService.createItem(wholeItemWithCollectionName);
-        const itemWithDate = {
+        const newItem = await ApiService.createItem(
+          wholeItemWithCollectionName
+        );
+        const itemWithDateAndId = {
           ...wholeItemInfo,
           createdDate: Date.now(),
+          _id: newItem._id,
         };
+        
         setCreateLoading(false);
         onSetItems((prevData) => ({
           ...prevData,
-          data: [...prevData.data, itemWithDate],
+          data: [...prevData.data, itemWithDateAndId],
         }));
       }
 
@@ -101,6 +105,7 @@ const EditModal = ({
       setChangedFields({});
       onHide();
     } catch (error) {
+      console.log("error: ", error);
       setCreateLoading(false);
       !error.response
         ? onSetErrors(error.message)
