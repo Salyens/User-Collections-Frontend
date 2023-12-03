@@ -1,9 +1,12 @@
-import { useContext, useState } from "react";
-import { ErrorsContext } from "../contexts/ErrorsContext";
+import { useState } from "react";
 
-const useHandleForm = (initialState, serviceFunction, navigateFunction) => {
+const useHandleForm = (
+  initialState,
+  serviceFunction,
+  navigateFunction,
+  setErrors
+) => {
   const [input, setInput] = useState(initialState);
-  const { setErrors } = useContext(ErrorsContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {

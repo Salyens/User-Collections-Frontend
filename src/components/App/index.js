@@ -17,7 +17,6 @@ import ItemsPage from "../Pages/ItemsPage";
 import UserPage from "../Pages/UserPage";
 import SingleCollectionPage from "../Pages/SingleCollectionPage";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { ErrorsProvider } from "../../contexts/ErrorsContext";
 import SingleItemPage from "../Pages/SingleItemPage";
 import { DataContext } from "../../contexts/DataContext";
 import { LangContext } from "../../contexts/LangContext";
@@ -45,70 +44,65 @@ const App = () => {
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      <ErrorsProvider>
-        <DataContext.Provider
-          value={{ collections, setCollections, items, setItems }}
-        >
-          <LangContext.Provider value={{ currentLang, setCurrentLang }}>
-            <Router>
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/registration" element={<Registration />} />
-                <Route
-                  path="/main-page"
-                  element={<MainPage userPage={false} limit={limit} />}
-                />
-                <Route
-                  path="/collections"
-                  element={<CollectionsPage userPage={false} limit={limit} />}
-                />
-                <Route
-                  path="/items"
-                  element={<ItemsPage userPage={false} limit={limit} />}
-                />
-                <Route
-                  path="/items/:itemName"
-                  element={<SingleItemPage userPage={false} limit={limit} />}
-                />
-                <Route
-                  path="/user-collections"
-                  element={
-                    <WithAuth>
-                      <UserPage userPage={true} limit={limit} />
-                    </WithAuth>
-                  }
-                />
-                <Route
-                  path="/user-collections/:collectionName"
-                  element={
-                    <WithAuth>
-                      <SingleCollectionPage userPage={true} limit={limit} />
-                    </WithAuth>
-                  }
-                />
-                <Route
-                  path="collections/:collectionName"
-                  element={
-                    <SingleCollectionPage userPage={false} limit={limit} />
-                  }
-                />
-                <Route
-                  path="/"
-                  element={<Navigate to="/main-page" replace />}
-                />
-                <Route
-                  path="/*"
-                  element={
-                    <h1 className="text-center text-danger">
-                      404 Error! Page is not found
-                    </h1>
-                  }
-                />
-              </Routes>
-            </Router>
-          </LangContext.Provider>
-        </DataContext.Provider>
-      </ErrorsProvider>
+      <DataContext.Provider
+        value={{ collections, setCollections, items, setItems }}
+      >
+        <LangContext.Provider value={{ currentLang, setCurrentLang }}>
+          <Router>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/registration" element={<Registration />} />
+              <Route
+                path="/main-page"
+                element={<MainPage userPage={false} limit={limit} />}
+              />
+              <Route
+                path="/collections"
+                element={<CollectionsPage userPage={false} limit={limit} />}
+              />
+              <Route
+                path="/items"
+                element={<ItemsPage userPage={false} limit={limit} />}
+              />
+              <Route
+                path="/items/:itemName"
+                element={<SingleItemPage userPage={false} limit={limit} />}
+              />
+              <Route
+                path="/user-collections"
+                element={
+                  <WithAuth>
+                    <UserPage userPage={true} limit={limit} />
+                  </WithAuth>
+                }
+              />
+              <Route
+                path="/user-collections/:collectionName"
+                element={
+                  <WithAuth>
+                    <SingleCollectionPage userPage={true} limit={limit} />
+                  </WithAuth>
+                }
+              />
+              <Route
+                path="collections/:collectionName"
+                element={
+                  <SingleCollectionPage userPage={false} limit={limit} />
+                }
+              />
+              <Route path="/" element={<Navigate to="/main-page" replace />} />
+              <Route
+                path="/*"
+                element={
+                  <h1 className="text-center text-danger">
+                    404 Error! Page is not found
+                  </h1>
+                }
+              />
+            </Routes>
+          </Router>
+        </LangContext.Provider>
+      </DataContext.Provider>
     </ThemeContext.Provider>
   );
 };

@@ -3,16 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import RegAndLoginItem from "../RegAndLoginItem";
 import useHandleForm from "../../../hooks/useHandleForm";
 import renderErrors from "../../../helpers/renderErrors";
-import { useContext, useEffect } from "react";
-import { ErrorsContext } from "../../../contexts/ErrorsContext";
+import { useEffect, useState } from "react";
 
 const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
   const navigate = useNavigate();
-  const { errors, setErrors } = useContext(ErrorsContext);
+  const [errors, setErrors] = useState([]);
   const { input, isLoading, handleInputChange, handleSubmit } = useHandleForm(
     initialState,
     apiServiceFunction,
-    () => navigate("/main-page")
+    () => navigate("/main-page"),
+    setErrors
   );
 
   useEffect(() => {

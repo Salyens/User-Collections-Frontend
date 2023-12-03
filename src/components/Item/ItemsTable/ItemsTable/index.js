@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   useTable,
   useGlobalFilter,
@@ -14,22 +14,22 @@ import TablePageSize from "../TablePageSize/index.js";
 import TablePagination from "../TablePagination/index.js";
 import CurrentPage from "../CurrentPage/index.js";
 import useTableColumns from "../../../../hooks/useTableColumns.js";
-import EditModal from "../Modals/EditModal/index.js";
 import "./tablelist.css";
 import renderErrors from "../../../../helpers/renderErrors.js";
+import CreateItemModal from "../Modals/CreateItemModal/index.js";
+import EditItemModal from "../Modals/EditItemModal/index.js";
 
-const ItemsTable = ({collection, items, setItems}) => {
+const ItemsTable = ({ collection, items, setItems }) => {
   const [isChecked, setIsChecked] = useState([]);
   const requiredFields = ["name", "tags", "createdDate"];
   const [allFields, setAllFields] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
-  const [mode, setMode] = useState("edit");
+  const [modalCreateShow, setModalCreateShow] = useState(false);
+  const [modalEditShow, setModalEditShow] = useState(false);
   const [oneItem, setOneItem] = useState({});
   const [errors, setErrors] = useState([]);
 
-  const handleModalToggle = () => {
-    setModalShow(!modalShow);
-    setErrors([]);
+  const handleModalToggle = (setModalShow) => {
+    setModalShow((prev) => !prev);
   };
 
   const columns = useTableColumns(collection.data, allFields);
@@ -61,7 +61,6 @@ const ItemsTable = ({collection, items, setItems}) => {
     addAdditionalFields();
   }, [items.data, data]);
 
-
   return (
     <>
       {collection.isLoading ? (
@@ -79,7 +78,7 @@ const ItemsTable = ({collection, items, setItems}) => {
               isChecked={isChecked}
               onSetIsChecked={setIsChecked}
               handleModalToggle={handleModalToggle}
-              onSetMode={setMode}
+              onSetModalCreateShow={setModalCreateShow}
               onSetErrors={setErrors}
             />
             <TableFilter filter={globalFilter} setFilter={setGlobalFilter} />
@@ -101,7 +100,7 @@ const ItemsTable = ({collection, items, setItems}) => {
                     onSetIsChecked={setIsChecked}
                     handleModalToggle={handleModalToggle}
                     onSetOneItem={setOneItem}
-                    onSetMode={setMode}
+                    onSetModalEditShow={setModalEditShow}
                   />
                 </Table>
               </div>
@@ -117,16 +116,22 @@ const ItemsTable = ({collection, items, setItems}) => {
           ) : (
             <h2>There are no items yet</h2>
           )}
-
-          <EditModal
-            show={modalShow}
+          <EditItemModal
+            show={modalEditShow}
+            onSetModalEditShow={setModalEditShow}
             onHide={handleModalToggle}
             oneItem={oneItem}
             collection={collection.data[0]}
             onSetItems={setItems}
-            mode={mode}
-            errors={errors}
-            onSetErrors={setErrors}
+          />
+
+          <CreateItemModal
+            show={modalCreateShow}
+            onSetModalCreateShow={setModalCreateShow}
+            onHide={handleModalToggle}
+            oneItem={oneItem}
+            collection={collection.data[0]}
+            onSetItems={setItems}
           />
         </div>
       )}

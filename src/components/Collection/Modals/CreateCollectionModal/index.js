@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import ApiService from "../../../../services/ApiService";
-import { ErrorsContext } from "../../../../contexts/ErrorsContext";
 import RequiredFields from "../RequiredFields";
 import renderErrors from "../../../../helpers/renderErrors";
 import AdditionalFields from "../AdditionalFields";
@@ -13,7 +12,7 @@ const CreateCollectionModal = ({ show, onHide }) => {
   const { setCollections } = useContext(DataContext);
   const [input, setInput] = useState({});
   const [newFields, setNewFields] = useState([]);
-  const { errors, setErrors } = useContext(ErrorsContext);
+  const [errors, setErrors] = useState([]);
 
   const handleInputChange = (key, value) => {
     setErrors([]);
@@ -35,8 +34,10 @@ const CreateCollectionModal = ({ show, onHide }) => {
       const newCollection = await ApiService.createCollection(finalInput);
       setCollections((prevData) => ({
         ...prevData,
+        total: prevData.total + 1,
         data: [...prevData.data, newCollection],
       }));
+      
 
       setInput({});
       onHide();
