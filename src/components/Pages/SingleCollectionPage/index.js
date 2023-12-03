@@ -9,29 +9,33 @@ import CustomPagination from "../../CustomPagination/index.js";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
 import ItemsTable from "../../Item/ItemsTable/ItemsTable/index.js";
 import useDataFetching from "../../../hooks/useDataFetching.js";
-import { DataContext } from "../../../contexts/DataContext.js";
 import ItemList from "../../Item/ItemList/index.js";
 
-const SingleCollectionPage = ({ userPage }) => {
+const SingleCollectionPage = ({ userPage, limit }) => {
   const { collectionName } = useParams();
-  const [errors, setErrors] = useState([]);
-  const [limit, setLimit] = useState(12);
+  const [error, setError] = useState("");
   const { theme } = useContext(ThemeContext);
-  const { collections, setCollections, items, setItems } =
-    useContext(DataContext);
+  const [collection, setCollection] = useState({
+    data: [],
+    total: 0,
+    isLoading: true,
+  });
+  const [items, setItems] = useState({ data: [], total: 0, isLoading: true });
 
   const pageParamsOneCollection = {
     apiFunction: "getOneCollection",
-    limit: 12,
+    limit: limit.default,
     userPage,
-    setData: setCollections,
+    setData: setCollection,
+    setError,
     collectionName,
   };
   const pageParamsItems = {
     apiFunction: "getItems",
-    limit: 12,
+    limit: limit.default,
     userPage,
     setData: setItems,
+    setError,
     collectionName,
   };
 
@@ -44,22 +48,26 @@ const SingleCollectionPage = ({ userPage }) => {
         <CustomNavBar />
       </ErrorBoundary>
 
-      {errors && errors.length > 0 && (
-        <div className="flex-grow-1 mt-5">{renderErrors(errors)}</div>
-      )}
-
       <div className="flex-grow-1">
         <ErrorBoundary componentName="SingleCollection">
-          <SingleCollection collection={collections} />
+          {error && collection.data.length === 0 && (
+            <div>{renderErrors(error)}</div>
+          )}
+          <SingleCollection collection={collection} />
         </ErrorBoundary>
+        {error && items.data.length === 0 && <div>{renderErrors(error)}</div>}
         {userPage ? (
           <ErrorBoundary componentName="ItemList">
-            <ItemsTable />
+            <ItemsTable
+              collection={collection}
+              items={items}
+              setItems={setItems}
+            />
           </ErrorBoundary>
         ) : (
           <>
             <ErrorBoundary componentName="CustomPagination">
-              <ItemList items={items}/>
+              <ItemList items={items} />
             </ErrorBoundary>
 
             <ErrorBoundary componentName="CustomPagination">

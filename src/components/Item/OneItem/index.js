@@ -6,7 +6,14 @@ import { Link } from "react-router-dom";
 import "./oneitem.css";
 
 const OneItem = ({ item }) => {
-  const {name, collectionName, user:{name:userName}} = item
+  if(!item.name) console.log(item);
+  // console.log('item: ', item);
+  if (!item) return;
+  const {
+    name,
+    collectionName,
+    user: { name: userName },
+  } = item;
   const { t } = useTranslation();
   const { theme } = useContext(ThemeContext);
   return (

@@ -10,17 +10,18 @@ import { DataContext } from "../../../contexts/DataContext.js";
 import useDataFetching from "../../../hooks/useDataFetching.js";
 import CollectionList from "../../Collection/CollectionList/index.js";
 import CustomPagination from "../../CustomPagination/index.js";
+import renderErrors from "../../../helpers/renderErrors.js";
 import "./userpage.css";
 
-const UserPage = ({ userPage }) => {
+const UserPage = ({ userPage, limit }) => {
   const { collections, setCollections } = useContext(DataContext);
-
+  const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getCollections",
-    limit: 5,
-    userPage: true,
+    limit: limit.short,
+    userPage,
     setData: setCollections,
-    isCollection: true,
+    setError,
   };
   const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
@@ -37,6 +38,7 @@ const UserPage = ({ userPage }) => {
       </ErrorBoundary>
       <div className="flex-grow-1 position-relative">
         <h2 className="text-center m-3">My collections</h2>
+        {error && <div>{renderErrors(error)}</div>}
         <ErrorBoundary componentName="Button">
           <Button
             variant="primary"

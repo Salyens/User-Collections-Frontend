@@ -5,7 +5,7 @@ import {
   useSortBy,
   usePagination,
 } from "react-table";
-import { Table as BootstrapTable, Spinner, Table } from "react-bootstrap";
+import { Spinner, Table } from "react-bootstrap";
 import TableFilter from "../TableFilter/index.js";
 import TableButtons from "../TableButtons/index.js";
 import TableHeader from "../TableHeader/index.js";
@@ -16,12 +16,9 @@ import CurrentPage from "../CurrentPage/index.js";
 import useTableColumns from "../../../../hooks/useTableColumns.js";
 import EditModal from "../Modals/EditModal/index.js";
 import "./tablelist.css";
-import { DataContext } from "../../../../contexts/DataContext.js";
 import renderErrors from "../../../../helpers/renderErrors.js";
 
-const ItemsTable = () => {
-  const { collections, setCollections, items, setItems } =
-    useContext(DataContext);
+const ItemsTable = ({collection, items, setItems}) => {
   const [isChecked, setIsChecked] = useState([]);
   const requiredFields = ["name", "tags", "createdDate"];
   const [allFields, setAllFields] = useState([]);
@@ -35,7 +32,7 @@ const ItemsTable = () => {
     setErrors([]);
   };
 
-  const columns = useTableColumns(collections.data, allFields);
+  const columns = useTableColumns(collection.data, allFields);
   const data = useMemo(() => items.data, [items.data]);
   const tableInstance = useTable(
     { columns, data },
@@ -67,7 +64,7 @@ const ItemsTable = () => {
 
   return (
     <>
-      {collections.isLoading ? (
+      {collection.isLoading ? (
         <Spinner
           className="d-flex ms-auto me-auto mt-5"
           animation="border"
@@ -125,7 +122,7 @@ const ItemsTable = () => {
             show={modalShow}
             onHide={handleModalToggle}
             oneItem={oneItem}
-            collection={collections.data[0]}
+            collection={collection.data[0]}
             onSetItems={setItems}
             mode={mode}
             errors={errors}

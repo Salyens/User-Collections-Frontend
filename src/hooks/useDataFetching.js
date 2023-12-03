@@ -8,18 +8,18 @@ const useDataFetching = ({
   setData,
   setError,
   collectionName = null,
-  itemName,
+  itemName = null,
 }) => {
   const [page, setPage] = useState(1);
   const fetchData = async () => {
     try {
-      const response = await ApiService[apiFunction](
+      const response = await ApiService[apiFunction]({
         page,
         limit,
         userPage,
         collectionName,
-        itemName
-      );
+        itemName,
+      });
       const { data, total } = response;
 
       setData((prevData) => {
