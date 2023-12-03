@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
@@ -8,21 +8,26 @@ import { Card, Spinner } from "react-bootstrap";
 import transformToDate from "../../../helpers/transformToDate";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
 import useDataFetching from "../../../hooks/useDataFetching";
+import ItemAdditionalFields from "../../Item/ItemAdditionalFields";
 
-const SingleItemPage = () => {
+const SingleItemPage = ({ userPage, limit }) => {
   const { itemName } = useParams();
   const [error, setError] = useState("");
   const { theme } = useContext(ThemeContext);
   const themeClass =
     theme === "light" ? "bg-light text-dark " : "bg-dark text-white";
 
-  const [collection, setCollection] = useState({ data: [] });
-  const [item, setItem] = useState({ data: [] });
+  const [collection, setCollection] = useState({
+    data: [],
+    total: 0,
+    isLoading: true,
+  });
+  const [item, setItem] = useState({ data: [], total: 0, isLoading: true });
 
   const pageParamsItems = {
     apiFunction: "getOneItem",
-    limit: 12,
-    userPage: false,
+    limit: limit.default,
+    userPage,
     setData: setItem,
     setError,
     itemName,
@@ -30,8 +35,8 @@ const SingleItemPage = () => {
 
   const pageParamsOneCollection = {
     apiFunction: "getOneCollection",
-    limit: 1,
-    userPage: false,
+    limit: limit.default,
+    userPage,
     setData: setCollection,
     setError,
     collectionName: item.data.length ? item.data[0].collectionName : null,
@@ -43,35 +48,6 @@ const SingleItemPage = () => {
   const oneItem = item.data[0];
   const oneCollection = collection.data[0];
 
-  const renderAdditionalFields = () => {
-    const additionalFieldsKeys = Object.keys(oneItem["additionalFields"]);
-    return additionalFieldsKeys.map((key) => {
-      const fieldValue = oneItem["additionalFields"][key]["value"];
-      const fieldType = oneCollection["additionalFields"][key]["type"];
-      // if (typeof fieldValue === "object" && fieldValue !== null) {
-      //   fieldValue = fieldValue.value; 
-      // }
-      if (fieldType === "date") {
-        return (
-          <Card.Text key={key}>
-            {key}: {transformToDate(fieldValue)}
-          </Card.Text>
-        );
-      } else if (fieldType === "boolean") {
-        return (
-          <Card.Text key={key}>
-            {key}: {fieldValue ? "Yes" : "No"}
-          </Card.Text>
-        );
-      }
-      return (
-        <Card.Text key={key}>
-          {key}: {fieldValue}
-        </Card.Text>
-      );
-    });
-  };
-
   return (
     <div className={`${themeClass} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
@@ -80,7 +56,7 @@ const SingleItemPage = () => {
 
       {error && <div>{renderErrors(error)}</div>}
       <div className="flex-grow-1 d-flex justify-content-center ">
-        {!item ? (
+        {item.isLoading ? (
           <Spinner
             className="ms-auto me-auto mt-5"
             animation="border"
@@ -97,15 +73,10 @@ const SingleItemPage = () => {
                     Created date: {transformToDate(oneItem?.createdDate)}
                   </Card.Text>
                   <Card.Text>Tags: {oneItem?.tags}</Card.Text>
-                  {oneCollection ? (
-                    renderAdditionalFields()
-                  ) : (
-                    <Spinner
-                      className="ms-auto me-auto mt-5"
-                      animation="border"
-                      size="lg"
-                    />
-                  )}
+                  <ItemAdditionalFields
+                    item={oneItem}
+                    collection={oneCollection}
+                  />
                 </Card.Body>
               </Card>
             </ErrorBoundary>

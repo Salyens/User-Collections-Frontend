@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
@@ -8,15 +8,17 @@ import { DataContext } from "../../../contexts/DataContext";
 import useDataFetching from "../../../hooks/useDataFetching";
 import ItemList from "../../Item/ItemList";
 import CustomPagination from "../../CustomPagination";
+import renderErrors from "../../../helpers/renderErrors";
 
-const ItemsPage = () => {
+const ItemsPage = ({ userPage, limit }) => {
   const { items, setItems } = useContext(DataContext);
+  const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getItems",
-    limit: 12,
-    userPage: false,
+    limit: limit.default,
+    userPage,
     setData: setItems,
-    isItem: true,
+    setError,
   };
   const { page, setPage } = useDataFetching(pageParams);
   const { t } = useTranslation();
@@ -31,6 +33,7 @@ const ItemsPage = () => {
       <div className="flex-grow-1">
         <ErrorBoundary componentName="CustomNavBar">
           <h1 className="text-center m-3">All items</h1>
+          {error && <div>{renderErrors(error)}</div>}
           <ItemList items={items} />
         </ErrorBoundary>
       </div>

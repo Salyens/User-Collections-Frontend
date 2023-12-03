@@ -4,6 +4,7 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 import "./singlecollection.css";
 
 const SingleCollection = ({ collection }) => {
+  if (!collection.data.length) return;
   const { theme } = useContext(ThemeContext);
 
   const renderAdditionalFields = (fields) => {
@@ -21,7 +22,11 @@ const SingleCollection = ({ collection }) => {
   return (
     <div className="row m-0 mb-3">
       {collection.isLoading ? (
-        <Spinner className="ms-auto me-auto mt-5" animation="border" size="lg" />
+        <Spinner
+          className="ms-auto me-auto mt-5"
+          animation="border"
+          size="lg"
+        />
       ) : (
         <Card
           className={`${theme} col-12 col-md-6 col-lg-3 ms-auto me-auto p-0`}

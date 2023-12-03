@@ -33,6 +33,7 @@ const App = () => {
     total: 0,
     isLoading: true,
   });
+  const [limit, setLimit] = useState({ default: 12, short: 5 });
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "bg-light text-dark"
   );
@@ -53,15 +54,27 @@ const App = () => {
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/registration" element={<Registration />} />
-                <Route path="/main-page" element={<MainPage />} />
-                <Route path="/collections" element={<CollectionsPage />} />
-                <Route path="/items" element={<ItemsPage />} />
-                <Route path="/items/:itemName" element={<SingleItemPage />} />
+                <Route
+                  path="/main-page"
+                  element={<MainPage userPage={false} limit={limit} />}
+                />
+                <Route
+                  path="/collections"
+                  element={<CollectionsPage userPage={false} limit={limit} />}
+                />
+                <Route
+                  path="/items"
+                  element={<ItemsPage userPage={false} limit={limit} />}
+                />
+                <Route
+                  path="/items/:itemName"
+                  element={<SingleItemPage userPage={false} limit={limit} />}
+                />
                 <Route
                   path="/user-collections"
                   element={
                     <WithAuth>
-                      <UserPage userPage={true} />
+                      <UserPage userPage={true} limit={limit} />
                     </WithAuth>
                   }
                 />
@@ -69,17 +82,15 @@ const App = () => {
                   path="/user-collections/:collectionName"
                   element={
                     <WithAuth>
-                      <SingleCollectionPage
-                        currentLang={currentLang}
-                        onSetCurrentLang={setCurrentLang}
-                        userPage={true}
-                      />
+                      <SingleCollectionPage userPage={true} limit={limit} />
                     </WithAuth>
                   }
                 />
                 <Route
                   path="collections/:collectionName"
-                  element={<SingleCollectionPage userPage={false} />}
+                  element={
+                    <SingleCollectionPage userPage={false} limit={limit} />
+                  }
                 />
                 <Route
                   path="/"

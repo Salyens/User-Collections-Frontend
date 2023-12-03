@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
@@ -8,15 +8,17 @@ import { DataContext } from "../../../contexts/DataContext.js";
 import CollectionList from "../../Collection/CollectionList/index.js";
 import useDataFetching from "../../../hooks/useDataFetching.js";
 import CustomPagination from "../../CustomPagination/index.js";
+import renderErrors from "../../../helpers/renderErrors.js";
 
-const CollectionsPage = () => {
+const CollectionsPage = ({ userPage, limit }) => {
   const { collections, setCollections } = useContext(DataContext);
+  const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getCollections",
-    limit: 12,
-    userPage: false,
-    setData:setCollections,
-    isCollection: true,
+    limit: limit.default,
+    userPage,
+    setData: setCollections,
+    setError,
   };
   const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
@@ -31,6 +33,7 @@ const CollectionsPage = () => {
       <div className="flex-grow-1">
         <ErrorBoundary componentName="CollectionList">
           <h1 className="text-center m-3">All collections</h1>
+          {error && <div>{renderErrors(error)}</div>}
           <CollectionList collections={collections} />
         </ErrorBoundary>
       </div>
