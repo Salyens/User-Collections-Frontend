@@ -49,7 +49,7 @@ const SingleItemPage = ({ userPage, limit }) => {
   const oneCollection = collection.data[0];
 
   return (
-    <div className={`${themeClass} d-flex flex-column min-vh-100`}>
+    <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
         <CustomNavBar />
       </ErrorBoundary>
@@ -66,7 +66,7 @@ const SingleItemPage = ({ userPage, limit }) => {
           <div className="mt-5">
             <ErrorBoundary componentName="Card">
               <Card style={{ width: 300 }}>
-                <Card.Body className={themeClass}>
+                <Card.Body className={theme}>
                   <Card.Title>Item name: {oneItem?.name}</Card.Title>
                   <Card.Text>Collection: {oneItem?.collectionName}</Card.Text>
                   <Card.Text>

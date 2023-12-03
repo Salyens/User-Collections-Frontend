@@ -8,8 +8,8 @@ const TableButtons = ({
   isChecked,
   onSetIsChecked,
   handleModalToggle,
-  onSetMode,
   onSetErrors,
+  onSetModalCreateShow
 }) => {
 
   const { theme } = useContext(ThemeContext);
@@ -34,8 +34,7 @@ const TableButtons = ({
     }
   };
   const handleChangeModeAndToggle = () => {
-    onSetMode("create");
-    handleModalToggle();
+    handleModalToggle(onSetModalCreateShow);
   };
 
   return (

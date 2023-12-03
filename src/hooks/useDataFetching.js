@@ -9,7 +9,9 @@ const useDataFetching = ({
   setError,
   collectionName = null,
   itemName = null,
+  total,
 }) => {
+  console.log("total: ", total);
   const [page, setPage] = useState(1);
   const fetchData = async () => {
     try {
@@ -45,7 +47,7 @@ const useDataFetching = ({
 
   useEffect(() => {
     fetchData();
-  }, [limit, page, collectionName, itemName]);
+  }, [limit, page, collectionName, itemName, total]);
 
   return { page, setPage };
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
@@ -22,6 +22,7 @@ const UserPage = ({ userPage, limit }) => {
     userPage,
     setData: setCollections,
     setError,
+    total:collections.total
   };
   const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();

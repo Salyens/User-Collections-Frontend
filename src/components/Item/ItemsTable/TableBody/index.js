@@ -8,12 +8,11 @@ const TableBody = ({
   onSetIsChecked,
   handleModalToggle,
   onSetOneItem,
-  onSetMode,
+  onSetModalEditShow,
 }) => {
   const { theme } = useContext(ThemeContext);
 
   const handleCheckboxChange = (rowId) => (event) => {
-
     const checked = event.target.checked;
     onSetIsChecked((prevChecked) => {
       if (checked) {
@@ -26,10 +25,10 @@ const TableBody = ({
     });
   };
   const handleEditItem = (row) => {
-    handleModalToggle();
+    handleModalToggle(onSetModalEditShow);
     onSetOneItem(row);
     onSetIsChecked([]);
-    onSetMode("edit");
+
   };
   return (
     <tbody {...tableInstance.getTableBodyProps()}>
