@@ -9,9 +9,10 @@ const useDataFetching = ({
   setError,
   collectionName = null,
   itemName = null,
+  searchText = null,
   total,
 }) => {
-  console.log("total: ", total);
+
   const [page, setPage] = useState(1);
   const fetchData = async () => {
     try {
@@ -21,9 +22,9 @@ const useDataFetching = ({
         userPage,
         collectionName,
         itemName,
+        searchText,
       });
       const { data, total } = response;
-
       setData((prevData) => {
         return {
           ...prevData,
@@ -47,7 +48,7 @@ const useDataFetching = ({
 
   useEffect(() => {
     fetchData();
-  }, [limit, page, collectionName, itemName, total]);
+  }, [limit, page, collectionName, itemName, total, searchText]);
 
   return { page, setPage };
 };

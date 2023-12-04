@@ -12,8 +12,10 @@ import AppLanguage from "../AppLanguage";
 import ThemeSwitcher from "../ThemeSwitcher";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { LangContext } from "../../../contexts/LangContext";
+import Search from "../Search";
 
 const CustomNavBar = () => {
+  const [input, setInput] = useState("");
   const { currentLang } = useContext(LangContext);
   const { t, i18n } = useTranslation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -41,8 +43,9 @@ const CustomNavBar = () => {
   }, []);
 
 
+
   return (
-    <Navbar className={`${theme} border-bottom bg-primary`} >
+    <Navbar className={`${theme} border-bottom bg-primary`}>
       <Container fluid className="row d-flex flex-column flex-lg-row p-0 m-0">
         <Nav className="col-12 col-lg-5 col-xl-4 col-xxl-3 flex-row justify-content-evenly justify-content-lg-between">
           <NavButtonsList buttons={navButtons} />
@@ -52,15 +55,7 @@ const CustomNavBar = () => {
           </div>
         </Nav>
 
-        <Form className="col-12 col-lg-5 col-xl-6 col-xxl-7 d-flex mt-2 mt-sm-0 m-0 pe-4 ">
-          <Form.Control
-            type="search"
-            placeholder={t("Search")}
-            className="  me-2"
-            aria-label="Search"
-          />
-          <Button variant="outline-light">{t("Search")}</Button>
-        </Form>
+<Search/>
 
         <div className=" col-12 col-lg-2 col-xl-2 d-flex justify-content-center justify-content-lg-end p-0 pe-1 mt-2 mt-md-0">
           {isLoggedIn ? (

@@ -44,11 +44,11 @@ class ApiService {
     return { data: response.data };
   }
 
-  static async getItems({ page, limit, collectionName = null }) {
+  static async getItems({ page, limit, collectionName = null, searchText=null }) {
     const response = await axios.get(
       `${ApiService.apiBase}/items?page=${page}&limit=${limit}${
         collectionName ? `&collectionName=${collectionName}` : ""
-      }`,
+      }${searchText ? `&searchText=${searchText}` : ""}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }

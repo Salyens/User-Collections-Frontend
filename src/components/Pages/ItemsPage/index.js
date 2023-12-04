@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
@@ -9,9 +9,11 @@ import useDataFetching from "../../../hooks/useDataFetching";
 import ItemList from "../../Item/ItemList";
 import CustomPagination from "../../CustomPagination";
 import renderErrors from "../../../helpers/renderErrors";
+import SearchResult from "../../SearchResult";
 
 const ItemsPage = ({ userPage, limit }) => {
-  const { items, setItems } = useContext(DataContext);
+  const { items, setItems, searchInput } =
+    useContext(DataContext);
   const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getItems",
@@ -29,20 +31,26 @@ const ItemsPage = ({ userPage, limit }) => {
       <ErrorBoundary componentName="CustomNavBar">
         <CustomNavBar />
       </ErrorBoundary>
+      {searchInput ? (
+        <SearchResult />
+      ) : (
+        <>
+          <div className="flex-grow-1">
+            <ErrorBoundary componentName="CustomNavBar">
+              <h1 className="text-center m-3">All items</h1>
+              {error && <div>{renderErrors(error)}</div>}
+              <ItemList items={items} />
+            </ErrorBoundary>
+          </div>
+          <CustomPagination
+            page={page}
+            limit={pageParams.limit}
+            total={items.total}
+            onSetPage={setPage}
+          />
+        </>
+      )}
 
-      <div className="flex-grow-1">
-        <ErrorBoundary componentName="CustomNavBar">
-          <h1 className="text-center m-3">All items</h1>
-          {error && <div>{renderErrors(error)}</div>}
-          <ItemList items={items} />
-        </ErrorBoundary>
-      </div>
-      <CustomPagination
-        page={page}
-        limit={pageParams.limit}
-        total={items.total}
-        onSetPage={setPage}
-      />
       <Footer className="mt-auto" />
     </div>
   );
