@@ -32,6 +32,7 @@ const App = () => {
     total: 0,
     isLoading: true,
   });
+  const [searchInput, setSearchInput] = useState("");
   const [limit, setLimit] = useState({ default: 12, short: 5 });
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "bg-light text-dark"
@@ -45,7 +46,14 @@ const App = () => {
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <DataContext.Provider
-        value={{ collections, setCollections, items, setItems }}
+        value={{
+          collections,
+          setCollections,
+          items,
+          setItems,
+          searchInput,
+          setSearchInput,
+        }}
       >
         <LangContext.Provider value={{ currentLang, setCurrentLang }}>
           <Router>
