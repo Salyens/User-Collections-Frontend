@@ -44,7 +44,12 @@ class ApiService {
     return { data: response.data };
   }
 
-  static async getItems({ page, limit, collectionName = null, searchText=null }) {
+  static async getItems({
+    page,
+    limit,
+    collectionName = null,
+    searchText = null,
+  }) {
     const response = await axios.get(
       `${ApiService.apiBase}/items?page=${page}&limit=${limit}${
         collectionName ? `&collectionName=${collectionName}` : ""
@@ -107,13 +112,14 @@ class ApiService {
   }
 
   static async updateCollection(updatedData, id) {
-    await axios.patch(
+    const response = await axios.patch(
       `${ApiService.apiBase}/collections/${id}`,
-      { ...updatedData },
+      updatedData,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }
     );
+    return response.data;
   }
 
   static async createCollection(data) {

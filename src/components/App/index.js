@@ -99,14 +99,14 @@ const App = () => {
                 }
               />
               <Route path="/" element={<Navigate to="/main-page" replace />} />
-              <Route
+              {/* <Route
                 path="/*"
                 element={
                   <h1 className="text-center text-danger">
                     404 Error! Page is not found
                   </h1>
                 }
-              />
+              /> */}
             </Routes>
           </Router>
         </LangContext.Provider>

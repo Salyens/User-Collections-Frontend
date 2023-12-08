@@ -1,8 +1,10 @@
-import React from "react";
-import { Form } from "react-bootstrap";
+import React, { useRef, useState } from "react";
+import { Button, Form, Image } from "react-bootstrap";
 import ThemeDropdown from "../../DropDowns/ThemeDropDown";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "./requiredfields.css";
+import UploadImg from "../UploadImg";
 
 const RequiredFields = ({ collection, handleInputChange, onSetInput }) => {
   return (
@@ -24,6 +26,7 @@ const RequiredFields = ({ collection, handleInputChange, onSetInput }) => {
         onSetInput={onSetInput}
         prevValue={collection ? collection["theme"] : ""}
       />
+      <UploadImg onSetInput={onSetInput} />
     </div>
   );
 };

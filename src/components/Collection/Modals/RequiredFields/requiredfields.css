@@ -1,0 +1,26 @@
+#file_uploader_btn {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.file_uploader_custom_btn {
+  margin-top: 20px;
+  cursor: pointer;
+  padding: 7px;
+  border-radius: 5px;
+  color: white;
+}
+
+#file_img {
+position: absolute;
+right: 0;
+font-size: 25px;
+color: white;
+transition: all 0.4s;
+cursor: pointer;
+}
+
+#file_img:hover {
+    font-size: 28px;
+}

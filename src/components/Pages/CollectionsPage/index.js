@@ -9,9 +9,10 @@ import CollectionList from "../../Collection/CollectionList/index.js";
 import useDataFetching from "../../../hooks/useDataFetching.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import renderErrors from "../../../helpers/renderErrors.js";
+import SearchResult from "../../SearchResult/index.js";
 
 const CollectionsPage = ({ userPage, limit }) => {
-  const { collections, setCollections } = useContext(DataContext);
+  const { collections, setCollections, searchInput } = useContext(DataContext);
   const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getCollections",
@@ -30,19 +31,26 @@ const CollectionsPage = ({ userPage, limit }) => {
         <CustomNavBar />
       </ErrorBoundary>
 
-      <div className="flex-grow-1">
-        <ErrorBoundary componentName="CollectionList">
-          <h1 className="text-center m-3">All collections</h1>
-          {error && <div>{renderErrors(error)}</div>}
-          <CollectionList collections={collections} />
-        </ErrorBoundary>
-      </div>
-      <CustomPagination
-        page={page}
-        limit={pageParams.limit}
-        total={collections.total}
-        onSetPage={setPage}
-      />
+      {searchInput ? (
+        <SearchResult />
+      ) : (
+        <>
+          <div className="flex-grow-1">
+            <ErrorBoundary componentName="CollectionList">
+              <h1 className="text-center m-3">All collections</h1>
+              {error && <div>{renderErrors(error)}</div>}
+              <CollectionList collections={collections} />
+            </ErrorBoundary>
+          </div>
+          <CustomPagination
+            page={page}
+            limit={pageParams.limit}
+            total={collections.total}
+            onSetPage={setPage}
+          />
+        </>
+      )}
+
       <Footer />
     </div>
   );

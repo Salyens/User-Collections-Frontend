@@ -30,18 +30,29 @@ const CreateCollectionModal = ({ show, onHide }) => {
       const { additionalFields, errors } = typeCastAdditionalFields(newFields);
       if (errors.length) return setErrors(errors);
 
-      const finalInput = { ...input, additionalFields };
-      const newCollection = await ApiService.createCollection(finalInput);
+      const formData = new FormData();
+      Object.keys(input).forEach((key) => {
+        if (key === "imgURL" && input.imgURL) {
+          formData.append("imgURL", input.imgURL);
+        } else {
+          formData.append(key, input[key]);
+        }
+      });
+
+      if (Object.keys(additionalFields))
+        formData.append("additionalFields", JSON.stringify(additionalFields));
+
+      const newCollection = await ApiService.createCollection(formData);
       setCollections((prevData) => ({
         ...prevData,
         total: prevData.total + 1,
         data: [...prevData.data, newCollection],
       }));
-      
 
       setInput({});
       onHide();
     } catch (error) {
+      console.log("error: ", error);
       !error.response
         ? setErrors(error.message)
         : setErrors(error.response.data.message);

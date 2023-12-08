@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 import "./oneitem.css";
 
 const OneItem = ({ item }) => {
-  if(!item.name) console.log(item);
-  // console.log('item: ', item);
   if (!item) return;
   const {
     name,

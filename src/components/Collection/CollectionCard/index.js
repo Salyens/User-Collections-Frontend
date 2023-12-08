@@ -9,7 +9,7 @@ import "./onecollection.css";
 import CreateModalButtons from "../../Buttons/CreateModalButtons";
 
 const CollectionCard = ({ collection, userPage }) => {
-  const { name, description } = collection;
+  const { name, description, imgURL } = collection;
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -33,7 +33,7 @@ const CollectionCard = ({ collection, userPage }) => {
         )}
 
         <Card.Img
-          src="https://via.placeholder.com/150"
+          src={imgURL ? imgURL : "https://via.placeholder.com/150"}
           alt="Collection Image"
         />
         <Card.Body>
