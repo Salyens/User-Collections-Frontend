@@ -10,12 +10,15 @@ import ErrorBoundary from "../../HOC/ErrorBoundary";
 import ItemsTable from "../../Item/ItemsTable/ItemsTable/index.js";
 import useDataFetching from "../../../hooks/useDataFetching.js";
 import ItemList from "../../Item/ItemList/index.js";
+import SearchResult from "../../SearchResult/index.js";
+import { DataContext } from "../../../contexts/DataContext.js";
 
 const SingleCollectionPage = ({ userPage, limit }) => {
   const { collectionName } = useParams();
   const [error, setError] = useState("");
   const { theme } = useContext(ThemeContext);
-  const [collection, setCollection] = useState({
+  const { searchInput } = useContext(DataContext);
+  const [collection, setCollection, ] = useState({
     data: [],
     total: 0,
     isLoading: true,
@@ -48,39 +51,43 @@ const SingleCollectionPage = ({ userPage, limit }) => {
         <CustomNavBar />
       </ErrorBoundary>
 
-      <div className="flex-grow-1">
-        <ErrorBoundary componentName="SingleCollection">
-          {error && collection.data.length === 0 && (
-            <div>{renderErrors(error)}</div>
-          )}
-          <SingleCollection collection={collection} />
-        </ErrorBoundary>
-        {error && items.data.length === 0 && <div>{renderErrors(error)}</div>}
-        {userPage ? (
-          <ErrorBoundary componentName="ItemList">
-            <ItemsTable
-              collection={collection}
-              items={items}
-              setItems={setItems}
-            />
+      {searchInput ? (
+        <SearchResult />
+      ) : (
+        <div className="flex-grow-1">
+          <ErrorBoundary componentName="SingleCollection">
+            {error && collection.data.length === 0 && (
+              <div>{renderErrors(error)}</div>
+            )}
+            <SingleCollection collection={collection} />
           </ErrorBoundary>
-        ) : (
-          <>
-            <ErrorBoundary componentName="CustomPagination">
-              <ItemList items={items} />
-            </ErrorBoundary>
-
-            <ErrorBoundary componentName="CustomPagination">
-              <CustomPagination
-                page={page}
-                limit={limit}
-                total={items.total}
-                onSetPage={setPage}
+          {error && items.data.length === 0 && <div>{renderErrors(error)}</div>}
+          {userPage ? (
+            <ErrorBoundary componentName="ItemList">
+              <ItemsTable
+                collection={collection}
+                items={items}
+                setItems={setItems}
               />
             </ErrorBoundary>
-          </>
-        )}
-      </div>
+          ) : (
+            <>
+              <ErrorBoundary componentName="CustomPagination">
+                <ItemList items={items} />
+              </ErrorBoundary>
+
+              <ErrorBoundary componentName="CustomPagination">
+                <CustomPagination
+                  page={page}
+                  limit={limit}
+                  total={items.total}
+                  onSetPage={setPage}
+                />
+              </ErrorBoundary>
+            </>
+          )}
+        </div>
+      )}
 
       <Footer className="mt-auto" />
     </div>

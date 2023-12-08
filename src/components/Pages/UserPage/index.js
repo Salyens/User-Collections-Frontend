@@ -12,9 +12,10 @@ import CollectionList from "../../Collection/CollectionList/index.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import renderErrors from "../../../helpers/renderErrors.js";
 import "./userpage.css";
+import SearchResult from "../../SearchResult/index.js";
 
 const UserPage = ({ userPage, limit }) => {
-  const { collections, setCollections } = useContext(DataContext);
+  const { collections, setCollections, searchInput } = useContext(DataContext);
   const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getCollections",
@@ -22,7 +23,7 @@ const UserPage = ({ userPage, limit }) => {
     userPage,
     setData: setCollections,
     setError,
-    total:collections.total
+    total: collections.total,
   };
   const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
@@ -37,33 +38,42 @@ const UserPage = ({ userPage, limit }) => {
       <ErrorBoundary componentName="CustomNavBar">
         <CustomNavBar />
       </ErrorBoundary>
-      <div className="flex-grow-1 position-relative">
-        <h2 className="text-center m-3">My collections</h2>
-        {error && <div>{renderErrors(error)}</div>}
-        <ErrorBoundary componentName="Button">
-          <Button
-            variant="primary"
-            className="create-btn"
-            onClick={handleModalToggle}
-          >
-            Create
-          </Button>
-        </ErrorBoundary>
+      {searchInput ? (
+        <SearchResult />
+      ) : (
+        <>
+          <div className="flex-grow-1 position-relative">
+            <h2 className="text-center m-3">My collections</h2>
+            {error && <div>{renderErrors(error)}</div>}
+            <ErrorBoundary componentName="Button">
+              <Button
+                variant="primary"
+                className="create-btn"
+                onClick={handleModalToggle}
+              >
+                Create
+              </Button>
+            </ErrorBoundary>
 
-        <ErrorBoundary componentName="Button">
-          <CollectionList collections={collections} userPage={userPage} />
-        </ErrorBoundary>
+            <ErrorBoundary componentName="Button">
+              <CollectionList collections={collections} userPage={userPage} />
+            </ErrorBoundary>
 
-        <ErrorBoundary componentName="EditCreateModal">
-          <CreateCollectionModal show={modalShow} onHide={handleModalToggle} />
-        </ErrorBoundary>
-      </div>
-      <CustomPagination
-        page={page}
-        limit={pageParams.limit}
-        total={collections.total}
-        onSetPage={setPage}
-      />
+            <ErrorBoundary componentName="EditCreateModal">
+              <CreateCollectionModal
+                show={modalShow}
+                onHide={handleModalToggle}
+              />
+            </ErrorBoundary>
+          </div>
+          <CustomPagination
+            page={page}
+            limit={pageParams.limit}
+            total={collections.total}
+            onSetPage={setPage}
+          />
+        </>
+      )}
 
       <Footer className="mt-auto" />
     </div>

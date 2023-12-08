@@ -16,9 +16,7 @@ const DeleteCollectionModal = ({ show, onHide, collectionName }) => {
           return {
             ...prevData,
               ...prevData.collections,
-              data: prevData.data.filter(
-                (collection) => collection.name !== collectionName
-              ),
+              total: prevData.total - 1,
           };
         });
       };

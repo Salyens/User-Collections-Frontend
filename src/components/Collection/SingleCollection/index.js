@@ -5,6 +5,7 @@ import "./singlecollection.css";
 
 const SingleCollection = ({ collection }) => {
   if (!collection.data.length) return;
+  const imgURL = collection.data[0].imgURL;
   const { theme } = useContext(ThemeContext);
 
   const renderAdditionalFields = (fields) => {
@@ -33,7 +34,7 @@ const SingleCollection = ({ collection }) => {
         >
           <>
             <Card.Img
-              src="https://via.placeholder.com/150"
+              src={imgURL ? imgURL : "https://via.placeholder.com/150"}
               alt="Collection Image"
             />
             <Card.Body>

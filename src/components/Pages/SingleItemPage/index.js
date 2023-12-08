@@ -14,9 +14,6 @@ const SingleItemPage = ({ userPage, limit }) => {
   const { itemName } = useParams();
   const [error, setError] = useState("");
   const { theme } = useContext(ThemeContext);
-  const themeClass =
-    theme === "light" ? "bg-light text-dark " : "bg-dark text-white";
-
   const [collection, setCollection] = useState({
     data: [],
     total: 0,

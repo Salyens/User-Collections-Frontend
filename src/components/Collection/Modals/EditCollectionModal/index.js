@@ -22,12 +22,24 @@ const EditCollectionModal = ({ show, onHide, collection }) => {
 
   const handleSaveChanges = async () => {
     try {
-      await ApiService.updateCollection(input, collection._id);
+      const formData = new FormData();
+      Object.keys(input).forEach((key) => {
+        if (key === "imgURL" && input.imgURL) {
+          formData.append("imgURL", input.imgURL);
+        } else {
+          formData.append(key, input[key]);
+        }
+      });
+
+      const updatedCollection = await ApiService.updateCollection(
+        formData,
+        collection._id
+      );
       const updateCollectionState = () => {
         setCollections((prevData) => ({
           ...prevData,
           data: prevData.data.map((el) =>
-            el._id === collection._id ? { ...el, ...input } : el
+            el._id === collection._id ? { ...el, ...updatedCollection } : el
           ),
         }));
       };
