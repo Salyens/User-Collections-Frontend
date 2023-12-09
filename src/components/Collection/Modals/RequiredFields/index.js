@@ -1,10 +1,8 @@
-import React, { useRef, useState } from "react";
-import { Button, Form, Image } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import ThemeDropdown from "../../DropDowns/ThemeDropDown";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import "./requiredfields.css";
 import UploadImg from "../UploadImg";
+import DescriptionEditor from "../DescriptionEditor";
+import "./requiredfields.css";
 
 const RequiredFields = ({ collection, handleInputChange, onSetInput }) => {
   return (
@@ -17,8 +15,9 @@ const RequiredFields = ({ collection, handleInputChange, onSetInput }) => {
         onChange={(e) => handleInputChange("name", e.target.value)}
       />
       <Form.Label>Collection description</Form.Label>
-      <ReactQuill
-        onChange={(value) => handleInputChange("description", value)}
+      <DescriptionEditor
+        handleInputChange={handleInputChange}
+        prevValue={collection ? collection["description"] : ""}
       />
       <Form.Label>Collection theme</Form.Label>
       <ThemeDropdown
