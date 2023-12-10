@@ -79,7 +79,7 @@ const SingleCollectionPage = ({ userPage, limit }) => {
               <ErrorBoundary componentName="CustomPagination">
                 <CustomPagination
                   page={page}
-                  limit={limit}
+                  limit={limit.default}
                   total={items.total}
                   onSetPage={setPage}
                 />

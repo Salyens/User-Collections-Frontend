@@ -52,7 +52,6 @@ const CreateCollectionModal = ({ show, onHide }) => {
       setInput({});
       onHide();
     } catch (error) {
-      console.log("error: ", error);
       !error.response
         ? setErrors(error.message)
         : setErrors(error.response.data.message);
@@ -83,11 +82,9 @@ const CreateCollectionModal = ({ show, onHide }) => {
             input={input}
             onSetInput={setInput}
           />
-
           <Button variant="primary" onClick={addNewField} className="mb-3">
             + Add new field
           </Button>
-
           <AdditionalFields
             newFields={newFields}
             onSetNewFields={setNewFields}

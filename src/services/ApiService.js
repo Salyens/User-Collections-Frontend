@@ -25,7 +25,7 @@ class ApiService {
   static async getCollections({ page, limit, userPage }) {
     let URL = `${ApiService.apiBase}/collections?page=${page}&limit=${limit}`;
     if (userPage)
-      URL = `${ApiService.apiBase}/collections/me?page=${page}&limit=${limit}`;
+      URL = `${ApiService.apiBase}/collections/my?page=${page}&limit=${limit}`;
 
     const response = await axios.get(URL, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -35,6 +35,7 @@ class ApiService {
   }
 
   static async getOneCollection({ collectionName }) {
+    if (collectionName === null) return collectionName;
     const response = await axios.get(
       `${ApiService.apiBase}/collections/${collectionName}`,
       {
@@ -131,6 +132,11 @@ class ApiService {
       }
     );
 
+    return response.data;
+  }
+
+  static async getTags() {
+    const response = await axios.get(`${ApiService.apiBase}/tags`);
     return response.data;
   }
 }

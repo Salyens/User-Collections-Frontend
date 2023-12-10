@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   HashRouter as Router,
   Route,
   Routes,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import WithAuth from "../HOC/WithAuth";
 import Login from "../Auth/Login";
 import Registration from "../Auth/Registration";
-import ErrorBoundary from "../HOC/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import { ThemeContext, ThemeProvider } from "../../contexts/ThemeContext";
 import MainPage from "../Pages/MainPage";
@@ -37,6 +37,7 @@ const App = () => {
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "bg-light text-dark"
   );
+
   const { t, i18n } = useTranslation();
   const [currentLang, setCurrentLang] = useState(i18n.language);
 
@@ -99,14 +100,14 @@ const App = () => {
                 }
               />
               <Route path="/" element={<Navigate to="/main-page" replace />} />
-              {/* <Route
+              <Route
                 path="/*"
                 element={
                   <h1 className="text-center text-danger">
                     404 Error! Page is not found
                   </h1>
                 }
-              /> */}
+              />
             </Routes>
           </Router>
         </LangContext.Provider>

@@ -18,7 +18,7 @@ const AppLanguage = () => {
 
   return (
     <Dropdown>
-      <Dropdown.Toggle className={`${theme} border-0`} variant="primary" id="dropdown-basic">
+      <Dropdown.Toggle className={`${theme} border-0 me-1`} variant="primary" id="dropdown-basic">
         {currentLang}
       </Dropdown.Toggle>
 
