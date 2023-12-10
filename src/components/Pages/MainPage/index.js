@@ -9,11 +9,14 @@ import CollectionList from "../../Collection/CollectionList/index.js";
 import ItemList from "../../Item/ItemList/index.js";
 import renderErrors from "../../../helpers/renderErrors.js";
 import SearchResult from "../../SearchResult/index.js";
+import TagCloud from "../../TagCloud/index.js";
+import { Link } from "react-router-dom";
 
 const MainPage = ({ userPage, limit }) => {
   const { collections, setCollections, items, setItems, searchInput } =
     useContext(DataContext);
   const [error, setError] = useState("");
+  const { theme } = useContext(ThemeContext);
 
   const pageParamsCollection = {
     apiFunction: "getCollections",
@@ -31,7 +34,6 @@ const MainPage = ({ userPage, limit }) => {
   };
   useDataFetching(pageParamsCollection);
   useDataFetching(pageParamsItem);
-  const { theme } = useContext(ThemeContext);
 
   return (
     <div className={`${theme} d-flex flex-column min-vh-100`}>
@@ -41,18 +43,29 @@ const MainPage = ({ userPage, limit }) => {
       {searchInput ? (
         <SearchResult />
       ) : (
-        <div className="flex-grow-1">
+        <div className="flex-grow-1 mb-4">
+          <TagCloud />
           <ErrorBoundary componentName="CollectionList">
             <h1 className="text-center m-3">Largest collections</h1>
             {error && collections.data.length === 0 && renderErrors(error)}
             <CollectionList collections={collections} userPage={userPage} />
           </ErrorBoundary>
+          <div className="d-flex justify-content-center">
+            <Link to="/collections" className=" btn btn-success">
+              See more collections
+            </Link>
+          </div>
 
           <ErrorBoundary componentName="GenericList">
             <h1 className="text-center m-3">Last items</h1>
             {error && items.data.length === 0 && renderErrors(error)}
             <ItemList items={items} />
           </ErrorBoundary>
+          <div className="d-flex justify-content-center">
+            <Link to="/items" className=" btn btn-primary">
+              See more items
+            </Link>
+          </div>
         </div>
       )}
 

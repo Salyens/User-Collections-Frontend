@@ -12,7 +12,6 @@ const useDataFetching = ({
   searchText = null,
   total,
 }) => {
-
   const [page, setPage] = useState(1);
   const fetchData = async () => {
     try {
@@ -24,7 +23,10 @@ const useDataFetching = ({
         itemName,
         searchText,
       });
+
+      if (response === null) return;
       const { data, total } = response;
+
       setData((prevData) => {
         return {
           ...prevData,
@@ -33,7 +35,7 @@ const useDataFetching = ({
           isLoading: false,
         };
       });
-    } catch (e) {
+    } catch (_) {
       setError(
         "We encountered an error while loading the data. Please accept our apologies for this inconvenience. Try refreshing the page or come back later."
       );
@@ -48,7 +50,7 @@ const useDataFetching = ({
 
   useEffect(() => {
     fetchData();
-  }, [limit, page, collectionName, itemName, total, searchText]);
+  }, [page, collectionName, itemName, total, searchText]);
 
   return { page, setPage };
 };

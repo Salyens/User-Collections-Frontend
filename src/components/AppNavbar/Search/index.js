@@ -3,21 +3,30 @@ import { Button } from "react-bootstrap";
 import { DataContext } from "../../../contexts/DataContext";
 import Form from "react-bootstrap/Form";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { ThemeContext } from "../../../contexts/ThemeContext";
 
 const Search = () => {
   const { searchInput, setSearchInput } = useContext(DataContext);
   const [input, setInput] = useState(searchInput ? searchInput : "");
   const { t, i18n } = useTranslation();
+  const location = useLocation();
+  const { theme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    setSearchInput("");
+  }, [location]);
 
   const handleSetSearchInput = () => {
     setSearchInput(input);
   };
+
   useEffect(() => {
-    if (!input) setSearchInput("");
-  }, [input]);
+    setInput(searchInput);
+  }, [searchInput]);
 
   return (
-    <Form className="col-12 col-lg-5 col-xl-6 col-xxl-7 d-flex mt-2 mt-sm-0 m-0 pe-4 ">
+    <Form className="d-flex">
       <Form.Control
         value={input}
         type="search"
@@ -26,7 +35,11 @@ const Search = () => {
         aria-label="Search"
         onChange={(e) => setInput(e.target.value)}
       />
-      <Button onClick={handleSetSearchInput} variant="outline-light">
+      <Button
+        className={theme}
+        onClick={handleSetSearchInput}
+        variant="outline-light"
+      >
         {t("Search")}
       </Button>
     </Form>

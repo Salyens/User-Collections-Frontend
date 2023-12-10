@@ -3,7 +3,7 @@ import GenerateNavButton from "../NavButton";
 
 const NavButtonsList = ({ buttons }) => {
   return (
-    <>
+    <div className="d-flex justify-content-between">
       {buttons.map((button, index) => (
         <GenerateNavButton
           key={index}
@@ -11,7 +11,8 @@ const NavButtonsList = ({ buttons }) => {
           innerText={button.innerText}
         />
       ))}
-    </>
+    </div>
+
   );
 };
 

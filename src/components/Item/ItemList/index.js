@@ -6,6 +6,8 @@ const ItemList = ({ items }) => {
   
   return (
     <div className="row d-flex justify-content-center align-items-stretch pb-3 me-3 ms-3 gx-2 gy-2">
+      
+      {items.data.length === 0 && <h2 className="text-center mt-5">There are no items yet</h2>}
       {items.isLoading && <Spinner animation="border" size="lg" />}
       {items.data.map((item) => (
         <div
