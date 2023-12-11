@@ -10,6 +10,8 @@ import useDataFetching from "../../../hooks/useDataFetching.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import renderErrors from "../../../helpers/renderErrors.js";
 import SearchResult from "../../SearchResult/index.js";
+import CreateCollectionButton from "../../Buttons/CreateCollectionButton/index.js";
+import CreateCollectionModal from "../../Collection/Modals/CreateCollectionModal/index.js";
 
 const CollectionsPage = ({ userPage, limit }) => {
   const { collections, setCollections, searchInput } = useContext(DataContext);
@@ -25,6 +27,10 @@ const CollectionsPage = ({ userPage, limit }) => {
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
 
+  // const handleModalToggle = () => {
+  //   setModalShow(!modalShow);
+  // };
+
   return (
     <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
@@ -39,6 +45,11 @@ const CollectionsPage = ({ userPage, limit }) => {
             <ErrorBoundary componentName="CollectionList">
               <h1 className="text-center m-3">All collections</h1>
               {error && <div>{renderErrors(error)}</div>}
+              {/* <CreateCollectionButton handleModalToggle={handleModalToggle} />
+              <CreateCollectionModal
+                show={modalShow}
+                onHide={handleModalToggle}
+              /> */}
               <CollectionList collections={collections} />
             </ErrorBoundary>
           </div>

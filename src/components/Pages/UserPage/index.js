@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import CustomNavBar from "../../AppNavbar/CustomNavBar";
 import Footer from "../../Footer/Footer";
-import { Button } from "react-bootstrap";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
 import CreateCollectionModal from "../../Collection/Modals/CreateCollectionModal/index.js";
 import { DataContext } from "../../../contexts/DataContext.js";
@@ -11,8 +10,8 @@ import useDataFetching from "../../../hooks/useDataFetching.js";
 import CollectionList from "../../Collection/CollectionList/index.js";
 import CustomPagination from "../../CustomPagination/index.js";
 import renderErrors from "../../../helpers/renderErrors.js";
-import "./userpage.css";
 import SearchResult from "../../SearchResult/index.js";
+import CreateCollectionButton from "../../Buttons/CreateCollectionButton/index.js";
 
 const UserPage = ({ userPage, limit }) => {
   const { collections, setCollections, searchInput } = useContext(DataContext);
@@ -45,15 +44,7 @@ const UserPage = ({ userPage, limit }) => {
           <div className="flex-grow-1 position-relative">
             <h2 className="text-center m-3">My collections</h2>
             {error && <div>{renderErrors(error)}</div>}
-            <ErrorBoundary componentName="Button">
-              <Button
-                variant="primary"
-                className="create-btn"
-                onClick={handleModalToggle}
-              >
-                Create
-              </Button>
-            </ErrorBoundary>
+            <CreateCollectionButton handleModalToggle={handleModalToggle} />
 
             <ErrorBoundary componentName="Button">
               <CollectionList collections={collections} userPage={userPage} />
