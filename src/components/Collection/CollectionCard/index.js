@@ -1,18 +1,20 @@
-import { Button, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import { Link } from "react-router-dom";
 import EditCollectionModal from "../Modals/EditCollectionModal";
 import DeleteCollectionModal from "../Modals/DeleteModal";
-import "./onecollection.css";
 import CreateModalButtons from "../../Buttons/CreateModalButtons";
+import "./onecollection.css";
+import { UserContext } from "../../../contexts/UserContext";
 
 const CollectionCard = ({ collection, userPage }) => {
   const { name, description, imgURL } = collection;
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const { user } = useContext(UserContext);
   const { t } = useTranslation();
   const handleModalToggle = () => {
     setModalShow(!modalShow);
@@ -25,7 +27,7 @@ const CollectionCard = ({ collection, userPage }) => {
   return (
     <div>
       <Card className={theme}>
-        {userPage && (
+        {(userPage || user.role === "admin") && (
           <CreateModalButtons
             handleModalToggle={handleModalToggle}
             handleDeleteModalToggle={handleDeleteModalToggle}

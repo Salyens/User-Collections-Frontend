@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 
-const Profile = ({ onSetIsLoggedIn }) => {
+const Profile = ({ onSetUser }) => {
   const { t } = useTranslation();
   const { theme } = useContext(ThemeContext);
 
   const handleLogOut = () => {
     localStorage.clear();
-    onSetIsLoggedIn(false);
+    onSetUser({});
   };
 
   return (

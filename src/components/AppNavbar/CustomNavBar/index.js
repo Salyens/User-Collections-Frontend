@@ -10,11 +10,12 @@ import AppLanguage from "../AppLanguage";
 import ThemeSwitcher from "../ThemeSwitcher";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import Search from "../Search";
+import { UserContext } from "../../../contexts/UserContext";
 
 const CustomNavBar = () => {
   const { t, i18n } = useTranslation();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { theme } = useContext(ThemeContext);
+  const { user, setUser } = useContext(UserContext);
 
   const navButtons = [
     { endpoint: "/main-page", innerText: t("Home") },
@@ -28,10 +29,12 @@ const CustomNavBar = () => {
 
   const handleGetUserName = async () => {
     try {
-      const result = await ApiService.getUserInfo();
-      if (result.status === 200) setIsLoggedIn(true);
+      const userInfo = await ApiService.getUserInfo();
+      setUser(userInfo);
     } catch (error) {}
   };
+
+  const showProfile = () => Object.keys(user).length > 0;
 
   useEffect(() => {
     handleGetUserName();
@@ -55,8 +58,8 @@ const CustomNavBar = () => {
         </div>
 
         <div className=" col-12 col-lg-2 col-xl-2 d-flex justify-content-center justify-content-lg-end p-0 pe-1 mt-2 mt-md-0">
-          {isLoggedIn ? (
-            <Profile onSetIsLoggedIn={setIsLoggedIn} />
+          {showProfile() ? (
+            <Profile onSetUser={setUser} />
           ) : (
             <NavButtonsList buttons={logRegButtons} />
           )}
