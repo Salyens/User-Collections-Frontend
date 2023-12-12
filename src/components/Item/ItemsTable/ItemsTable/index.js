@@ -31,7 +31,6 @@ const ItemsTable = ({ collection, items, setItems }) => {
   const handleModalToggle = (setModalShow) => {
     setModalShow((prev) => !prev);
   };
-
   const columns = useTableColumns(collection.data, allFields);
   const data = useMemo(() => items.data, [items.data]);
   const tableInstance = useTable(

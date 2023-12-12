@@ -44,11 +44,13 @@ const UserPage = ({ userPage, limit }) => {
           <div className="flex-grow-1 position-relative">
             <h2 className="text-center m-3">My collections</h2>
             {error && <div>{renderErrors(error)}</div>}
-            <CreateCollectionButton handleModalToggle={handleModalToggle} />
 
-            <ErrorBoundary componentName="Button">
-              <CollectionList collections={collections} userPage={userPage} />
-            </ErrorBoundary>
+            <div>
+              <CreateCollectionButton handleModalToggle={handleModalToggle} />
+              <ErrorBoundary componentName="Button">
+                <CollectionList collections={collections} userPage={userPage} />
+              </ErrorBoundary>
+            </div>
 
             <ErrorBoundary componentName="EditCreateModal">
               <CreateCollectionModal

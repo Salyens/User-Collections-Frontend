@@ -5,6 +5,7 @@ const useDataFetching = ({
   apiFunction,
   limit,
   userPage,
+  data,
   setData,
   setError,
   collectionName = null,
@@ -12,6 +13,7 @@ const useDataFetching = ({
   searchText = null,
   total,
 }) => {
+
   const [page, setPage] = useState(1);
   const fetchData = async () => {
     try {
@@ -26,7 +28,6 @@ const useDataFetching = ({
 
       if (response === null) return;
       const { data, total } = response;
-
       setData((prevData) => {
         return {
           ...prevData,

@@ -12,24 +12,30 @@ import renderErrors from "../../../helpers/renderErrors.js";
 import SearchResult from "../../SearchResult/index.js";
 import CreateCollectionButton from "../../Buttons/CreateCollectionButton/index.js";
 import CreateCollectionModal from "../../Collection/Modals/CreateCollectionModal/index.js";
+import { UserContext } from "../../../contexts/UserContext.js";
 
 const CollectionsPage = ({ userPage, limit }) => {
   const { collections, setCollections, searchInput } = useContext(DataContext);
+  const { user } = useContext(UserContext);
   const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getCollections",
     limit: limit.default,
     userPage,
+    data: collections,
     setData: setCollections,
     setError,
+    total: collections.total,
   };
+
   const { page, setPage } = useDataFetching(pageParams);
+  if (collections.total) console.log("sss");
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
-
-  // const handleModalToggle = () => {
-  //   setModalShow(!modalShow);
-  // };
+  const [modalShow, setModalShow] = useState(false);
+  const handleModalToggle = () => {
+    setModalShow(!modalShow);
+  };
 
   return (
     <div className={`${theme} d-flex flex-column min-vh-100`}>
@@ -45,11 +51,15 @@ const CollectionsPage = ({ userPage, limit }) => {
             <ErrorBoundary componentName="CollectionList">
               <h1 className="text-center m-3">All collections</h1>
               {error && <div>{renderErrors(error)}</div>}
-              {/* <CreateCollectionButton handleModalToggle={handleModalToggle} />
+
+              {user.role === "admin" && (
+                <CreateCollectionButton handleModalToggle={handleModalToggle} />
+              )}
+
               <CreateCollectionModal
                 show={modalShow}
                 onHide={handleModalToggle}
-              /> */}
+              />
               <CollectionList collections={collections} />
             </ErrorBoundary>
           </div>
