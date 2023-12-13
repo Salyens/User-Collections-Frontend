@@ -99,10 +99,19 @@ const App = () => {
                 <Route
                   path="collections/:collectionName"
                   element={
-                    <SingleCollectionPage userPage={false} limit={limit} />
+                    <WithAuth>
+                      <SingleCollectionPage userPage={false} limit={limit} />
+                    </WithAuth>
                   }
                 />
-                <Route path="adminPage" element={<AdminPage limit={limit} />} />
+                <Route
+                  path="adminPage"
+                  element={
+                    <WithAuth>
+                      <AdminPage limit={limit} />
+                    </WithAuth>
+                  }
+                />
                 <Route
                   path="/"
                   element={<Navigate to="/main-page" replace />}

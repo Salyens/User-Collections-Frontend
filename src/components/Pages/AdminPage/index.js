@@ -78,7 +78,7 @@ const AdminPage = ({ limit }) => {
       {searchInput ? (
         <SearchResult />
       ) : (
-        <div className="flex-grow-1">
+        <div className="flex-grow-1 ms-2 me-2">
           <h2 className="text-center m-3">Admin page</h2>
           {error && <div>{renderErrors(error)}</div>}
           <div className="d-flex justify-content-between">
@@ -98,12 +98,14 @@ const AdminPage = ({ limit }) => {
                 tableInstance={tableInstance}
                 isChecked={isChecked}
                 onSetIsChecked={setIsChecked}
+                adminPage={true}
               />
               <TableBody
                 tableInstance={tableInstance}
                 isChecked={isChecked}
                 onSetIsChecked={setIsChecked}
                 onSetOneItem={setOneItem}
+                adminPage={true}
               />
             </Table>
           </div>

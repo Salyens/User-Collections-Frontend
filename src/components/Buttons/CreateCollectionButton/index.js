@@ -3,11 +3,7 @@ import { Button } from "react-bootstrap";
 
 const CreateCollectionButton = ({ handleModalToggle }) => {
   return (
-    <Button
-      variant="primary"
-      className="m-3"
-      onClick={handleModalToggle}
-    >
+    <Button variant="primary" className="m-3" onClick={handleModalToggle}>
       Create
     </Button>
   );

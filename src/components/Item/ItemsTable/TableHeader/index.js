@@ -3,7 +3,13 @@ import { Form } from "react-bootstrap";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import { UserContext } from "../../../../contexts/UserContext";
 
-const TableHeader = ({ items, tableInstance, isChecked, onSetIsChecked }) => {
+const TableHeader = ({
+  items,
+  tableInstance,
+  isChecked,
+  onSetIsChecked,
+  adminPage,
+}) => {
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(UserContext);
 
@@ -14,7 +20,7 @@ const TableHeader = ({ items, tableInstance, isChecked, onSetIsChecked }) => {
     if (nonRootUserIds.length === isChecked.length) {
       onSetIsChecked([]);
     } else {
-      onSetIsChecked(nonRootUserIds); 
+      onSetIsChecked(nonRootUserIds);
     }
   };
 
@@ -34,7 +40,7 @@ const TableHeader = ({ items, tableInstance, isChecked, onSetIsChecked }) => {
               onChange={handleFillAll}
             />
           </th>
-          {user.role === "user" && <th className={`${theme} border`}>Edit</th>}
+          {!adminPage && <th className={`${theme} border`}>Edit</th>}
 
           {headerGroup.headers.map((column) => (
             <th

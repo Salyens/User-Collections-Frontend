@@ -1,7 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Button, Form } from "react-bootstrap";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import { UserContext } from "../../../../contexts/UserContext";
+import { Link } from "react-router-dom";
+import "./tablebody.css";
 
 const TableBody = ({
   tableInstance,
@@ -10,12 +12,12 @@ const TableBody = ({
   handleModalToggle,
   onSetOneItem,
   onSetModalEditShow,
+  adminPage,
 }) => {
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(UserContext);
 
   const handleCheckboxChange = (rowId) => (event) => {
-
     const checked = event.target.checked;
     onSetIsChecked((prevChecked) => {
       if (checked) {
@@ -48,7 +50,7 @@ const TableBody = ({
                 disabled={row.original.role === "root"}
               />
             </td>
-            {user.role === "user" && (
+            {!adminPage && (
               <td className={`${theme} border`}>
                 <Button
                   onClick={() => handleEditItem(row.original)}
@@ -60,11 +62,20 @@ const TableBody = ({
               </td>
             )}
 
-            {row.cells.map((cell) => (
-              <td className={`${theme} border`} {...cell.getCellProps()}>
-                {cell.render("Cell")}
-              </td>
-            ))}
+            {row.cells.map((cell) => {
+              const isNameColumn = cell.column.id === "name" && !adminPage;
+              return (
+                <td className={`${theme} border`} {...cell.getCellProps()}>
+                  {isNameColumn ? (
+                    <Link className="link" to={`/items/${cell.value}`}>
+                      {cell.render("Cell")}
+                    </Link>
+                  ) : (
+                    cell.render("Cell")
+                  )}
+                </td>
+              );
+            })}
           </tr>
         );
       })}

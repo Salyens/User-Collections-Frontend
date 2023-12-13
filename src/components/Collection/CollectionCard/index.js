@@ -9,7 +9,7 @@ import CreateModalButtons from "../../Buttons/CreateModalButtons";
 import "./onecollection.css";
 import { UserContext } from "../../../contexts/UserContext";
 
-const CollectionCard = ({ collection, userPage }) => {
+const CollectionCard = ({ collection, userPage, setTotalFlag}) => {
   const { name, description, imgURL } = collection;
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
@@ -27,7 +27,7 @@ const CollectionCard = ({ collection, userPage }) => {
   return (
     <div>
       <Card className={theme}>
-        {(userPage || user.role === "admin") && (
+        {(userPage || user.role === "admin" || user.role === "root") && (
           <CreateModalButtons
             handleModalToggle={handleModalToggle}
             handleDeleteModalToggle={handleDeleteModalToggle}
@@ -61,6 +61,7 @@ const CollectionCard = ({ collection, userPage }) => {
         show={deleteModalShow}
         onHide={handleDeleteModalToggle}
         collectionName={name}
+        setTotalFlag={setTotalFlag}
       />
     </div>
   );

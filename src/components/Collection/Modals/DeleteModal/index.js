@@ -5,7 +5,12 @@ import renderErrors from "../../../../helpers/renderErrors";
 import { useContext, useState } from "react";
 import { DataContext } from "../../../../contexts/DataContext";
 
-const DeleteCollectionModal = ({ show, onHide, collectionName }) => {
+const DeleteCollectionModal = ({
+  show,
+  onHide,
+  collectionName,
+  setTotalFlag,
+}) => {
   const { setCollections } = useContext(DataContext);
   const [errors, setErrors] = useState([]);
   const handleDeleteCollection = async () => {
@@ -15,13 +20,18 @@ const DeleteCollectionModal = ({ show, onHide, collectionName }) => {
         setCollections((prevData) => {
           return {
             ...prevData,
-              ...prevData.collections,
-              total: prevData.total - 1,
+            data: prevData.data.filter(
+              (collection) => collection.name !== collectionName
+            ),
+            total: prevData.total - 1,
           };
         });
       };
+
       updateCollectionState();
+      setTotalFlag((prev) => !prev);
       onHide();
+
     } catch (error) {
       !error.response
         ? setErrors(error.message)

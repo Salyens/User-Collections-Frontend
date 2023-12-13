@@ -5,16 +5,15 @@ const useDataFetching = ({
   apiFunction,
   limit,
   userPage,
-  data,
   setData,
   setError,
   collectionName = null,
   itemName = null,
   searchText = null,
-  total,
+  totalFlag,
 }) => {
-
   const [page, setPage] = useState(1);
+
   const fetchData = async () => {
     try {
       const response = await ApiService[apiFunction]({
@@ -51,7 +50,7 @@ const useDataFetching = ({
 
   useEffect(() => {
     fetchData();
-  }, [page, collectionName, itemName, total, searchText]);
+  }, [page, collectionName, itemName, totalFlag, searchText]);
 
   return { page, setPage };
 };

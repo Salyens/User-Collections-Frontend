@@ -12,13 +12,15 @@ import useDataFetching from "../../../hooks/useDataFetching.js";
 import ItemList from "../../Item/ItemList/index.js";
 import SearchResult from "../../SearchResult/index.js";
 import { DataContext } from "../../../contexts/DataContext.js";
+import { UserContext } from "../../../contexts/UserContext.js";
 
 const SingleCollectionPage = ({ userPage, limit }) => {
   const { collectionName } = useParams();
   const [error, setError] = useState("");
   const { theme } = useContext(ThemeContext);
   const { searchInput } = useContext(DataContext);
-  const [collection, setCollection, ] = useState({
+  const { user } = useContext(UserContext);
+  const [collection, setCollection] = useState({
     data: [],
     total: 0,
     isLoading: true,
@@ -62,7 +64,7 @@ const SingleCollectionPage = ({ userPage, limit }) => {
             <SingleCollection collection={collection} />
           </ErrorBoundary>
           {error && items.data.length === 0 && <div>{renderErrors(error)}</div>}
-          {userPage ? (
+          {userPage || user.role === "admin" || user.role === "root" ? (
             <ErrorBoundary componentName="ItemList">
               <ItemsTable
                 collection={collection}

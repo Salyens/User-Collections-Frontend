@@ -16,13 +16,14 @@ import CreateCollectionButton from "../../Buttons/CreateCollectionButton/index.j
 const UserPage = ({ userPage, limit }) => {
   const { collections, setCollections, searchInput } = useContext(DataContext);
   const [error, setError] = useState("");
+  const [totalFlag, setTotalFlag] = useState(false);
   const pageParams = {
     apiFunction: "getCollections",
     limit: limit.short,
     userPage,
     setData: setCollections,
     setError,
-    total: collections.total,
+    totalFlag,
   };
   const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
@@ -30,6 +31,7 @@ const UserPage = ({ userPage, limit }) => {
   const [modalShow, setModalShow] = useState(false);
   const handleModalToggle = () => {
     setModalShow(!modalShow);
+    setTotalFlag((prev) => !prev);
   };
 
   return (
@@ -48,7 +50,11 @@ const UserPage = ({ userPage, limit }) => {
             <div>
               <CreateCollectionButton handleModalToggle={handleModalToggle} />
               <ErrorBoundary componentName="Button">
-                <CollectionList collections={collections} userPage={userPage} />
+                <CollectionList
+                  collections={collections}
+                  userPage={userPage}
+                  setTotalFlag={setTotalFlag}
+                />
               </ErrorBoundary>
             </div>
 

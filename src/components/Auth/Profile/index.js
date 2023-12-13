@@ -16,7 +16,7 @@ const Profile = ({ onSetUser }) => {
 
   const transferTo = () => {
     if (user.role === "user") return "/user-collections";
-    else if (user.role === "admin") return "/adminPage";
+    else if (user.role === "admin" || user.role === "root") return "/adminPage";
   };
 
   return (

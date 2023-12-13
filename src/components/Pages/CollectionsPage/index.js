@@ -17,24 +17,24 @@ import { UserContext } from "../../../contexts/UserContext.js";
 const CollectionsPage = ({ userPage, limit }) => {
   const { collections, setCollections, searchInput } = useContext(DataContext);
   const { user } = useContext(UserContext);
+  const [totalFlag, setTotalFlag] = useState(false);
   const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getCollections",
     limit: limit.default,
     userPage,
-    data: collections,
     setData: setCollections,
     setError,
-    total: collections.total,
+    totalFlag,
   };
 
   const { page, setPage } = useDataFetching(pageParams);
-  if (collections.total) console.log("sss");
   const { t, i18n } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
   const handleModalToggle = () => {
     setModalShow(!modalShow);
+    setTotalFlag((prev) => !prev);
   };
 
   return (
@@ -60,7 +60,10 @@ const CollectionsPage = ({ userPage, limit }) => {
                 show={modalShow}
                 onHide={handleModalToggle}
               />
-              <CollectionList collections={collections} />
+              <CollectionList
+                collections={collections}
+                setTotalFlag={setTotalFlag}
+              />
             </ErrorBoundary>
           </div>
           <CustomPagination
