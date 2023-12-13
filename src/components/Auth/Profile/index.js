@@ -9,6 +9,7 @@ const Profile = ({ onSetUser }) => {
   const { t } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(UserContext);
+  console.log('user: ', user);
   const handleLogOut = () => {
     localStorage.clear();
     onSetUser({});
