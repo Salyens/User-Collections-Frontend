@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 const MainPage = ({ userPage, limit }) => {
   const { collections, setCollections, items, setItems, searchInput } =
     useContext(DataContext);
+  const [totalFlag, setTotalFlag] = useState(false);
   const [error, setError] = useState("");
   const { theme } = useContext(ThemeContext);
 
@@ -24,6 +25,7 @@ const MainPage = ({ userPage, limit }) => {
     userPage,
     setData: setCollections,
     setError,
+    totalFlag,
   };
   const pageParamsItem = {
     apiFunction: "getItems",
@@ -44,11 +46,18 @@ const MainPage = ({ userPage, limit }) => {
         <SearchResult />
       ) : (
         <div className="flex-grow-1 mb-4">
-          <TagCloud />
+          <ErrorBoundary componentName="TagCloud">
+            <TagCloud />
+          </ErrorBoundary>
+          <h1 className="text-center">Collector</h1>
           <ErrorBoundary componentName="CollectionList">
-            <h1 className="text-center m-3">Largest collections</h1>
+            <h3 className="text-center m-3">Largest collections</h3>
             {error && collections.data.length === 0 && renderErrors(error)}
-            <CollectionList collections={collections} userPage={userPage} />
+            <CollectionList
+              collections={collections}
+              userPage={userPage}
+              setTotalFlag={setTotalFlag}
+            />
           </ErrorBoundary>
           <div className="d-flex justify-content-center">
             <Link to="/collections" className=" btn btn-success">
@@ -57,7 +66,7 @@ const MainPage = ({ userPage, limit }) => {
           </div>
 
           <ErrorBoundary componentName="GenericList">
-            <h1 className="text-center m-3">Last items</h1>
+            <h3 className="text-center m-3">Last items</h3>
             {error && items.data.length === 0 && renderErrors(error)}
             <ItemList items={items} />
           </ErrorBoundary>

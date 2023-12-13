@@ -45,6 +45,10 @@ const SingleItemPage = ({ userPage, limit }) => {
   const oneItem = item.data[0];
   const oneCollection = collection.data[0];
 
+  const renderTags = (tags) => {
+    return tags.map((tag) => `#${tag}`)
+  }
+
   return (
     <div className={`${theme} d-flex flex-column min-vh-100`}>
       <ErrorBoundary componentName="CustomNavBar">
@@ -69,7 +73,7 @@ const SingleItemPage = ({ userPage, limit }) => {
                   <Card.Text>
                     Created date: {transformToDate(oneItem?.createdDate)}
                   </Card.Text>
-                  <Card.Text>Tags: {oneItem?.tags}</Card.Text>
+                  <Card.Text>Tags: {renderTags(oneItem?.tags)}</Card.Text>
                   <ItemAdditionalFields
                     item={oneItem}
                     collection={oneCollection}

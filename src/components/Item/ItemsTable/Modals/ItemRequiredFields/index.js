@@ -39,7 +39,7 @@ const ItemRequiredFields = ({
       <Form.Label>Item tags</Form.Label>
       <Form.Control
         type="text"
-        value={input["tags"] || ""}
+        value={input["tags"] || "#"}
         onChange={handleTagInputChange}
       />
     </>

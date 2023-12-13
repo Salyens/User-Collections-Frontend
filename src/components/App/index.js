@@ -4,7 +4,6 @@ import {
   Route,
   Routes,
   Navigate,
-  useLocation,
 } from "react-router-dom";
 import WithAuth from "../HOC/WithAuth";
 import Login from "../Auth/Login";
@@ -21,6 +20,7 @@ import SingleItemPage from "../Pages/SingleItemPage";
 import { DataContext } from "../../contexts/DataContext";
 import { LangContext } from "../../contexts/LangContext";
 import { UserContext } from "../../contexts/UserContext";
+import AdminPage from "../Pages/AdminPage";
 
 const App = () => {
   const [collections, setCollections] = useState({
@@ -99,7 +99,17 @@ const App = () => {
                 <Route
                   path="collections/:collectionName"
                   element={
-                    <SingleCollectionPage userPage={false} limit={limit} />
+                    <WithAuth>
+                      <SingleCollectionPage userPage={false} limit={limit} />
+                    </WithAuth>
+                  }
+                />
+                <Route
+                  path="adminPage"
+                  element={
+                    <WithAuth>
+                      <AdminPage limit={limit} />
+                    </WithAuth>
                   }
                 />
                 <Route

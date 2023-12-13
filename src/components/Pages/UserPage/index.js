@@ -16,13 +16,14 @@ import CreateCollectionButton from "../../Buttons/CreateCollectionButton/index.j
 const UserPage = ({ userPage, limit }) => {
   const { collections, setCollections, searchInput } = useContext(DataContext);
   const [error, setError] = useState("");
+  const [totalFlag, setTotalFlag] = useState(false);
   const pageParams = {
     apiFunction: "getCollections",
     limit: limit.short,
     userPage,
     setData: setCollections,
     setError,
-    total: collections.total,
+    totalFlag,
   };
   const { page, setPage } = useDataFetching(pageParams);
   const { t, i18n } = useTranslation();
@@ -30,6 +31,7 @@ const UserPage = ({ userPage, limit }) => {
   const [modalShow, setModalShow] = useState(false);
   const handleModalToggle = () => {
     setModalShow(!modalShow);
+    setTotalFlag((prev) => !prev);
   };
 
   return (
@@ -44,11 +46,17 @@ const UserPage = ({ userPage, limit }) => {
           <div className="flex-grow-1 position-relative">
             <h2 className="text-center m-3">My collections</h2>
             {error && <div>{renderErrors(error)}</div>}
-            <CreateCollectionButton handleModalToggle={handleModalToggle} />
 
-            <ErrorBoundary componentName="Button">
-              <CollectionList collections={collections} userPage={userPage} />
-            </ErrorBoundary>
+            <div>
+              <CreateCollectionButton handleModalToggle={handleModalToggle} />
+              <ErrorBoundary componentName="Button">
+                <CollectionList
+                  collections={collections}
+                  userPage={userPage}
+                  setTotalFlag={setTotalFlag}
+                />
+              </ErrorBoundary>
+            </div>
 
             <ErrorBoundary componentName="EditCreateModal">
               <CreateCollectionModal

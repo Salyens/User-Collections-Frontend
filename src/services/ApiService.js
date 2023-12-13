@@ -106,6 +106,32 @@ class ApiService {
     return restData;
   }
 
+  static async getAllUsers() {
+    const response = await axios.get(`${ApiService.apiBase}/users`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response;
+  }
+
+  static async changeUsersStatus(blockStatus, ids) {
+    const response = await axios.post(
+      `${ApiService.apiBase}/users`,
+      { blockStatus, ids },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
+    return response.data;
+  }
+
+  static async deleteUsers(ids) {
+    const response = await axios.delete(`${ApiService.apiBase}/users`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      data: { ids },
+    });
+    return response;
+  }
+
   static async deleteCollection(collectionName) {
     await axios.delete(`${ApiService.apiBase}/collections/${collectionName}`, {
       name: collectionName,

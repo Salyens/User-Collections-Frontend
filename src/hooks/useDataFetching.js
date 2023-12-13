@@ -10,9 +10,10 @@ const useDataFetching = ({
   collectionName = null,
   itemName = null,
   searchText = null,
-  total,
+  totalFlag,
 }) => {
   const [page, setPage] = useState(1);
+
   const fetchData = async () => {
     try {
       const response = await ApiService[apiFunction]({
@@ -26,7 +27,6 @@ const useDataFetching = ({
 
       if (response === null) return;
       const { data, total } = response;
-
       setData((prevData) => {
         return {
           ...prevData,
@@ -50,7 +50,7 @@ const useDataFetching = ({
 
   useEffect(() => {
     fetchData();
-  }, [page, collectionName, itemName, total, searchText]);
+  }, [page, collectionName, itemName, totalFlag, searchText]);
 
   return { page, setPage };
 };
