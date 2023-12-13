@@ -99,9 +99,7 @@ const App = () => {
                 <Route
                   path="collections/:collectionName"
                   element={
-                    <WithAuth>
-                      <SingleCollectionPage userPage={false} limit={limit} />
-                    </WithAuth>
+                    <SingleCollectionPage userPage={false} limit={limit} />
                   }
                 />
                 <Route
