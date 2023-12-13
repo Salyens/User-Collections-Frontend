@@ -38,6 +38,9 @@ const CreateCollectionModal = ({ show, onHide }) => {
           formData.append(key, input[key]);
         }
       });
+      formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
 
       if (Object.keys(additionalFields))
         formData.append("additionalFields", JSON.stringify(additionalFields));
