@@ -52,7 +52,7 @@ const CollectionsPage = ({ userPage, limit }) => {
               <h1 className="text-center m-3">All collections</h1>
               {error && <div>{renderErrors(error)}</div>}
 
-              {user.role === "admin" && (
+              {(user.role === "admin" || user.role === "root") && (
                 <CreateCollectionButton handleModalToggle={handleModalToggle} />
               )}
 
