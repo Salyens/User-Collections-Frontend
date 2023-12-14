@@ -49,9 +49,11 @@ const MainPage = ({ userPage, limit }) => {
           <ErrorBoundary componentName="TagCloud">
             <TagCloud />
           </ErrorBoundary>
-          <h1 className="text-center">Collector</h1>
+          <h1 className="text-center">
+            Collector <i className="bi bi-collection"></i>
+          </h1>
           <ErrorBoundary componentName="CollectionList">
-            <h3 className="text-center m-3">Largest collections</h3>
+            <p className="text-center m-3 fs-4">Largest collections</p>
             {error && collections.data.length === 0 && renderErrors(error)}
             <CollectionList
               collections={collections}
@@ -66,7 +68,7 @@ const MainPage = ({ userPage, limit }) => {
           </div>
 
           <ErrorBoundary componentName="GenericList">
-            <h3 className="text-center m-3">Last items</h3>
+            <p className="text-center m-3 fs-4">Last items</p>
             {error && items.data.length === 0 && renderErrors(error)}
             <ItemList items={items} />
           </ErrorBoundary>
