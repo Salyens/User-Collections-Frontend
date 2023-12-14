@@ -42,7 +42,7 @@ const TagCloud = () => {
       {tags.map((tag) => (
         <Button
           key={tag.name}
-          className={`${theme} tag badge`}
+          className={`tag badge bg-transparent text-secondary`}
           style={{ fontSize: getTagSize(tag.weight) }}
           onClick={() => setSearchInput(tag.name)}
         >
