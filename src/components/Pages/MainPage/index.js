@@ -49,7 +49,7 @@ const MainPage = ({ userPage, limit }) => {
           <ErrorBoundary componentName="TagCloud">
             <TagCloud />
           </ErrorBoundary>
-          <h1 className="text-center">
+          <h1 className="text-center mt-4">
             Collector <i className="bi bi-collection"></i>
           </h1>
           <ErrorBoundary componentName="CollectionList">
