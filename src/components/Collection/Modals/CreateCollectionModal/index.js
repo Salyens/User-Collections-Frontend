@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Spinner } from "react-bootstrap";
 import ApiService from "../../../../services/ApiService";
 import RequiredFields from "../RequiredFields";
 import renderErrors from "../../../../helpers/renderErrors";
@@ -13,6 +13,7 @@ const CreateCollectionModal = ({ show, onHide }) => {
   const [input, setInput] = useState({});
   const [newFields, setNewFields] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (key, value) => {
     setErrors([]);
@@ -26,9 +27,9 @@ const CreateCollectionModal = ({ show, onHide }) => {
     try {
       const error = validRequiredFields(input);
       if (error) return setErrors(error);
-
       const { additionalFields, errors } = typeCastAdditionalFields(newFields);
       if (errors.length) return setErrors(errors);
+      setIsLoading(true);
 
       const formData = new FormData();
       Object.keys(input).forEach((key) => {
@@ -37,9 +38,6 @@ const CreateCollectionModal = ({ show, onHide }) => {
         } else {
           formData.append(key, input[key]);
         }
-      });
-      formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
       });
 
       if (Object.keys(additionalFields))
@@ -51,10 +49,11 @@ const CreateCollectionModal = ({ show, onHide }) => {
         total: prevData.total + 1,
         data: [...prevData.data, newCollection],
       }));
-
+      setIsLoading(false);
       setInput({});
       onHide();
     } catch (error) {
+      setIsLoading(false);
       !error.response
         ? setErrors(error.message)
         : setErrors(error.response.data.message);
@@ -100,7 +99,7 @@ const CreateCollectionModal = ({ show, onHide }) => {
           Close
         </Button>
         <Button variant="primary" onClick={handleSaveChanges}>
-          Save
+          {isLoading ? <Spinner animation="border" size="sm" /> : "Save"}
         </Button>
       </Modal.Footer>
     </Modal>

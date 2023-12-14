@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Spinner } from "react-bootstrap";
 import ApiService from "../../../../services/ApiService";
 import RequiredFields from "../RequiredFields";
 import renderErrors from "../../../../helpers/renderErrors";
@@ -11,6 +11,7 @@ const EditCollectionModal = ({ show, onHide, collection }) => {
   const [errors, setErrors] = useState([]);
   const [input, setInput] = useState({});
   const [newFields, setNewFields] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (key, value) => {
     setErrors([]);
@@ -22,6 +23,7 @@ const EditCollectionModal = ({ show, onHide, collection }) => {
 
   const handleSaveChanges = async () => {
     try {
+      setIsLoading(true);
       const formData = new FormData();
       Object.keys(input).forEach((key) => {
         if (key === "imgURL" && input.imgURL) {
@@ -44,10 +46,11 @@ const EditCollectionModal = ({ show, onHide, collection }) => {
         }));
       };
       updateCollectionState();
-
+      setIsLoading(false);
       setInput({});
       onHide(false);
     } catch (error) {
+      setIsLoading(false);
       !error.response
         ? setErrors(error.message)
         : setErrors(error.response.data.message);
@@ -87,7 +90,7 @@ const EditCollectionModal = ({ show, onHide, collection }) => {
           Close
         </Button>
         <Button variant="primary" onClick={handleSaveChanges}>
-          Save
+          {isLoading ? <Spinner animation="border" size="sm" /> : "Save"}
         </Button>
       </Modal.Footer>
     </Modal>
