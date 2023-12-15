@@ -4,7 +4,7 @@ import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import RequiredFields from "../RequiredFields";
 import AdditionalFields from "../AdditionalFields";
 
-const CommonModal = ({
+const CommonCollectionModal = ({
   show,
   onHide,
   handleSaveChanges,
@@ -85,4 +85,4 @@ const CommonModal = ({
   );
 };
 
-export default CommonModal;
+export default CommonCollectionModal;

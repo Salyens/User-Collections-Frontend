@@ -4,7 +4,7 @@ import typeCastAdditionalFields from "../../../../helpers/modals/typeCastAdditio
 import validRequiredFields from "../../../../helpers/validation/createCollection";
 import { DataContext } from "../../../../contexts/DataContext";
 import transformToFormData from "../../../../helpers/modals/transformToFormData";
-import CommonModal from "../CommonModal";
+import CommonCollectionModal from "../CommonCollectionModal";
 
 const CreateCollectionModal = ({ show, onHide }) => {
   const { setCollections } = useContext(DataContext);
@@ -50,7 +50,7 @@ const CreateCollectionModal = ({ show, onHide }) => {
   };
 
   return (
-    <CommonModal
+    <CommonCollectionModal
       show={show}
       onHide={onHide}
       handleSaveChanges={handleSaveChanges}

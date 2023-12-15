@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import ApiService from "../../../../services/ApiService";
 import { DataContext } from "../../../../contexts/DataContext";
 import transformToFormData from "../../../../helpers/modals/transformToFormData";
-import CommonModal from "../CommonModal";
+import CommonCollectionModal from "../CommonCollectionModal";
 
 const EditCollectionModal = ({ show, onHide, collection }) => {
   const { setCollections } = useContext(DataContext);
@@ -43,7 +43,7 @@ const EditCollectionModal = ({ show, onHide, collection }) => {
   };
 
   return (
-    <CommonModal
+    <CommonCollectionModal
       show={show}
       onHide={onHide}
       handleSaveChanges={handleSaveChanges}
