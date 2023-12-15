@@ -37,9 +37,12 @@ const AdminPage = ({ limit }) => {
     setError,
   };
   useDataFetching(pageParamsItems);
-  const { t } = useTranslation();
-  const columns = useMemo(
-    () => [
+  
+  const { t, i18n } = useTranslation();
+  const [columns, setColumns] = useState([]);
+
+  useEffect(() => {
+    setColumns([
       { Header: t("User name"), accessor: "name" },
       { Header: t("Email"), accessor: "email" },
       { Header: t("Role"), accessor: "role" },
@@ -53,9 +56,8 @@ const AdminPage = ({ limit }) => {
         accessor: "status",
         Cell: ({ value }) => (value ? t("Blocked") : t("Active")),
       },
-    ],
-    []
-  );
+    ]);
+  }, [t, i18n.language]);
 
   const data = useMemo(() => users.data, [users.data]);
   const tableInstance = useTable(
