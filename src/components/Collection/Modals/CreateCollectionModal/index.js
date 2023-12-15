@@ -1,49 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Modal, Form, Button, Spinner } from "react-bootstrap";
+import React, { useContext } from "react";
 import ApiService from "../../../../services/ApiService";
-import RequiredFields from "../RequiredFields";
-import renderErrors from "../../../../helpers/renderErrors";
-import AdditionalFields from "../AdditionalFields";
 import typeCastAdditionalFields from "../../../../helpers/modals/typeCastAdditionalFields";
 import validRequiredFields from "../../../../helpers/validation/createCollection";
 import { DataContext } from "../../../../contexts/DataContext";
+import transformToFormData from "../../../../helpers/modals/transformToFormData";
+import CommonModal from "../CommonModal";
 
 const CreateCollectionModal = ({ show, onHide }) => {
   const { setCollections } = useContext(DataContext);
-  const [input, setInput] = useState({});
-  const [newFields, setNewFields] = useState([]);
-  const [errors, setErrors] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleInputChange = (key, value) => {
-    setErrors([]);
-    setInput((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+  const params = {
+    title: "Create collection",
+    button: true,
   };
 
-  const handleSaveChanges = async () => {
+  const handleSaveChanges = async (
+    input,
+    setInput,
+    setIsLoading,
+    setErrors,
+    newFields
+  ) => {
     try {
       const error = validRequiredFields(input);
       if (error) return setErrors(error);
       const { additionalFields, errors } = typeCastAdditionalFields(newFields);
       if (errors.length) return setErrors(errors);
       setIsLoading(true);
-
-      const formData = new FormData();
-      Object.keys(input).forEach((key) => {
-        if (key === "imgURL" && input.imgURL) {
-          formData.append("imgURL", input.imgURL);
-        } else {
-          formData.append(key, input[key]);
-        }
-      });
+      const formData = transformToFormData(input);
 
       if (Object.keys(additionalFields))
         formData.append("additionalFields", JSON.stringify(additionalFields));
 
       const newCollection = await ApiService.createCollection(formData);
+
       setCollections((prevData) => ({
         ...prevData,
         total: prevData.total + 1,
@@ -60,49 +49,13 @@ const CreateCollectionModal = ({ show, onHide }) => {
     }
   };
 
-  const addNewField = () => {
-    setNewFields([...newFields, { type: "string", value: "" }]);
-  };
-
-  useEffect(() => {
-    if (!show) {
-      setErrors([]);
-      setNewFields([]);
-    }
-  }, [show]);
-
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Create collection</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {renderErrors(errors)}
-        <Form.Group>
-          <RequiredFields
-            handleInputChange={handleInputChange}
-            input={input}
-            onSetInput={setInput}
-          />
-          <Button variant="primary" onClick={addNewField} className="mb-3">
-            + Add new field
-          </Button>
-          <AdditionalFields
-            newFields={newFields}
-            onSetNewFields={setNewFields}
-          />
-        </Form.Group>
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleSaveChanges}>
-          {isLoading ? <Spinner animation="border" size="sm" /> : "Save"}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <CommonModal
+      show={show}
+      onHide={onHide}
+      handleSaveChanges={handleSaveChanges}
+      params={params}
+    />
   );
 };
 
