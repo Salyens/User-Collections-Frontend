@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
 import { UserContext } from "../../../../contexts/UserContext";
+import { useTranslation } from "react-i18next";
 
 const TableHeader = ({
   items,
@@ -12,6 +13,7 @@ const TableHeader = ({
 }) => {
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const handleFillAll = (e) => {
     const nonRootUserIds = items
@@ -40,8 +42,9 @@ const TableHeader = ({
               onChange={handleFillAll}
             />
           </th>
-          {!adminPage && <th className={`${theme} border`}>Edit</th>}
-
+          {!adminPage && (
+            <th className={`${theme} border`}>{t("Edit button")}</th>
+          )}
           {headerGroup.headers.map((column) => (
             <th
               className={`${theme} border`}
@@ -49,14 +52,10 @@ const TableHeader = ({
             >
               {column.render("Header")}
               <span className="ms-1">
-                {column.isSorted ? (
-                  column.isSortedDesc ? (
-                    <i className="bi bi-sort-down"></i>
-                  ) : (
-                    <i className="bi bi-sort-up"></i>
-                  )
+                {column.isSortedDesc ? (
+                  <i className="bi bi-sort-down"></i>
                 ) : (
-                  ""
+                  <i className="bi bi-sort-up"></i>
                 )}
               </span>
             </th>

@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import ApiService from "../../../../services/ApiService";
 import { ThemeContext } from "../../../../contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const TableButtons = ({
   onSetItems,
@@ -9,9 +10,9 @@ const TableButtons = ({
   onSetIsChecked,
   handleModalToggle,
   onSetErrors,
-  onSetModalCreateShow
+  onSetModalCreateShow,
 }) => {
-
+  const { t } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const handleDeleteItem = async () => {
@@ -44,10 +45,10 @@ const TableButtons = ({
         className="me-1"
         onClick={handleChangeModeAndToggle}
       >
-        Create
+        {t("Create button")} <i className="bi bi-pencil-fill"></i>
       </Button>
       <Button variant="outline-danger" onClick={handleDeleteItem}>
-        {deleteIsLoading ? <Spinner animation="border" size="sm" /> : "Delete"}
+        {deleteIsLoading ? <Spinner animation="border" size="sm" /> : t("Delete button")}
         <i className="bi bi-trash-fill"></i>
       </Button>
     </div>

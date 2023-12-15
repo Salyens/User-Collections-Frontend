@@ -1,4 +1,5 @@
 import { Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const ItemRequiredFields = ({
   oneItem,
@@ -7,7 +8,7 @@ const ItemRequiredFields = ({
   mode,
   onSetSeparatedTags,
 }) => {
-
+  const { t } = useTranslation();
   const handleInputChange = (key, value) => {
     if (key === "tags") {
       const tags = value.split(" ").map((tag) => `#${tag}`);
@@ -29,14 +30,14 @@ const ItemRequiredFields = ({
 
   return (
     <>
-      <Form.Label>Item name</Form.Label>
+      <Form.Label>{t("Item name")}</Form.Label>
       <Form.Control
         type="text"
-        placeholder="Field value"
+        placeholder={t("Field value")}
         defaultValue={mode === "edit" ? oneItem["name"] : ""}
         onChange={(e) => handleInputChange("name", e.target.value)}
       />
-      <Form.Label>Item tags</Form.Label>
+      <Form.Label>{t("Item tags")}</Form.Label>
       <Form.Control
         type="text"
         value={input["tags"] || "#"}

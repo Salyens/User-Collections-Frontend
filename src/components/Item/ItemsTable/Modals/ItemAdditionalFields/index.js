@@ -2,6 +2,7 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import DropdownBoolean from "../DropdownBoolean";
 import timestampToDate from "../../../../../helpers/date/timestampToDate";
+import { useTranslation } from "react-i18next";
 
 const ItemAdditionalFields = ({
   oneItem,
@@ -11,7 +12,8 @@ const ItemAdditionalFields = ({
 }) => {
   const fields = collection["additionalFields"];
   if (!fields) return null;
-
+  const { t } = useTranslation();
+  
   const handleNewFieldChange = (fieldName, value) => {
     const originalValue = collection["additionalFields"][fieldName]["value"];
     if (originalValue !== value) {
@@ -48,7 +50,7 @@ const ItemAdditionalFields = ({
         ) : (
           <Form.Control
             type={fieldType === "string" ? "text" : fieldType}
-            placeholder="Field value"
+            placeholder={t("Field value")}
             defaultValue={mode === "edit" ? fieldValue : ""}
             onChange={(e) => handleNewFieldChange(field, e.target.value)}
           />

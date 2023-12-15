@@ -5,6 +5,7 @@ import renderErrors from "../../../../../helpers/renderErrors";
 import ItemAdditionalFields from "../ItemAdditionalFields";
 import ItemRequiredFields from "../ItemRequiredFields";
 import prepareAdditionalFields from "../../../../../helpers/prepareAdditionalFields";
+import { useTranslation } from "react-i18next";
 
 const CommonItemModal = ({
   collection,
@@ -13,6 +14,7 @@ const CommonItemModal = ({
   oneItem,
   params,
   handleSaveChanges,
+  onHide,
 }) => {
   const [input, setInput] = useState({});
   const [errors, setErrors] = useState([]);
@@ -22,6 +24,7 @@ const CommonItemModal = ({
   const themeClass =
     theme === "light" ? "bg-light text-dark  " : "bg-dark text-white";
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     params.mode === "create"
@@ -83,7 +86,7 @@ const CommonItemModal = ({
 
       <Modal.Footer className={themeClass}>
         <Button variant="secondary" onClick={() => onHide(onSetModalEditShow)}>
-          Close
+          {t("Close")}
         </Button>
         <Button
           variant="primary"
@@ -97,7 +100,7 @@ const CommonItemModal = ({
             )
           }
         >
-          {isLoading ? <Spinner animation="border" size="sm" /> : "Save"}
+          {isLoading ? <Spinner animation="border" size="sm" /> : t("Save")}
         </Button>
       </Modal.Footer>
     </Modal>

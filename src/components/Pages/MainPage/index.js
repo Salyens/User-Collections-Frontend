@@ -11,6 +11,7 @@ import renderErrors from "../../../helpers/renderErrors.js";
 import SearchResult from "../../SearchResult/index.js";
 import TagCloud from "../../TagCloud/index.js";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const MainPage = ({ userPage, limit }) => {
   const { collections, setCollections, items, setItems, searchInput } =
@@ -18,6 +19,7 @@ const MainPage = ({ userPage, limit }) => {
   const [totalFlag, setTotalFlag] = useState(false);
   const [error, setError] = useState("");
   const { theme } = useContext(ThemeContext);
+  const { t } = useTranslation();
 
   const pageParamsCollection = {
     apiFunction: "getCollections",
@@ -50,10 +52,12 @@ const MainPage = ({ userPage, limit }) => {
             <TagCloud />
           </ErrorBoundary>
           <h1 className="text-center mt-4">
-            Collector <i className="bi bi-collection"></i>
+            {t("Name")} <i className="bi bi-collection"></i>
           </h1>
           <ErrorBoundary componentName="CollectionList">
-            <p className="text-center m-3 fs-4">Largest collections</p>
+            <p className="text-center m-3 fs-4">
+              {t("Home-collection-header")}
+            </p>
             {error && collections.data.length === 0 && renderErrors(error)}
             <CollectionList
               collections={collections}
@@ -63,18 +67,18 @@ const MainPage = ({ userPage, limit }) => {
           </ErrorBoundary>
           <div className="d-flex justify-content-center">
             <Link to="/collections" className=" btn btn-success">
-              See more collections
+              {t("See more collections")}
             </Link>
           </div>
 
           <ErrorBoundary componentName="GenericList">
-            <p className="text-center m-3 fs-4">Last items</p>
+            <p className="text-center m-3 fs-4">{t("Home-items-header")}</p>
             {error && items.data.length === 0 && renderErrors(error)}
             <ItemList items={items} />
           </ErrorBoundary>
           <div className="d-flex justify-content-center">
             <Link to="/items" className=" btn btn-primary">
-              See more items
+            {t("See more items")}
             </Link>
           </div>
         </div>

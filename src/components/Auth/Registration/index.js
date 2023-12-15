@@ -1,17 +1,19 @@
+import { useTranslation } from "react-i18next";
 import ApiService from "../../../services/ApiService";
 import AuthForm from "../AuthForm";
 
 const Registration = () => {
+  const { t } = useTranslation();
   const fields = [
-    { param: "User name", name: "name" },
-    { param: "Email", name: "email" },
-    { param: "Password", name: "password" },
+    { param: t("User name"), name: "name" },
+    { param: t("Email"), name: "email" },
+    { param: t("Password"), name: "password" },
   ];
   const initialState = { name: "", email: "", password: "" };
 
   return (
     <AuthForm
-      title="Sign Up"
+      title={t("Sign Up")}
       fields={fields}
       initialState={initialState}
       apiServiceFunction={ApiService.registration}

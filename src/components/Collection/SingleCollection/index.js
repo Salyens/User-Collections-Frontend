@@ -1,19 +1,22 @@
 import { Card, Spinner } from "react-bootstrap";
 import { useContext } from "react";
 import { ThemeContext } from "../../../contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
+import SafeHTMLContent from "../SafeHTMLContent";
 import "./singlecollection.css";
 
 const SingleCollection = ({ collection }) => {
   if (!collection.data.length) return;
   const imgURL = collection.data[0].imgURL;
   const { theme } = useContext(ThemeContext);
+  const { t } = useTranslation();
 
   const renderAdditionalFields = (fields) => {
     const fieldKeys = Object.keys(fields);
     return (
       <>
         <Card.Text>
-          <strong>Additional Fields:</strong>
+          <strong>{t("Additional fields")}:</strong>
         </Card.Text>
         {<Card.Text>{fieldKeys.join(", ")}</Card.Text>}
       </>
@@ -39,11 +42,7 @@ const SingleCollection = ({ collection }) => {
             />
             <Card.Body>
               <Card.Title>{collection.data[0].name}</Card.Title>
-              <Card.Text
-                dangerouslySetInnerHTML={{
-                  __html: collection.data[0].description,
-                }}
-              ></Card.Text>
+              <SafeHTMLContent html={collection.data[0].description} />
               {collection.data[0].additionalFields &&
                 renderAdditionalFields(collection.data[0].additionalFields)}
             </Card.Body>

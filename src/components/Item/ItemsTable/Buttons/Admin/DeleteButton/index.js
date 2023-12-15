@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import ApiService from "../../../../../../services/ApiService";
-import "./../AdminTableButtonsList/buttonslist.css";
+import { useTranslation } from "react-i18next";
 
 const DeleteButton = ({
   isChecked,
@@ -10,6 +10,7 @@ const DeleteButton = ({
   onSetError,
 }) => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handleDeleteOnClick = async () => {
     try {
@@ -35,10 +36,10 @@ const DeleteButton = ({
   return (
     <Button
       onClick={handleDeleteOnClick}
-      className="buttons"
+      className="me-1"
       variant="outline-danger"
     >
-      {deleteIsLoading ? <Spinner animation="border" size="sm" /> : "Delete"}
+      {deleteIsLoading ? <Spinner animation="border" size="sm" /> : t("Delete")}
     </Button>
   );
 };

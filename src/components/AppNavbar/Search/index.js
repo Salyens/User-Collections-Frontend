@@ -9,7 +9,7 @@ import { ThemeContext } from "../../../contexts/ThemeContext";
 const Search = () => {
   const { searchInput, setSearchInput } = useContext(DataContext);
   const [input, setInput] = useState(searchInput ? searchInput : "");
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const location = useLocation();
   const { theme } = useContext(ThemeContext);
 

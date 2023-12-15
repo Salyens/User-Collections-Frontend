@@ -1,7 +1,10 @@
 import { useMemo } from "react";
 import transformToDate from "../helpers/transformToDate";
+import { useTranslation } from "react-i18next";
 
 const useTableColumns = (collection, allFields) => {
+  const { t } = useTranslation();
+
   const fieldsMap = {
     createdDate: (fieldValue) => transformToDate(fieldValue),
     tags: (fieldValue) => fieldValue.join(", "),
@@ -13,12 +16,26 @@ const useTableColumns = (collection, allFields) => {
       number: (fieldValue) => fieldValue,
     },
   };
+
+  const getReadableHeader = (field) => {
+    switch (field) {
+      case "name":
+        return t("Item name");
+      case "tags":
+        return t("Tags");
+      case "createdDate":
+        return t("Created date");
+      default:
+        return field.charAt(0).toUpperCase() + field.slice(1);
+    }
+  };
+
   const columns = useMemo(() => {
     return allFields.map((field) => {
       const additionalField = collection[0]?.["additionalFields"]?.[field];
 
       return {
-        Header: field,
+        Header: getReadableHeader(field),
         accessor: (row) => {
           let fieldValue;
           if (row["additionalFields"] && additionalField) {

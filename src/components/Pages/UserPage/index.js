@@ -26,7 +26,7 @@ const UserPage = ({ userPage, limit }) => {
     totalFlag,
   };
   const { page, setPage } = useDataFetching(pageParams);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
   const handleModalToggle = () => {
@@ -44,7 +44,7 @@ const UserPage = ({ userPage, limit }) => {
       ) : (
         <>
           <div className="flex-grow-1 position-relative">
-            <h2 className="text-center m-3">My collections</h2>
+            <h2 className="text-center m-3">{t("My collections")}</h2>
             {error && <div>{renderErrors(error)}</div>}
 
             <div>

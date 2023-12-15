@@ -18,8 +18,22 @@ const OneItem = ({ item }) => {
     <Card className={theme}>
       <Card.Body className="d-flex flex-column justify-content-between fs-6">
         <Card.Title className="truncate">{name}</Card.Title>
-        <Card.Text className="truncate">{collectionName}</Card.Text>
-        <Card.Text className="truncate">{userName} </Card.Text>
+        <Card.Text className="truncate">
+          {
+            <>
+              {t("Collection name")}: <br />
+              {name}
+            </>
+          }
+        </Card.Text>
+        <Card.Text className="truncate">
+          {
+            <>
+              {t("Author")}: <br />
+              {userName}
+            </>
+          }{" "}
+        </Card.Text>
         <Link
           to={`/items/${name}`}
           className="d-flex justify-content-center btn btn-primary"

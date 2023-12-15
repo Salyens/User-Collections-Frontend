@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import ApiService from "../../../../../../services/ApiService";
-import "./../AdminTableButtonsList/buttonslist.css";
+import { useTranslation } from "react-i18next";
 
 const BlockButtons = ({ isChecked, onSetIsChecked, onSetUsers, onSetError }) => {
   const [blockIsLoading, setBlockIsLoading] = useState(false);
   const [unBlockIsLoading, setUnBlockIsLoading] = useState(false);
+  const { t } = useTranslation();
+
   const handleChangeStatus = async (blockStatus) => {
     try {
 
@@ -32,20 +34,20 @@ const BlockButtons = ({ isChecked, onSetIsChecked, onSetUsers, onSetError }) => 
     <>
       <Button
         onClick={() => handleChangeStatus(true)}
-        className="buttons"
+        className="me-1"
         variant="outline-warning"
       >
-        {blockIsLoading ? <Spinner animation="border" size="sm" /> : "Block"}
+        {blockIsLoading ? <Spinner animation="border" size="sm" /> : t("Block")}
       </Button>
       <Button
         onClick={() => handleChangeStatus(false)}
-        className="buttons"
+        className="me-1"
         variant="outline-success"
       >
         {unBlockIsLoading ? (
           <Spinner animation="border" size="sm" />
         ) : (
-          "Unblock"
+          t("Unblock")
         )}
       </Button>
     </>

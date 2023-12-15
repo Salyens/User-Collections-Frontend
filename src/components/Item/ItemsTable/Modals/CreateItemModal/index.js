@@ -1,6 +1,7 @@
 import ApiService from "../../../../../services/ApiService";
 import createItemValidation from "../../../../../helpers/validation/createItem";
 import CommonItemModal from "../CommonItemModal";
+import { useTranslation } from "react-i18next";
 
 const CreateItemModal = ({
   show,
@@ -10,9 +11,9 @@ const CreateItemModal = ({
   onSetItems,
   onSetModalCreateShow,
 }) => {
-
+  const { t } = useTranslation();
   const params = {
-    title: "Create item",
+    title: t("Create item"),
     mode: "create",
   };
 
@@ -72,6 +73,7 @@ const CreateItemModal = ({
       oneItem={oneItem}
       params={params}
       handleSaveChanges={handleSaveChanges}
+      onHide={onHide}
     />
   );
 };

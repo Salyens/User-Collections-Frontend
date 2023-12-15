@@ -9,6 +9,7 @@ import transformToDate from "../../../helpers/transformToDate";
 import ErrorBoundary from "../../HOC/ErrorBoundary";
 import useDataFetching from "../../../hooks/useDataFetching";
 import ItemAdditionalFields from "../../Item/ItemAdditionalFields";
+import { useTranslation } from "react-i18next";
 
 const SingleItemPage = ({ userPage, limit }) => {
   const { itemName } = useParams();
@@ -20,6 +21,7 @@ const SingleItemPage = ({ userPage, limit }) => {
     isLoading: true,
   });
   const [item, setItem] = useState({ data: [], total: 0, isLoading: true });
+  const { t } = useTranslation();
 
   const pageParamsItems = {
     apiFunction: "getOneItem",
@@ -46,8 +48,8 @@ const SingleItemPage = ({ userPage, limit }) => {
   const oneCollection = collection.data[0];
 
   const renderTags = (tags) => {
-    return tags.map((tag) => `#${tag}`)
-  }
+    return tags.map((tag) => `#${tag}`);
+  };
 
   return (
     <div className={`${theme} d-flex flex-column min-vh-100`}>
@@ -68,12 +70,14 @@ const SingleItemPage = ({ userPage, limit }) => {
             <ErrorBoundary componentName="Card">
               <Card style={{ width: 300 }}>
                 <Card.Body className={theme}>
-                  <Card.Title>Item name: {oneItem?.name}</Card.Title>
-                  <Card.Text>Collection: {oneItem?.collectionName}</Card.Text>
+                  <Card.Title>{t("Item name")}: {oneItem?.name}</Card.Title>
                   <Card.Text>
-                    Created date: {transformToDate(oneItem?.createdDate)}
+                    {t("Collection name")}: {oneItem?.collectionName}
                   </Card.Text>
-                  <Card.Text>Tags: {renderTags(oneItem?.tags)}</Card.Text>
+                  <Card.Text>
+                  {t("Created date")}: {transformToDate(oneItem?.createdDate)}
+                  </Card.Text>
+                  <Card.Text>{t("Tags")}: {renderTags(oneItem?.tags)}</Card.Text>
                   <ItemAdditionalFields
                     item={oneItem}
                     collection={oneCollection}
