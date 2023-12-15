@@ -29,7 +29,7 @@ const CollectionsPage = ({ userPage, limit }) => {
   };
 
   const { page, setPage } = useDataFetching(pageParams);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { theme } = useContext(ThemeContext);
   const [modalShow, setModalShow] = useState(false);
   const handleModalToggle = () => {
@@ -49,7 +49,7 @@ const CollectionsPage = ({ userPage, limit }) => {
         <>
           <div className="flex-grow-1">
             <ErrorBoundary componentName="CollectionList">
-              <h1 className="text-center m-3">All collections</h1>
+              <h1 className="text-center m-3">{t("All-collections-header")}</h1>
               {error && <div>{renderErrors(error)}</div>}
 
               {(user.role === "admin" || user.role === "root") && (

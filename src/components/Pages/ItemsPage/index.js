@@ -37,7 +37,7 @@ const ItemsPage = ({ userPage, limit }) => {
         <>
           <div className="flex-grow-1">
             <ErrorBoundary componentName="CustomNavBar">
-              <h1 className="text-center m-3">All items</h1>
+              <h1 className="text-center m-3">{t("All-items-header")}</h1>
               {error && <div>{renderErrors(error)}</div>}
               <ItemList items={items} />
             </ErrorBoundary>

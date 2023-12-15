@@ -2,6 +2,7 @@ import ApiService from "../../../../../services/ApiService";
 import hasEmptyValues from "../../../../../helpers/validation";
 import updateItemState from "../../../../../helpers/updateItem/updateItemState";
 import CommonItemModal from "../CommonItemModal";
+import { useTranslation } from "react-i18next";
 
 const EditItemModal = ({
   show,
@@ -11,8 +12,9 @@ const EditItemModal = ({
   onSetItems,
   onSetModalEditShow,
 }) => {
+  const { t } = useTranslation();
   const params = {
-    title: "Edit item",
+    title: t("Edit item"),
     mode: "edit",
   };
 
@@ -79,6 +81,7 @@ const EditItemModal = ({
       oneItem={oneItem}
       params={params}
       handleSaveChanges={handleSaveChanges}
+      onHide={onHide}
     />
   );
 };

@@ -1,13 +1,15 @@
 import React from "react";
 import OneItem from "../OneItem";
 import { Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const ItemList = ({ items }) => {
-  
+  const { t } = useTranslation();
   return (
     <div className="row d-flex justify-content-center align-items-stretch pb-3 me-3 ms-3 gx-2 gy-2">
-      
-      {items.data.length === 0 && <h2 className="text-center mt-5">There are no items yet</h2>}
+      {items.data.length === 0 && (
+        <h2 className="text-center mt-5">{t("No items")}</h2>
+      )}
       {items.isLoading && <Spinner animation="border" size="lg" />}
       {items.data.map((item) => (
         <div

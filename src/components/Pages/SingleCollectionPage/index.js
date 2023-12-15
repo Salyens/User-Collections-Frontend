@@ -61,7 +61,9 @@ const SingleCollectionPage = ({ userPage, limit }) => {
             {error && collection.data.length === 0 && (
               <div>{renderErrors(error)}</div>
             )}
-            <SingleCollection collection={collection} />
+            {collection.data.length > 0 && (
+              <SingleCollection collection={collection} />
+            )}
           </ErrorBoundary>
           {error && items.data.length === 0 && <div>{renderErrors(error)}</div>}
           {userPage || user.role === "admin" || user.role === "root" ? (

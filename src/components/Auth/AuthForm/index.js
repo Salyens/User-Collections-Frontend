@@ -4,6 +4,7 @@ import RegAndLoginItem from "../RegAndLoginItem";
 import useHandleForm from "../../../hooks/useHandleForm";
 import renderErrors from "../../../helpers/renderErrors";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
   const navigate = useNavigate();
@@ -14,7 +15,8 @@ const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
     () => navigate("/main-page"),
     setErrors
   );
-
+  const { t } = useTranslation();
+  
   useEffect(() => {
     setErrors([]);
   }, []);
@@ -25,7 +27,7 @@ const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
       {renderErrors(errors)}
 
       <Form
-        className="col-10 col-sm-10 col-md-7 col-lg-6 col-xl-5 col-xxl-4 d-flex flex-column justify-content-center align-items-center"
+        className="col-10 col-sm-10 col-md-10 col-lg-6 col-xl-5 col-xxl-4 d-flex flex-column justify-content-center align-items-center"
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
@@ -51,14 +53,14 @@ const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
         </Button>
       </Form>
 
-      {title === "Sign Up" && (
+      {title === t("Sign Up") && (
         <Link to="/login" className="text-decoration-none mt-3">
-          Login
+          {t("Log In")}
         </Link>
       )}
-      {title === "Log In" && (
+      {title === t("Log In") && (
         <Link to="/registration" className="text-decoration-none mt-3">
-          Sign Up
+          {t("Sign Up")}
         </Link>
       )}
     </div>

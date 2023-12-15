@@ -4,6 +4,8 @@ import useDataFetching from "../../hooks/useDataFetching";
 import ItemList from "../Item/ItemList";
 import CustomPagination from "../CustomPagination";
 import { Spinner } from "react-bootstrap";
+import renderErrors from "../../helpers/renderErrors";
+import { useTranslation } from "react-i18next";
 
 const SearchResult = () => {
   const { searchInput } = useContext(DataContext);
@@ -12,7 +14,7 @@ const SearchResult = () => {
     total: 0,
     isLoading: true,
   });
-
+  const { t } = useTranslation();
   const [error, setError] = useState("");
   const pageParams = {
     apiFunction: "getItems",
@@ -30,9 +32,10 @@ const SearchResult = () => {
         <Spinner className="mt-5" animation="border" size="lg" />
       ) : (
         <div className="flex-grow-1 text-center">
+          {error && <div>{renderErrors(error)}</div>}
           {foundItems.data.length && !foundItems.isLoading > 0 ? (
             <>
-              <h3 className="mb-3">Found Items:</h3>
+              <h3 className="mb-3">{t("Found Items")}:</h3>
               <ItemList items={foundItems} />
               <CustomPagination
                 page={page}
@@ -42,7 +45,7 @@ const SearchResult = () => {
               />
             </>
           ) : (
-            <h2 className="mt-5">Item is not found</h2>
+            <h2 className="mt-5">{t("Item is not found")}</h2>
           )}
         </div>
       )}

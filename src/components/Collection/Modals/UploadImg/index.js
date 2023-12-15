@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
 import { Button, Form, Image } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const UploadImg = ({ onSetInput }) => {
   const [img, setImg] = useState();
   const filePicker = useRef(null);
+  const { t } = useTranslation();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -32,7 +34,7 @@ const UploadImg = ({ onSetInput }) => {
     <div className="d-flex justify-content-between position-relative">
       <div className="d-flex align-items-center">
         <Button className="mt-3" onClick={handlePick} variant="outline-primary">
-          Upload file
+          {t("Upload file")}
         </Button>
       </div>
 

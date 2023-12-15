@@ -3,14 +3,16 @@ import ApiService from "../../../../services/ApiService";
 import { DataContext } from "../../../../contexts/DataContext";
 import transformToFormData from "../../../../helpers/modals/transformToFormData";
 import CommonCollectionModal from "../CommonCollectionModal";
+import { useTranslation } from "react-i18next";
 
 const EditCollectionModal = ({ show, onHide, collection }) => {
   const { setCollections } = useContext(DataContext);
+  const { t } = useTranslation();
   const params = {
-    title: "Edit collection",
+    title: t("Edit collection"),
     button: false,
   };
-
+  
   const handleSaveChanges = async (
     input,
     setInput,

@@ -4,6 +4,7 @@ import ApiService from "../../../../services/ApiService";
 import renderErrors from "../../../../helpers/renderErrors";
 import { useContext, useState } from "react";
 import { DataContext } from "../../../../contexts/DataContext";
+import { useTranslation } from "react-i18next";
 
 const DeleteCollectionModal = ({
   show,
@@ -13,6 +14,8 @@ const DeleteCollectionModal = ({
 }) => {
   const { setCollections } = useContext(DataContext);
   const [errors, setErrors] = useState([]);
+  const { t } = useTranslation();
+
   const handleDeleteCollection = async () => {
     try {
       await ApiService.deleteCollection(collectionName);
@@ -46,23 +49,23 @@ const DeleteCollectionModal = ({
     >
       <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Deleting collection</Modal.Title>
+          <Modal.Title>{t("Deleting collection")}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           {renderErrors(errors)}
           {!errors ||
             (errors.length === 0 && (
-              <p>{`Are you sure you want to delete ${collectionName}?`}</p>
+              <p>{`${t("Do delete")} "${collectionName}"?`}</p>
             ))}
         </Modal.Body>
 
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>
-            No
+            {t("No")}
           </Button>
           <Button variant="primary" onClick={handleDeleteCollection}>
-            Yes
+          {t("Yes")}
           </Button>
         </Modal.Footer>
       </Modal>

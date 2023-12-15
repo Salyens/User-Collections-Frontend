@@ -5,11 +5,13 @@ import validRequiredFields from "../../../../helpers/validation/createCollection
 import { DataContext } from "../../../../contexts/DataContext";
 import transformToFormData from "../../../../helpers/modals/transformToFormData";
 import CommonCollectionModal from "../CommonCollectionModal";
+import { useTranslation } from "react-i18next";
 
 const CreateCollectionModal = ({ show, onHide }) => {
   const { setCollections } = useContext(DataContext);
+  const { t } = useTranslation();
   const params = {
-    title: "Create collection",
+    title: t("Create collection"),
     button: true,
   };
 
@@ -22,15 +24,17 @@ const CreateCollectionModal = ({ show, onHide }) => {
   ) => {
     try {
       const error = validRequiredFields(input);
-      if (error) return setErrors(error);
+      if (error) return setErrors(t("validRequiredFields"));
+
       const { additionalFields, errors } = typeCastAdditionalFields(newFields);
       if (errors.length) return setErrors(errors);
-      setIsLoading(true);
+
       const formData = transformToFormData(input);
 
       if (Object.keys(additionalFields))
         formData.append("additionalFields", JSON.stringify(additionalFields));
 
+      setIsLoading(true);
       const newCollection = await ApiService.createCollection(formData);
 
       setCollections((prevData) => ({

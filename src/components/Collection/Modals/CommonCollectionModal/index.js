@@ -3,6 +3,7 @@ import renderErrors from "../../../../helpers/renderErrors";
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import RequiredFields from "../RequiredFields";
 import AdditionalFields from "../AdditionalFields";
+import { useTranslation } from "react-i18next";
 
 const CommonCollectionModal = ({
   show,
@@ -15,6 +16,7 @@ const CommonCollectionModal = ({
   const [newFields, setNewFields] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState({});
+  const { t } = useTranslation();
 
   const handleInputChange = (key, value) => {
     setErrors([]);
@@ -32,7 +34,7 @@ const CommonCollectionModal = ({
   }, [show]);
 
   const addNewField = () => {
-    setNewFields([...newFields, { type: "string", value: "" }]);
+    setNewFields([...newFields, { type: t("String"), value: "" }]);
   };
 
   return (
@@ -51,7 +53,7 @@ const CommonCollectionModal = ({
           />
           {params.button && (
             <Button variant="primary" onClick={addNewField} className="mb-3">
-              + Add new field
+              + {t("Add new field")}
             </Button>
           )}
 
@@ -64,7 +66,7 @@ const CommonCollectionModal = ({
 
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
-          Close
+          {t("Close")}
         </Button>
         <Button
           variant="primary"
@@ -78,7 +80,7 @@ const CommonCollectionModal = ({
             )
           }
         >
-          {isLoading ? <Spinner animation="border" size="sm" /> : "Save"}
+          {isLoading ? <Spinner animation="border" size="sm" /> : t("Save")}
         </Button>
       </Modal.Footer>
     </Modal>

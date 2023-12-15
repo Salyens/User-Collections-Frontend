@@ -1,11 +1,13 @@
 import React from "react";
 import { Dropdown } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const TablePageSize = ({setPageSize}) => {
+  const { t } = useTranslation();
   return (
     <Dropdown>
       <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-        Page size
+        {t("Page size")}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>

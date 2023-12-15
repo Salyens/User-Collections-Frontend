@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import themes from "../../../../data/themes/themes.json";
+import { useTranslation } from "react-i18next";
 
 const ThemeDropdown = ({ collectionKey, onSetInput, prevValue }) => {
   const [selectedTheme, setSelectedTheme] = useState("");
-
+  const { t } = useTranslation();
+  
   useEffect(() => {
     if (themes.length > 0) {
       setSelectedTheme(prevValue);
@@ -19,7 +21,7 @@ const ThemeDropdown = ({ collectionKey, onSetInput, prevValue }) => {
   return (
     <Dropdown onSelect={handleSelect}>
       <Dropdown.Toggle variant="success" id="dropdown-basic">
-        {selectedTheme || "Select a theme"}
+        {selectedTheme || t("Select a theme")}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>

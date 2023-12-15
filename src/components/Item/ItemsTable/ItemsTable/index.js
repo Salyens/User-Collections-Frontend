@@ -14,10 +14,11 @@ import TablePageSize from "../TablePageSize/index.js";
 import TablePagination from "../TablePagination/index.js";
 import CurrentPage from "../CurrentPage/index.js";
 import useTableColumns from "../../../../hooks/useTableColumns.js";
-import "./tablelist.css";
 import renderErrors from "../../../../helpers/renderErrors.js";
 import CreateItemModal from "../Modals/CreateItemModal/index.js";
 import EditItemModal from "../Modals/EditItemModal/index.js";
+import "./tablelist.css";
+import { useTranslation } from "react-i18next";
 
 const ItemsTable = ({ collection, items, setItems }) => {
   const [isChecked, setIsChecked] = useState([]);
@@ -27,10 +28,12 @@ const ItemsTable = ({ collection, items, setItems }) => {
   const [modalEditShow, setModalEditShow] = useState(false);
   const [oneItem, setOneItem] = useState({});
   const [errors, setErrors] = useState([]);
+  const { t } = useTranslation();
 
   const handleModalToggle = (setModalShow) => {
     setModalShow((prev) => !prev);
   };
+
   const columns = useTableColumns(collection.data, allFields);
   const data = useMemo(() => items.data, [items.data]);
   const tableInstance = useTable(
@@ -113,7 +116,7 @@ const ItemsTable = ({ collection, items, setItems }) => {
               </div>
             </div>
           ) : (
-            <h2>There are no items yet</h2>
+            <h2>{t("No items")}</h2>
           )}
           <EditItemModal
             show={modalEditShow}

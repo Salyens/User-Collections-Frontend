@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import EditCollectionModal from "../Modals/EditCollectionModal";
 import DeleteCollectionModal from "../Modals/DeleteModal";
 import CreateModalButtons from "../../Buttons/CreateModalButtons";
-import "./onecollection.css";
 import { UserContext } from "../../../contexts/UserContext";
+import "./onecollection.css";
 
 const CollectionCard = ({ collection, userPage, setTotalFlag}) => {
   const { name, description, imgURL } = collection;
