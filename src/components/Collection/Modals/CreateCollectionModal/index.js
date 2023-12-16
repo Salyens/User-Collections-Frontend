@@ -15,6 +15,13 @@ const CreateCollectionModal = ({ show, onHide }) => {
     button: true,
   };
 
+  const optionalFieldTypes = {
+    string: t("String"),
+    text: t("Text"),
+    number: t("Number"),
+    date: t("Date"),
+  };
+
   const handleSaveChanges = async (
     input,
     setInput,
@@ -26,7 +33,7 @@ const CreateCollectionModal = ({ show, onHide }) => {
       const error = validRequiredFields(input);
       if (error) return setErrors(t("validRequiredFields"));
 
-      const { additionalFields, errors } = typeCastAdditionalFields(newFields);
+      const { additionalFields, errors } = typeCastAdditionalFields(newFields, optionalFieldTypes);
       if (errors.length) return setErrors(errors);
 
       const formData = transformToFormData(input);

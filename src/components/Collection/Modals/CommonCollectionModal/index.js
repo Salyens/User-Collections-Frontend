@@ -54,7 +54,7 @@ const CommonCollectionModal = ({
           {params.button && (
             <Button variant="primary" onClick={addNewField} className="mb-3">
               + {t("Add new field")}
-            </Button>
+             </Button>
           )}
 
           <AdditionalFields

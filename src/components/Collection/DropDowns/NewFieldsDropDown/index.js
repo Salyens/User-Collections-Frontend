@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 const NewFieldsDropDown = ({ index, newFields, onSetNewFields }) => {
   const { t } = useTranslation();
-  const optionalFields = [t("String"), t("Text"), t("Number"), t("Date")];
+  const optionalFieldTypes = [t("String"), t("Text"), t("Number"), t("Date")];
 
   const handleSelect = (eventKey) => {
     const updatedFields = [...newFields];
@@ -18,7 +18,7 @@ const NewFieldsDropDown = ({ index, newFields, onSetNewFields }) => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {optionalFields.map((field, idx) => (
+        {optionalFieldTypes.map((field, idx) => (
           <Dropdown.Item key={idx} eventKey={field}>
             {field}
           </Dropdown.Item>

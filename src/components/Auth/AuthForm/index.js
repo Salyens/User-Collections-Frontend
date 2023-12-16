@@ -3,12 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import RegAndLoginItem from "../RegAndLoginItem";
 import useHandleForm from "../../../hooks/useHandleForm";
 import renderErrors from "../../../helpers/renderErrors";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ThemeContext } from "../../../contexts/ThemeContext";
 
 const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
+  const { theme } = useContext(ThemeContext);
   const { input, isLoading, handleInputChange, handleSubmit } = useHandleForm(
     initialState,
     apiServiceFunction,
@@ -16,13 +18,13 @@ const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
     setErrors
   );
   const { t } = useTranslation();
-  
+
   useEffect(() => {
     setErrors([]);
   }, []);
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+    <div className={`${theme} d-flex flex-column justify-content-center align-items-center vh-100`}>
       <h2 className="mb-3 text-center">{title}</h2>
       {renderErrors(errors)}
 
@@ -44,7 +46,7 @@ const AuthForm = ({ fields, initialState, apiServiceFunction, title }) => {
         ))}
 
         <Button
-          className="col-4"
+          className="col-8 col-sm-5 col-md-4"
           variant="primary"
           onClick={handleSubmit}
           disabled={isLoading}
