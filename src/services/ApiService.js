@@ -18,8 +18,6 @@ class ApiService {
       data
     );
     localStorage.setItem("token", response.data.accessToken);
-
-    return response.status;
   }
 
   static async getCollections({ page, limit, userPage }) {

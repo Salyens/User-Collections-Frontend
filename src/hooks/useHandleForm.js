@@ -19,6 +19,7 @@ const useHandleForm = (
     try {
       if (hasEmptyField(input)) return setErrors("All field are required");
       await serviceFunction(input);
+
       setInput(initialState);
       navigateFunction();
     } catch (error) {

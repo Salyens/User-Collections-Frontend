@@ -1,12 +1,15 @@
+import { useContext } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
+import { ThemeContext } from "../../../contexts/ThemeContext";
 
 const RegAndLoginItem = ({ param, name, onInputChange, inputValue }) => {
+  const { theme } = useContext(ThemeContext);
   return (
     <InputGroup size="lg" className="mb-3 row">
       <InputGroup.Text
         id={`inputGroup-${name}`}
-        className="col-12 col-sm-5 col-md-4 col-lg-5 justify-content-center"
+        className={`${theme} col-12 col-sm-5 col-md-4 col-lg-5 justify-content-center`}
       >
         {param}
       </InputGroup.Text>
@@ -17,6 +20,7 @@ const RegAndLoginItem = ({ param, name, onInputChange, inputValue }) => {
         name={name}
         onChange={onInputChange}
         value={inputValue}
+        className={theme}
       />
     </InputGroup>
   );

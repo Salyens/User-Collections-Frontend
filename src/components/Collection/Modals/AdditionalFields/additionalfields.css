@@ -1,0 +1,12 @@
+.delete_field {
+  /* position: absolute; */
+  /* right: 0; */
+  font-size: 12px;
+
+  transition: all 0.4s;
+  cursor: pointer;
+}
+
+.delete_field:hover {
+  font-size: 16px;
+}
