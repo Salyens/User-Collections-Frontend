@@ -1,4 +1,4 @@
-# User Collections Project
+# User Collections Project - Frontend
 
 This project was developed for "Intransition" company as a part of an internship program. It focuses on functionality over aesthetics, intentionally designed to demonstrate practical utility.
 
