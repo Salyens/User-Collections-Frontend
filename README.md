@@ -1,26 +1,28 @@
 # User Collections Project - Frontend
 
-This project was developed for "Intransition" company as a part of an internship program. It focuses on functionality over aesthetics, intentionally designed to demonstrate practical utility.
+Developed during an internship at "Intransition", this project emphasizes functionality over aesthetics, designed to showcase practical capabilities in a web application context.
 
 **Live Demo:** [User Collections App](https://user-collections-frontend.onrender.com)
 
-## Features
+## Key Features
 
-- **User Registration:** Enable users to create their own accounts.
-- **Theme Customization:** Users can switch between different visual themes.
-- **Language Selection:** Supports changing the interface language.
-- **Collection Management:** Users can create, edit, delete collections, and add items to them. Markdown supported for rich text descriptions with security considerations on both front-end and back-end.
-- **Administrator and Root User Roles:**
-  - **Administrator:** Can view and manage all collections and items, similar to their owners. Able to block, unblock, and delete users.
-  - **Root User:** Inherits all administrator privileges plus can manage other administrators. Root users cannot be blocked or deleted.
-- **User and Item Tables:** Featuring search, sorting, and pagination.
-- **Full-Text Item Search:** Enables searching within item content.
-- **Tag Cloud:** Displays popular tags.
-- **AWS Bucket Integration:** For photo uploads.
-- **Deployment:** Hosted on onRender.com.
+- **User Registration:** Enables users to create their own accounts.
+- **Theme Customization:** Users can switch between different visual themes for a personalized interface.
+- **Language Selection:** Support for English and Russian languages, enhancing accessibility for users.
+- **Collection Management:** Allows creation, editing, and deletion of collections, and adding items. Markdown support for detailed descriptions, with security measures on both front-end and back-end.
+- **User Roles:** Separate privileges for administrators and root users, including user management and protection against deletion (for root users).
+- **Interactive Tables:** Advanced features for user and item tables, including search, sorting, and pagination.
+- **Full-Text Item Search:** Provides detailed searching within item content.
+- **Tag Cloud:** Displays and utilizes popular tags for easier navigation and categorization.
+- **AWS Bucket Integration for Images:** Built-in functionality for image uploads.
+- **Deployment and Hosting:** The application is deployed and hosted on onRender.com for accessibility.
 
-## Tech Stack
+## Technical Specifications
 
-- **Frontend:** JavaScript, React, Bootstrap 5, CSS
-
-
+- **Frontend Stack:** Built with JavaScript, React, Bootstrap 5, and CSS, offering a responsive and modern user interface.
+- **Data Management:** Utilizes axios for reliable and secure HTTP requests, ensuring efficient data management.
+- **Error Handling:** Includes error boundaries to maintain interface stability and provide user feedback in case of issues.
+- **Route Protection:** Implements measures to restrict access to authenticated users only, enhancing security.
+- **Context API and Custom Hooks:** Uses React's Context API for state management across components and custom hooks for handling forms and table management.
+- **Rich Text Editor:** Integrates TinyMCE for rich text editing, allowing the creation of detailed and formatted content.
+- **HTML Sanitization:** Uses DOMPurify to safely render user-generated HTML content, preventing XSS attacks.
