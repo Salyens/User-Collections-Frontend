@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import themes from "../../../../data/themes/themes.json";
 import { useTranslation } from "react-i18next";
+import "./themedropdown.css";
 
 const ThemeDropdown = ({ collectionKey, onSetInput, prevValue }) => {
   const [selectedTheme, setSelectedTheme] = useState("");
   const { t } = useTranslation();
-  
+
   useEffect(() => {
     if (themes.length > 0) {
       setSelectedTheme(prevValue);
@@ -24,7 +25,7 @@ const ThemeDropdown = ({ collectionKey, onSetInput, prevValue }) => {
         {selectedTheme || t("Select a theme")}
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
+      <Dropdown.Menu className="dropdown-menu-scroll">
         {themes.map((theme, index) => (
           <Dropdown.Item key={index} eventKey={theme} required>
             {theme}

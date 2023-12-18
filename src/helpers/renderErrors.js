@@ -1,7 +1,6 @@
 const renderErrors = (errors) => {
-
   if (!errors || !errors.length) return;
-
+  
   const renderErrorsList = () => (
     <ul className="text-danger mt-3">
       {errors.map((error, index) => (

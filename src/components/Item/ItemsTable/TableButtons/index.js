@@ -17,6 +17,7 @@ const TableButtons = ({
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
   const handleDeleteItem = async () => {
     try {
+      if (!isChecked.length) return;
       setDeleteIsLoading(true);
       await ApiService.deleteItems(isChecked);
       onSetItems((prevData) => {
@@ -30,8 +31,8 @@ const TableButtons = ({
       onSetErrors([]);
       onSetIsChecked([]);
     } catch (error) {
-      onSetErrors("Something went wrong while deleting the item");
       setDeleteIsLoading(false);
+      onSetErrors("Something went wrong while deleting the item");
     }
   };
   const handleChangeModeAndToggle = () => {
@@ -48,7 +49,11 @@ const TableButtons = ({
         {t("Create button")} <i className="bi bi-pencil-fill"></i>
       </Button>
       <Button variant="outline-danger" onClick={handleDeleteItem}>
-        {deleteIsLoading ? <Spinner animation="border" size="sm" /> : t("Delete button")}
+        {deleteIsLoading ? (
+          <Spinner animation="border" size="sm" />
+        ) : (
+          t("Delete button")
+        )}
         <i className="bi bi-trash-fill"></i>
       </Button>
     </div>

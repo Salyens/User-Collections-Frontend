@@ -18,6 +18,7 @@ const CommonItemModal = ({
 }) => {
   const [input, setInput] = useState({});
   const [errors, setErrors] = useState([]);
+
   const [separatedTags, setSeparatedTags] = useState([]);
   const [changedFields, setChangedFields] = useState({});
   const { theme } = useContext(ThemeContext);
