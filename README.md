@@ -14,7 +14,7 @@ Developed during an internship at "Intransition", this project emphasizes functi
 - **Interactive Tables:** Advanced features for user and item tables, including search, sorting, and pagination.
 - **Full-Text Item Search:** Provides detailed searching within item content.
 - **Tag Cloud:** Displays and utilizes popular tags for easier navigation and categorization.
-- **AWS Bucket Integration for Images:** Built-in functionality for image uploads.
+- **AWS S3 Bucket Integration for Images:** Built-in functionality for image uploads.
 - **Deployment and Hosting:** The application is deployed and hosted on onRender.com for accessibility.
 
 ## Technical Specifications
