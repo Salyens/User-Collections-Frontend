@@ -69,7 +69,7 @@ const EditItemModal = ({
       setIsLoading(false);
       !error.response
         ? setErrors(error.message)
-        : setErrors(error.response.data.message);
+        : setErrors(error.response.data.errors);
     }
   };
 
